@@ -120,8 +120,8 @@ export default function ReferralPageContent() {
   ];
 
   return (
-    <div className="min-h-full bg-[#0a0a0a]">
-      <header className="sticky top-0 z-30 border-b border-[#1f1f1f] bg-[#0a0a0a]/95 backdrop-blur-sm">
+    <div className="min-h-full bg-[var(--bg)]">
+      <header className="sticky top-0 z-30 border-b border-[#1f1f1f] bg-[var(--bg)]/95 backdrop-blur-sm">
         <div className="flex h-[48px] items-center gap-2 px-3 sm:px-4 lg:px-6">
           <Link
             href={base}
@@ -146,13 +146,13 @@ export default function ReferralPageContent() {
       </div>
 
       <div className="mx-auto max-w-5xl space-y-4 px-3 py-4 sm:space-y-5 sm:px-4 sm:py-5 lg:px-6">
-        <section className="rounded-xl bg-[#1a1a1a] p-4 sm:p-5">
+        <section className="rounded-xl bg-[var(--surface)] p-4 sm:p-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <h2 className="text-[16px] font-bold text-white sm:text-[17px]">{r.whatIsTitle}</h2>
             <button
               type="button"
               onClick={() => setRulesOpen(true)}
-              className="focus-ring shrink-0 self-start rounded-md border border-[#555] bg-[#262626] px-4 py-2 text-[13px] font-medium text-white transition-colors hover:border-[#777] hover:bg-[#303030]"
+              className="focus-ring shrink-0 self-start rounded-md border border-[#555] bg-[var(--surface-elevated)] px-4 py-2 text-[13px] font-medium text-white transition-colors hover:border-[#777] hover:bg-[#303030]"
             >
               {r.rules}
             </button>
@@ -161,7 +161,7 @@ export default function ReferralPageContent() {
           <p className="mt-3 text-[13px] leading-relaxed text-[#b3b3b3] sm:text-[14px]">{r.whatIsP2}</p>
         </section>
 
-        <section className="rounded-xl bg-[#1a1a1a] p-4 sm:p-5">
+        <section className="rounded-xl bg-[var(--surface)] p-4 sm:p-5">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-[16px] font-bold text-white sm:text-[17px]">{r.cashRewardTitle}</h2>
             <div className="flex gap-2">
@@ -169,7 +169,7 @@ export default function ReferralPageContent() {
                 type="button"
                 aria-label={r.prevLevels}
                 onClick={() => scrollLevels("left")}
-                className="focus-ring flex h-8 w-8 items-center justify-center rounded-full border border-[#444] bg-[#262626] text-[#a3a3a3] hover:text-white"
+                className="focus-ring flex h-8 w-8 items-center justify-center rounded-full border border-[#444] bg-[var(--surface-elevated)] text-[#a3a3a3] hover:text-white"
               >
                 <ScrollArrow direction="left" label={r.prevLevels} />
               </button>
@@ -177,7 +177,7 @@ export default function ReferralPageContent() {
                 type="button"
                 aria-label={r.nextLevels}
                 onClick={() => scrollLevels("right")}
-                className="focus-ring flex h-8 w-8 items-center justify-center rounded-full border border-[#444] bg-[#262626] text-[#a3a3a3] hover:text-white"
+                className="focus-ring flex h-8 w-8 items-center justify-center rounded-full border border-[#444] bg-[var(--surface-elevated)] text-[#a3a3a3] hover:text-white"
               >
                 <ScrollArrow direction="right" label={r.nextLevels} />
               </button>
@@ -215,7 +215,7 @@ export default function ReferralPageContent() {
           </div>
         </section>
 
-        <section className="rounded-xl bg-[#1a1a1a] p-4 sm:p-5">
+        <section className="rounded-xl bg-[var(--surface)] p-4 sm:p-5">
           <h2 className="mb-5 text-[16px] font-bold text-white sm:text-[17px]">{r.howToTitle}</h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-4">
             {STEP_IDS.map((id, index) => {
@@ -239,7 +239,7 @@ export default function ReferralPageContent() {
         </section>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5">
-          <section className="rounded-xl bg-[#1a1a1a] p-4 sm:p-5">
+          <section className="rounded-xl bg-[var(--surface)] p-4 sm:p-5">
             <h2 className="mb-6 text-center text-[16px] font-bold text-white sm:text-[17px]">
               {r.bonusRanking}
             </h2>
@@ -253,7 +253,7 @@ export default function ReferralPageContent() {
                   >
                     <CrownBadge rank={rank.rank} label={r.topRank} />
                     <div
-                      className={`flex w-full flex-col items-center rounded-t-xl bg-gradient-to-b from-[#178358] to-[#0d4a2e] px-2 pb-4 pt-3 ${
+                      className={`flex w-full flex-col items-center rounded-t-xl bg-gradient-to-b from-[var(--gold)] to-[#0d4a2e] px-2 pb-4 pt-3 ${
                         isFirst ? "min-h-[160px] sm:min-h-[180px]" : "min-h-[130px] sm:min-h-[150px]"
                       }`}
                     >
@@ -271,16 +271,16 @@ export default function ReferralPageContent() {
             </div>
           </section>
 
-          <section className="rounded-xl bg-[#1a1a1a] p-4 sm:p-5">
+          <section className="rounded-xl bg-[var(--surface)] p-4 sm:p-5">
             <div className="mb-4 flex items-center justify-between gap-2">
               <h2 className="text-[16px] font-bold text-white sm:text-[17px]">{r.whoGotPrize}</h2>
-              <span className="flex items-center gap-1.5 text-[12px] font-medium text-[#4ade80]">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-[#4ade80]" />
+              <span className="flex items-center gap-1.5 text-[12px] font-medium text-[var(--cyan)]">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--cyan)]" />
                 {r.live}
               </span>
             </div>
             <div className="max-h-[320px] overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
-              <ul className="divide-y divide-[#2a2a2a]">
+              <ul className="divide-y divide-[var(--border)]">
                 {referralRecentWinners.map((row) => (
                   <li
                     key={row.id}

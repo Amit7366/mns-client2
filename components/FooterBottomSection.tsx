@@ -4,16 +4,8 @@ import { useState } from "react";
 import { socialLinks } from "@/lib/footer-social-data";
 import { useLocale } from "./LocaleProvider";
 
-function GreenSectionTitle({ children }: { children: React.ReactNode }) {
-  return <h3 className="mb-4 text-[12px] font-semibold text-[#4ade80]">{children}</h3>;
-}
-
-function CazvipLogo() {
-  return (
-    <div className="text-[22px] font-black tracking-wide text-[#d4a843]">
-      CAZ<span className="text-[#f5c518]">VIP</span>
-    </div>
-  );
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return <h3 className="mb-4 text-[12px] font-semibold text-[var(--cyan)]">{children}</h3>;
 }
 
 function CuracaoLogo() {
@@ -22,7 +14,7 @@ function CuracaoLogo() {
       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#22c55e] via-[#3b82f6] to-[#a855f7] text-[10px] font-black text-white">
         GC
       </div>
-      <span className="text-[10px] font-semibold leading-tight text-[#9ca3af]">
+      <span className="text-[10px] font-semibold leading-tight text-[var(--text-muted)]">
         GAMING
         <br />
         CURACAO
@@ -33,7 +25,7 @@ function CuracaoLogo() {
 
 function AnjouanLogo() {
   return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-md border border-[#4b5563] bg-[#1f2937] text-[8px] font-bold leading-tight text-[#d1d5db]">
+    <div className="flex h-10 w-10 items-center justify-center rounded-md border border-[var(--border-strong)] bg-[var(--surface)] text-[8px] font-bold leading-tight text-[var(--text-muted)]">
       Anjouan
       <br />
       eGaming
@@ -43,29 +35,15 @@ function AnjouanLogo() {
 
 function SealLogo() {
   return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#dc2626] bg-[#7f1d1d] text-[9px] font-bold text-[#fbbf24]">
-      ✓
+    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[var(--gold)] bg-[var(--surface)] text-[9px] font-bold text-[var(--gold)]">
+      GLI
     </div>
-  );
-}
-
-function StopHandIcon() {
-  return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#6b7280] text-lg text-[#d1d5db]">
-      🛑
-    </div>
-  );
-}
-
-function GamcareLogo() {
-  return (
-    <div className="text-[11px] font-bold tracking-wider text-[#d1d5db]">GAMCARE</div>
   );
 }
 
 function Age18Icon() {
   return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#6b7280] text-[11px] font-bold text-[#d1d5db]">
+    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-strong)] text-[11px] font-bold text-[var(--text)]">
       18+
     </div>
   );
@@ -90,16 +68,11 @@ export default function FooterBottomSection() {
 
   return (
     <>
-      <div className="my-8 border-t border-[#1f1f1f]" />
+      <div className="my-8 border-t border-[var(--border)]" />
 
-      <div className="grid gap-8 md:grid-cols-3">
+      <div className="grid gap-8 md:grid-cols-2">
         <div>
-          <GreenSectionTitle>{b.officialBrandPartner}</GreenSectionTitle>
-          <CazvipLogo />
-        </div>
-
-        <div>
-          <GreenSectionTitle>{b.gamingLicense}</GreenSectionTitle>
+          <SectionTitle>{b.gamingLicense}</SectionTitle>
           <div className="flex flex-wrap items-center gap-4">
             <CuracaoLogo />
             <AnjouanLogo />
@@ -108,16 +81,15 @@ export default function FooterBottomSection() {
         </div>
 
         <div>
-          <GreenSectionTitle>{b.responsibleGaming}</GreenSectionTitle>
+          <SectionTitle>{b.responsibleGaming}</SectionTitle>
           <div className="flex flex-wrap items-center gap-4">
-            <StopHandIcon />
-            <GamcareLogo />
             <Age18Icon />
+            <div className="text-[11px] font-bold tracking-wider text-[var(--text-muted)]">GAMCARE</div>
           </div>
         </div>
       </div>
 
-      <div className="my-8 border-t border-[#1f1f1f]" />
+      <div className="my-8 border-t border-[var(--border)]" />
 
       <div className="flex flex-wrap justify-center gap-2.5">
         {socialLinks.map((social) => (
@@ -125,11 +97,15 @@ export default function FooterBottomSection() {
         ))}
       </div>
 
-      <div className="my-8 border-t border-[#1f1f1f]" />
+      <div className="my-8 border-t border-[var(--border)]" />
 
       <div className="relative">
-        <h3 className="mb-3 text-[13px] font-semibold text-[#d1d5db]">{b.aboutHeading}</h3>
-        <p className={`whitespace-pre-line text-[11px] leading-[1.7] text-[#6b7280] ${expanded ? "" : "line-clamp-4"}`}>
+        <h3 className="mb-3 text-[13px] font-semibold text-[var(--text)]">{b.aboutHeading}</h3>
+        <p
+          className={`whitespace-pre-line text-[11px] leading-[1.7] text-[var(--text-muted)] ${
+            expanded ? "" : "line-clamp-4"
+          }`}
+        >
           {b.aboutText}
           {expanded ? `\n\n${b.aboutTextMore}` : null}
         </p>
@@ -137,44 +113,44 @@ export default function FooterBottomSection() {
           <button
             type="button"
             onClick={() => setExpanded((open) => !open)}
-            className="rounded-md border border-[#333333] bg-[#1a1a1a] px-6 py-1.5 text-[12px] text-white transition-colors hover:bg-[#262626]"
+            className="rounded-md border border-[var(--border)] bg-[var(--surface)] px-6 py-1.5 text-[12px] text-white transition-colors hover:bg-[var(--surface-elevated)]"
           >
             {expanded ? b.showLess : b.showMore}
           </button>
         </div>
       </div>
 
-      <div className="my-8 border-t border-[#1f1f1f]" />
+      <div className="my-8 border-t border-[var(--border)]" />
 
       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
         <a href="#" className="text-[26px] font-bold tracking-tight">
-          <span className="text-white">bk</span>
-          <span className="text-[#ed1c24]">baji</span>
+          <span className="text-[var(--gold)]">BK</span>
+          <span className="text-white">Baji</span>
         </a>
         <div>
-          <p className="text-[13px] font-semibold text-[#4ade80]">{b.winLikeAKing}</p>
-          <p className="text-[11px] text-[#6b7280]">{b.copyright}</p>
+          <p className="text-[13px] font-semibold text-[var(--cyan)]">{b.winLikeAKing}</p>
+          <p className="text-[11px] text-[var(--text-muted)]">{b.copyright}</p>
         </div>
       </div>
 
-      <div className="my-8 border-t border-[#1f1f1f]" />
+      <div className="my-8 border-t border-[var(--border)]" />
 
-      <div className="space-y-3 text-[11px] leading-[1.7] text-[#6b7280]">
+      <div className="space-y-3 text-[11px] leading-[1.7] text-[var(--text-muted)]">
         <p>
-          <span className="text-[#4ade80]">bkbaji.com</span> {b.legalOwnership}
+          <span className="text-[var(--cyan)]">bkbaji.com</span> {b.legalOwnership}
         </p>
         <p>
           {b.legalContactPrefix}{" "}
-          <a href="mailto:legal@northernlightsltd.com" className="text-[#4ade80] hover:underline">
+          <a href="mailto:legal@northernlightsltd.com" className="text-[var(--cyan)] hover:underline">
             legal@northernlightsltd.com
           </a>
           .
         </p>
         <p>
-          <span className="text-[#4ade80]">bkbaji.com</span> {b.legalLicense}
+          <span className="text-[var(--cyan)]">bkbaji.com</span> {b.legalLicense}
         </p>
         <p>
-          <span className="text-[#4ade80]">bkbaji.com</span> {b.legalCompliance}
+          <span className="text-[var(--cyan)]">bkbaji.com</span> {b.legalCompliance}
         </p>
       </div>
     </>

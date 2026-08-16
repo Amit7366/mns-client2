@@ -10,8 +10,8 @@ import { getAuthMessages } from "@/lib/i18n/auth-messages";
 function BjFooterMark() {
   return (
     <span className="text-[15px] font-bold tracking-tight">
-      <span className="text-white">b</span>
-      <span className="text-[#ed1c24]">j</span>
+      <span className="text-[var(--gold)]">BK</span>
+      <span className="text-white">Baji</span>
     </span>
   );
 }
@@ -28,11 +28,11 @@ export default function AuthShell({ mode, children }: AuthShellProps) {
   const showTabs = mode === "login" || mode === "register";
 
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col bg-[#0a0a0a]">
+    <div className="relative flex min-h-0 flex-1 flex-col bg-[var(--bg)]">
       <TopNavbar variant="auth" />
 
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-        <div className="relative hidden min-h-[220px] flex-1 overflow-hidden bg-[#0a0a0a] lg:block lg:min-h-0">
+        <div className="relative hidden min-h-[220px] flex-1 overflow-hidden bg-[var(--bg)] lg:block lg:min-h-0">
           <Image
             src={AUTH_HERO_IMAGE}
             alt={AUTH_HERO_ALT}
@@ -45,10 +45,10 @@ export default function AuthShell({ mode, children }: AuthShellProps) {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(23,131,88,0.15),transparent_55%)]" />
         </div>
 
-        <div className="flex w-full shrink-0 flex-col bg-[#0a0a0a] lg:w-[min(100%,480px)] xl:w-[520px]">
+        <div className="flex w-full shrink-0 flex-col bg-[var(--bg)] lg:w-[min(100%,480px)] xl:w-[520px]">
           <div className="flex flex-1 flex-col px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
             {showTabs ? (
-              <nav className="mb-8 flex border-b border-[#2a2a2a]" aria-label="Authentication">
+              <nav className="mb-8 flex border-b border-[var(--border)]" aria-label="Authentication">
                 <Link
                   href={`${base}/login`}
                   className={`focus-ring relative flex min-h-11 flex-1 items-center justify-center pb-3 text-center text-[15px] font-semibold transition-colors ${
@@ -57,7 +57,7 @@ export default function AuthShell({ mode, children }: AuthShellProps) {
                 >
                   {a.logInTab}
                   {mode === "login" ? (
-                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#178358]" />
+                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--gold)]" />
                   ) : null}
                 </Link>
                 <Link
@@ -68,7 +68,7 @@ export default function AuthShell({ mode, children }: AuthShellProps) {
                 >
                   {a.signUpTab}
                   {mode === "register" ? (
-                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#178358]" />
+                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--gold)]" />
                   ) : null}
                 </Link>
               </nav>

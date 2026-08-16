@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import VendorGamesLobby from "@/components/VendorGamesLobby";
 import { loadExclusiveLobbyGames } from "@/lib/exclusive-lobby-games";
 import { fetchVendorGames } from "@/lib/games-api";
@@ -72,13 +73,15 @@ export default async function LobbyByKindPage({ params, searchParams }: PageProp
   const games = filterGamesByLobbyTypes(merged, typeParts);
 
   return (
-    <VendorGamesLobby
-      key={`${kind}-${vendorsResolved.join(",")}-${typeParts.join(",")}`}
-      locale={locale}
-      kind={kind}
-      vendors={vendorsResolved}
-      activeTypes={typeParts}
-      games={games}
-    />
+    <Suspense fallback={<div className="min-h-full bg-[var(--bg)]" />}>
+      <VendorGamesLobby
+        key={`${kind}-${vendorsResolved.join(",")}-${typeParts.join(",")}`}
+        locale={locale}
+        kind={kind}
+        vendors={vendorsResolved}
+        activeTypes={typeParts}
+        games={games}
+      />
+    </Suspense>
   );
 }

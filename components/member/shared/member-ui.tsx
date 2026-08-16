@@ -1,14 +1,14 @@
 import Link from "next/link";
 
-export const MEMBER_PAGE_BG = "min-h-full bg-[#0a0a0a]";
+export const MEMBER_PAGE_BG = "min-h-full bg-[var(--bg)]";
 
 export const memberContainerNarrow = "mx-auto w-full max-w-lg px-3 sm:px-4";
 export const memberContainerWide = "mx-auto w-full max-w-3xl px-3 sm:px-4 lg:px-6";
 export const memberContainerProfile = "mx-auto w-full max-w-5xl px-3 sm:px-4 lg:px-6";
 export const memberContainerXl = "mx-auto w-full max-w-6xl px-3 sm:px-4 lg:px-6";
 
-export const memberCardBorder = "rounded-lg border border-[#3a3a3a] bg-[#0a0a0a]";
-export const memberPanelBorder = "rounded-lg border border-[#3a3a3a] bg-[#121212]";
+export const memberCardBorder = "rounded-lg border border-[var(--border)] bg-[var(--bg-deep)]";
+export const memberPanelBorder = "rounded-lg border border-[var(--border)] bg-[var(--bg-header)]";
 
 /** Standard content padding; clears mobile bottom nav. */
 export const memberPagePadding = "py-4 sm:py-5 pb-mobile-nav lg:pb-6";
@@ -17,22 +17,22 @@ export const memberPagePaddingNarrow = "py-5 sm:py-6 pb-mobile-nav lg:pb-8";
 export const memberPagePaddingFormSticky = "py-5 sm:py-6 pb-28 lg:pb-8";
 
 export const memberBtnPrimary =
-  "focus-ring min-h-11 w-full rounded-md bg-[#178358] px-4 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-[#1a9664] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-45";
+  "focus-ring min-h-11 w-full rounded-md bg-[var(--gold)] px-4 py-3 text-[15px] font-semibold text-[#1a1400] transition-colors hover:bg-[var(--gold-hover)] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-45";
 
 export const memberBtnSecondary =
-  "focus-ring min-h-10 shrink-0 rounded-md border border-[#555] px-4 py-2 text-[13px] font-medium text-white transition-colors hover:border-[#777] hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40";
+  "focus-ring min-h-10 shrink-0 rounded-md border border-[var(--border-strong)] px-4 py-2 text-[13px] font-medium text-white transition-colors hover:border-[var(--cyan)] hover:bg-[var(--cyan-muted)] disabled:cursor-not-allowed disabled:opacity-40";
 
 export const memberBtnGhost =
-  "focus-ring min-h-10 rounded-md bg-[#333] px-3 py-2 text-[12px] text-white transition-colors hover:bg-[#3d3d3d] disabled:cursor-not-allowed disabled:opacity-40 sm:text-[13px]";
+  "focus-ring min-h-10 rounded-md bg-[var(--surface)] px-3 py-2 text-[12px] text-white transition-colors hover:bg-[var(--surface-elevated)] disabled:cursor-not-allowed disabled:opacity-40 sm:text-[13px]";
 
 export const memberBtnDanger =
   "focus-ring min-h-10 rounded-md bg-[#e85d4a] px-3 py-2 text-[12px] font-medium text-white transition-colors hover:bg-[#d14a38] disabled:cursor-not-allowed disabled:opacity-40 sm:text-[13px]";
 
 export const memberDateChipClass =
-  "focus-ring rounded-md border border-[#3a3a3a] bg-[#1a1a1a] px-3 py-2 text-[13px] font-medium text-[#d4d4d4] transition-colors hover:border-[#555] hover:bg-[#222]";
+  "focus-ring rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[13px] font-medium text-[var(--text)] transition-colors hover:border-[var(--border-strong)] hover:bg-[var(--surface-elevated)]";
 
 export const memberRecordCardClass =
-  "rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] px-4 py-4 sm:px-5";
+  "rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-4 py-4 sm:px-5";
 
 export type MemberContainerWidth = "narrow" | "wide" | "profile" | "xl";
 
@@ -53,7 +53,7 @@ export function memberContainerFor(width: MemberContainerWidth): string {
 
 export function MemberFieldLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="mb-2 block text-[13px] leading-snug text-[#9ca3af] sm:text-[14px]">
+    <span className="mb-2 block text-[13px] leading-snug text-[var(--text-muted)] sm:text-[14px]">
       {children}
     </span>
   );

@@ -1,328 +1,448 @@
 "use client";
 
 import Link from "next/link";
-import type { SidebarMenuItem } from "./sidebar-menu";
-import PromotionSidebarSlider from "./promotions/PromotionSidebarSlider";
-import {
-  sidebarMenuItems,
-  sidebarPrimaryItems,
-  sidebarSecondaryItems,
-} from "./sidebar-menu";
-import { ExternalLinkIcon, LiveSupportIcon, SubItemIcon, menuIconFor } from "./SidebarIcons";
-import { sidebarItemHref, sidebarSubItemHref } from "@/lib/sidebar-routes";
-import { BKBAJI_ANDROID_APP_PATH } from "@/lib/seo/site-config";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./AuthProvider";
-import { memberLiveChatHref } from "@/lib/member-routes";
 import { useLocale } from "./LocaleProvider";
+import { sidebarGridItems, type SidebarGridItem } from "./sidebar-menu";
+import {
+  memberLiveChatHref,
+  memberMissionHref,
+  memberRebateHref,
+  memberRewardCenterHref,
+} from "@/lib/member-routes";
+import { BKBAJI_ANDROID_APP_PATH } from "@/lib/seo/site-config";
+import { lobbyCategoryHref, type LobbyKind } from "@/lib/vendor-routes";
 
 type SideNavigationProps = {
   expanded: boolean;
-  expandedId: string | null;
-  onToggleItem: (id: string) => void;
-  onItemClick: (id: string) => void;
-  onExpand: () => void;
+  onClose: () => void;
 };
 
-function Chevron({ open }: { open: boolean }) {
-  return (
-    <svg
-      width="10"
-      height="10"
-      viewBox="0 0 10 10"
-      fill="none"
-      aria-hidden
-      className={`block shrink-0 text-[#a8a8a8] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-    >
-      <path
-        d="M1.5 3.5L5 7l3.5-3.5"
-        stroke="currentColor"
-        strokeWidth="1"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+const CORAL = "#E85A3C";
+const GOLD = "#E8B84A";
+const SKY = "#5B9FD4";
+const GREEN = "#2CB86E";
+
+function toneColor(tone: SidebarGridItem["tone"]): string {
+  if (tone === "gold") return GOLD;
+  if (tone === "sky") return SKY;
+  if (tone === "green") return GREEN;
+  return CORAL;
 }
 
-function PromoBanner() {
-  const { t } = useLocale();
+function GridIcon({ id, tone }: { id: string; tone: SidebarGridItem["tone"] }) {
+  const c = toneColor(tone);
+  const common = { width: 20, height: 20, viewBox: "0 0 36 36", fill: "none", "aria-hidden": true as const };
 
-  return (
-    <div className="mx-2 mb-2 shrink-0 overflow-hidden rounded-lg">
-      <div className="relative flex min-h-[72px] items-center overflow-hidden rounded-lg bg-gradient-to-r from-[#2a0808] via-[#5c1010] to-[#8b1a1a] px-3 py-2.5">
-        <p className="min-w-0 flex-1 pr-[84px] text-[11px] font-semibold uppercase leading-[1.45] tracking-wide text-white/95 sm:text-[12px]">
-          {t.promoSponsor}
-        </p>
-        <div className="absolute -right-1 bottom-0 top-0 flex w-[88px] items-center justify-center">
-          <div className="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-[#1a2d6e] text-center shadow-lg">
-            <span className="text-[9px] font-bold leading-none text-[#f5c518]">MI</span>
-            <span className="mt-0.5 text-[7px] font-semibold leading-none text-white">EMIRATES</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-type MenuRowProps = {
-  item: SidebarMenuItem;
-  expandedId: string | null;
-  onToggleItem: (id: string) => void;
-};
-
-function MenuRow({ item, expandedId, onToggleItem }: MenuRowProps) {
-  const { t, preferences } = useLocale();
-  const kind = item.kind ?? (item.subItems?.length ? "dropdown" : "link");
-  const isOpen = expandedId === item.id;
-  const label = t.sidebar[item.id] ?? item.id;
-  const isPromotions = item.id === "promotions";
-
-  const icon = (
-    <span className="flex h-[26px] w-[26px] shrink-0 items-center justify-center">
-      {menuIconFor(item.id)}
-    </span>
-  );
-
-  if (kind === "link") {
-    const href = sidebarItemHref(preferences.locale, item.id);
-    const rowClass =
-      "flex w-full items-center gap-3 px-3 py-[13px] text-left transition-opacity hover:opacity-90";
-    if (href === BKBAJI_ANDROID_APP_PATH) {
+  switch (id) {
+    case "hotGames":
       return (
-        <a href={href} download className={rowClass}>
-          {icon}
-          <span className="min-w-0 flex-1 text-[14px] font-normal leading-snug text-[#c8c8c8]">{label}</span>
-          <span className="w-4 shrink-0" />
-        </a>
+        <svg {...common}>
+          <path
+            d="M18 4c2 4 1 7-1 9 4-1 8 2 8 7a9 9 0 11-18 0c0-4 3-7 6-9-1 3 1 5 3 6 0-5 1-9 2-13z"
+            fill={c}
+          />
+          <path d="M15 24c0 2 1.5 4 3 4s3-2 3-4c0-2-1.5-3.5-3-4.5-1.5 1-3 2.5-3 4.5z" fill="#F5C518" />
+        </svg>
       );
-    }
-    if (href) {
+    case "inviteFriends":
       return (
-        <Link href={href} className={rowClass}>
-          {icon}
-          <span className="min-w-0 flex-1 text-[14px] font-normal leading-snug text-[#c8c8c8]">{label}</span>
-          <span className="w-4 shrink-0" />
-        </Link>
+        <svg {...common}>
+          <circle cx="12" cy="13" r="4" fill={c} />
+          <circle cx="24" cy="13" r="4" fill={c} />
+          <path
+            d="M8 26c0-3.5 2.5-6 6-6h1c1.5 2.5 4.5 2.5 6 0h1c3.5 0 6 2.5 6 6"
+            stroke={c}
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            fill="none"
+          />
+          <path d="M14 18c2 1.5 6 1.5 8 0" stroke="#7EC8F0" strokeWidth="2" strokeLinecap="round" />
+        </svg>
       );
-    }
-    return (
-      <a href="#" className={rowClass}>
-        {icon}
-        <span className="min-w-0 flex-1 text-[14px] font-normal leading-snug text-[#c8c8c8]">{label}</span>
-        <span className="w-4 shrink-0" />
-      </a>
-    );
+    case "favorites":
+      return (
+        <svg {...common}>
+          <path
+            d="M8 10h16a2 2 0 012 2v14H8a2 2 0 01-2-2V12a2 2 0 012-2z"
+            fill={c}
+          />
+          <path d="M10 10V8a3 3 0 013-3h2l2 3h7" stroke={c} strokeWidth="2" fill="none" />
+          <path
+            d="M18 16.5c-1.2-1.3-3.2-.3-3.2 1.4 0 1.6 1.5 2.8 3.2 4.1 1.7-1.3 3.2-2.5 3.2-4.1 0-1.7-2-2.7-3.2-1.4z"
+            fill="#fff"
+          />
+        </svg>
+      );
+    case "offers":
+      return (
+        <svg {...common}>
+          <rect x="9" y="14" width="18" height="14" rx="2" fill={c} />
+          <path d="M9 18h18" stroke="#9A6B12" strokeWidth="2" />
+          <path d="M18 14v14" stroke="#9A6B12" strokeWidth="2" />
+          <path
+            d="M14 14c-2.5 0-4-1.8-4-3.5S12 7 14 9c2-2 4-.8 4 1.5S16.5 14 14 14z"
+            fill={c}
+          />
+          <path
+            d="M22 14c-2.5 0-4-1.8-4-3.5S20 7 22 9c2-2 4-.8 4 1.5S24.5 14 22 14z"
+            fill={c}
+          />
+        </svg>
+      );
+    case "slots":
+      return (
+        <svg {...common}>
+          <rect x="5" y="8" width="26" height="20" rx="4" fill={c} />
+          <rect x="8" y="11" width="6" height="14" rx="1.5" fill="#F5C518" />
+          <rect x="15" y="11" width="6" height="14" rx="1.5" fill="#F5C518" />
+          <rect x="22" y="11" width="6" height="14" rx="1.5" fill="#F5C518" />
+          <text x="9.2" y="21.5" fill={c} fontSize="10" fontWeight="900">
+            7
+          </text>
+          <text x="16.2" y="21.5" fill={c} fontSize="10" fontWeight="900">
+            7
+          </text>
+          <text x="23.2" y="21.5" fill={c} fontSize="10" fontWeight="900">
+            7
+          </text>
+        </svg>
+      );
+    case "rewardCenter":
+      return (
+        <svg {...common}>
+          <circle cx="18" cy="18" r="11" fill={c} />
+          <circle cx="18" cy="18" r="7" fill="#8B6914" />
+          <path d="M18 12l1.8 3.6 4 .6-2.9 2.8.7 4L18 21.4 14.4 23l.7-4L12.2 16.2l4-.6L18 12z" fill="#FFE566" />
+        </svg>
+      );
+    case "live":
+      return (
+        <svg {...common}>
+          <circle cx="18" cy="18" r="12" fill={c} />
+          <circle cx="18" cy="18" r="7" fill="#2a1a12" />
+          <circle cx="18" cy="18" r="3.5" fill="#F5C518" />
+          <circle cx="18" cy="18" r="1.5" fill="#fff" />
+        </svg>
+      );
+    case "rebate":
+      return (
+        <svg {...common}>
+          <rect x="7" y="10" width="22" height="16" rx="3" fill={c} />
+          <path d="M11 16h6M11 20h10" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M24 14l3 4-3 4" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12 14l-3 4 3 4" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+        </svg>
+      );
+    case "sports":
+      return (
+        <svg {...common}>
+          <rect x="15" y="6" width="6" height="22" rx="1" fill={c} />
+          <path d="M10 10h16" stroke={c} strokeWidth="3" strokeLinecap="round" />
+          <path d="M8 26h20" stroke={c} strokeWidth="3" strokeLinecap="round" />
+          <circle cx="18" cy="18" r="3" fill="#F5C518" />
+        </svg>
+      );
+    case "vip":
+      return (
+        <svg {...common}>
+          <path
+            d="M18 5l3.5 7.5L30 14l-6 5.5L26 28l-8-4.5L10 28l2-8.5L6 14l8.5-1.5L18 5z"
+            fill={c}
+          />
+          <path d="M18 12l1.5 3 3.2.4-2.3 2.2.6 3.2L18 19.2 15 20.8l.6-3.2-2.3-2.2 3.2-.4L18 12z" fill="#fff" />
+        </svg>
+      );
+    case "esports":
+      return (
+        <svg {...common}>
+          <rect x="5" y="12" width="26" height="14" rx="5" fill={c} />
+          <circle cx="13" cy="19" r="2.2" fill="#fff" />
+          <path d="M12 17v4M11 19h4" stroke={c} strokeWidth="1.4" strokeLinecap="round" />
+          <circle cx="23" cy="17.5" r="1.4" fill="#F5C518" />
+          <circle cx="26" cy="20.5" r="1.4" fill="#7EC8F0" />
+        </svg>
+      );
+    case "mission":
+      return (
+        <svg {...common}>
+          <circle cx="18" cy="18" r="12" stroke={c} strokeWidth="2.5" fill="none" />
+          <circle cx="18" cy="18" r="7" stroke={c} strokeWidth="2.5" fill="none" />
+          <circle cx="18" cy="18" r="2.5" fill={c} />
+          <path d="M18 4v4M18 28v4M4 18h4M28 18h4" stroke={c} strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      );
+    case "table":
+    case "poker":
+      return (
+        <svg {...common}>
+          <rect x="8" y="8" width="12" height="12" rx="2.5" fill={c} transform="rotate(12 14 14)" />
+          <rect x="16" y="14" width="12" height="12" rx="2.5" fill="#F5C518" transform="rotate(-8 22 20)" />
+          <circle cx="14" cy="13" r="1.5" fill="#fff" />
+          <circle cx="22" cy="19" r="1.5" fill="#333" />
+        </svg>
+      );
+    case "fishing":
+      return (
+        <svg {...common}>
+          <path
+            d="M6 20c4-8 12-10 18-6 2 1.5 4 2 6 1-2 3-5 5-9 5H8c-1.5 0-2.5-0.5-2-0z"
+            fill={c}
+          />
+          <path d="M8 18c2-1 4-1 6 0" stroke="#7EC8F0" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="24" cy="16" r="1.4" fill="#fff" />
+          <path d="M28 14l4-2M28 18l4 2" stroke={c} strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M10 22c1.5 2 4 3 7 2" stroke={c} strokeWidth="2" strokeLinecap="round" opacity="0.7" />
+        </svg>
+      );
+    case "lottery":
+      return (
+        <svg {...common}>
+          <rect x="8" y="7" width="20" height="14" rx="2.5" fill={c} />
+          <path d="M8 12h20" stroke="#fff" strokeWidth="1.5" opacity="0.35" />
+          <circle cx="12" cy="27" r="3" fill={c} />
+          <circle cx="18" cy="27" r="3" fill={c} />
+          <circle cx="24" cy="27" r="3" fill={c} />
+          <text x="10.5" y="29.2" fill="#fff" fontSize="5" fontWeight="700">
+            7
+          </text>
+          <text x="16.5" y="29.2" fill="#fff" fontSize="5" fontWeight="700">
+            2
+          </text>
+          <text x="22.5" y="29.2" fill="#fff" fontSize="5" fontWeight="700">
+            9
+          </text>
+        </svg>
+      );
+    case "appDownload":
+      return (
+        <svg {...common}>
+          <path
+            d="M8 16c0-6 4.5-10 10-10s10 4 10 10c3 0 5 2 5 5s-2 5-5 5H11c-3.5 0-6-2.5-6-5.5 0-2.5 1.5-4.5 3-5z"
+            fill={c}
+          />
+          <path d="M18 14v10" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" />
+          <path d="M14 20l4 4 4-4" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case "customerService":
+      return (
+        <svg {...common}>
+          <path
+            d="M10 16a8 8 0 0116 0v2a3 3 0 01-3 3h-1v-7a4 4 0 00-8 0v8h5"
+            stroke={c}
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            fill="none"
+          />
+          <rect x="14" y="20" width="10" height="8" rx="3" fill={c} />
+          <circle cx="19" cy="24" r="1.2" fill="#fff" />
+        </svg>
+      );
+    case "language":
+      return (
+        <svg {...common}>
+          <circle cx="18" cy="18" r="14" fill="#006a4e" />
+          <circle cx="20" cy="18" r="8" fill="#f42a41" />
+        </svg>
+      );
+    default:
+      return (
+        <svg {...common}>
+          <circle cx="18" cy="18" r="10" fill={c} />
+        </svg>
+      );
   }
-
-  if (kind === "external") {
-    const externalHref = item.externalUrl ?? "#";
-    return (
-      <a
-        href={externalHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex w-full items-center gap-3 px-3 py-[13px] text-left transition-opacity hover:opacity-90"
-      >
-        {icon}
-        <span className="min-w-0 flex-1 text-[14px] font-normal leading-snug text-[#c8c8c8]">{label}</span>
-        <span className="flex w-4 shrink-0 items-center justify-end">
-          <ExternalLinkIcon />
-        </span>
-      </a>
-    );
-  }
-
-  return (
-    <div>
-      <button
-        type="button"
-        onClick={() => onToggleItem(item.id)}
-        className="focus-ring flex w-full items-center gap-3 px-3 py-[13px] text-left transition-opacity hover:opacity-90"
-        aria-expanded={isOpen}
-      >
-        {icon}
-        <span className="min-w-0 flex-1 text-[14px] font-normal leading-snug text-[#c8c8c8]">{label}</span>
-        <span className="flex shrink-0 items-center gap-2">
-          {item.showViewAll ? (
-            <Link
-              href={`/${preferences.locale}/promotion`}
-              onClick={(e) => e.stopPropagation()}
-              className="text-[12px] font-medium text-[#4ade80] underline-offset-2 hover:underline"
-            >
-              {t.viewAll}
-            </Link>
-          ) : null}
-          <Chevron open={isOpen} />
-        </span>
-      </button>
-
-      <div
-        className={`grid transition-[grid-template-rows] duration-200 ease-out ${
-          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-        }`}
-      >
-        <div className="overflow-hidden">
-          {isPromotions && isOpen ? (
-            <PromotionSidebarSlider />
-          ) : (
-            <div className="space-y-1 px-2 pb-1">
-              {item.subItems?.map((sub) => {
-                const href = sidebarSubItemHref(preferences.locale, item.id, sub.id);
-                const rowClass =
-                  "flex items-center gap-3 rounded-md bg-[#242424] px-3 py-2.5 text-[13px] text-[#d8d8d8] transition-colors hover:bg-[#2e2e2e]";
-                const content = (
-                  <>
-                    <SubItemIcon id={sub.id} label={t.sub[sub.id] ?? sub.id} accent={sub.accent} />
-                    <span className="truncate">{t.sub[sub.id] ?? sub.id}</span>
-                  </>
-                );
-                if (href) {
-                  return (
-                    <Link key={sub.id} href={href} className={rowClass}>
-                      {content}
-                    </Link>
-                  );
-                }
-                return (
-                  <a key={sub.id} href="#" className={rowClass}>
-                    {content}
-                  </a>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
 }
 
-export default function SideNavigation({
-  expanded,
-  expandedId,
-  onToggleItem,
-  onItemClick,
-  onExpand,
-}: SideNavigationProps) {
-  const { t, preferences } = useLocale();
+function resolveHref(locale: string, item: SidebarGridItem): string | null {
+  if (item.action === "home") return `/${locale}`;
+  if (item.action === "locale" || item.action === "liveChat") return null;
+  if (item.action === "download") return BKBAJI_ANDROID_APP_PATH;
+  if (item.action === "page") {
+    if (item.routeKey === "referral") return `/${locale}/referral`;
+    if (item.routeKey === "promotion") return `/${locale}/promotion`;
+    if (item.routeKey === "vip") return `/${locale}/vip`;
+    return `/${locale}`;
+  }
+  if (item.action === "member") {
+    if (item.routeKey === "reward-center") return memberRewardCenterHref(locale);
+    if (item.routeKey === "rebate") return memberRebateHref(locale);
+    if (item.routeKey === "mission") return memberMissionHref(locale);
+    return `/${locale}/member`;
+  }
+  if (item.action === "lobby" && item.routeKey) {
+    return lobbyCategoryHref(locale, item.routeKey as LobbyKind);
+  }
+  return `/${locale}`;
+}
+
+export default function SideNavigation({ expanded, onClose }: SideNavigationProps) {
+  const { t, preferences, openModal } = useLocale();
   const router = useRouter();
   const { isAuthenticated } = useAuth();
+  const locale = preferences.locale;
 
-  function goLiveChat() {
-    const href = memberLiveChatHref(preferences.locale);
+  useEffect(() => {
+    if (!expanded) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [expanded, onClose]);
+
+  useEffect(() => {
+    if (!expanded) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [expanded]);
+
+  function handleMemberNav(href: string) {
     if (!isAuthenticated) {
-      router.push(`/${preferences.locale}/login?next=${encodeURIComponent(href)}`);
+      router.push(`/${locale}/login?next=${encodeURIComponent(href)}`);
+      onClose();
       return;
     }
     router.push(href);
-    onItemClick("");
+    onClose();
+  }
+
+  function handleLocale() {
+    onClose();
+    openModal();
+  }
+
+  function handleLiveChat() {
+    const href = memberLiveChatHref(locale);
+    handleMemberNav(href);
   }
 
   return (
-    <aside
-      className={`relative z-20 flex h-full max-h-full min-h-0 shrink-0 flex-col border-r border-[#2a2a2a] bg-[#1a1a1a] transition-[width] duration-300 ease-in-out ${
-        expanded
-          ? "w-[min(100vw,272px)] max-lg:fixed max-lg:bottom-0 max-lg:left-0 max-lg:top-[52px] max-lg:z-30"
-          : "w-0 overflow-hidden border-r-0 max-lg:hidden lg:w-[52px] lg:overflow-visible lg:border-r"
-      }`}
-    >
-      <div className={`shrink-0 p-2 ${expanded ? "" : "flex justify-center"}`}>
-        <button
-          type="button"
-          onClick={goLiveChat}
-          className={
-            expanded
-              ? "flex w-full items-center gap-3 rounded-lg bg-[#262626] px-3 py-3 text-left text-[14px] font-medium text-white transition-colors hover:bg-[#303030]"
-              : "flex h-10 w-10 items-center justify-center rounded-lg bg-[#262626] transition-colors hover:bg-[#303030]"
-          }
-        >
-          <LiveSupportIcon />
-          {expanded ? <span>{t.liveSupport}</span> : null}
-        </button>
-      </div>
+    <>
+      <div
+        className={`fixed inset-0 z-[60] bg-black/55 transition-opacity duration-300 ${
+          expanded ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        aria-hidden={!expanded}
+        onClick={onClose}
+      />
 
-      {expanded ? <PromoBanner /> : null}
-
-      <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
-        {expanded ? (
-          <div className="pb-3">
-            {sidebarPrimaryItems.map((item) => (
-              <MenuRow
-                key={item.id}
-                item={item}
-                expandedId={expandedId}
-                onToggleItem={onToggleItem}
+      <aside
+        className={`fixed bottom-0 left-0 top-0 z-[70] flex w-[min(78vw,280px)] max-w-full flex-col bg-[#042c2c] shadow-[8px_0_32px_rgba(0,0,0,0.45)] transition-transform duration-300 ease-out ${
+          expanded ? "translate-x-0" : "-translate-x-full"
+        }`}
+        aria-hidden={!expanded}
+        aria-label={t.ui.menu}
+      >
+        <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+          <Link
+            href={`/${locale}`}
+            onClick={onClose}
+            className="focus-ring text-[18px] font-bold tracking-tight"
+          >
+            <span className="text-[var(--gold)]">BK</span>
+            <span className="text-white">Baji</span>
+          </Link>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t.ui.closeMenu}
+            className="focus-ring flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white transition-colors hover:bg-white/10"
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+              <path
+                d="M4 4l10 10M14 4L4 14"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
               />
-            ))}
+            </svg>
+          </button>
+        </div>
 
-            <div className="my-1 border-t border-[#2a2a2a]" />
-
-            {sidebarSecondaryItems.map((item) => (
-              <MenuRow
-                key={item.id}
-                item={item}
-                expandedId={expandedId}
-                onToggleItem={onToggleItem}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center gap-0.5 px-1 py-1">
-            {sidebarMenuItems.map((item) => {
-              const href = sidebarItemHref(preferences.locale, item.id);
+        <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2.5 py-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch]">
+          <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+            {sidebarGridItems.map((item) => {
               const label = t.sidebar[item.id] ?? item.id;
-              const railClass =
-                "focus-ring flex h-11 w-11 shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-[#262626]";
-              if (href === BKBAJI_ANDROID_APP_PATH) {
+              const href = resolveHref(locale, item);
+              const tileClass =
+                "focus-ring flex min-h-[48px] flex-col items-center justify-center gap-1 rounded-xl bg-[#0a3d3d] px-1.5 py-1.5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-colors hover:bg-[#0f4a4a] active:scale-[0.98] sm:min-h-[52px]";
+
+              const content = (
+                <>
+                  <GridIcon id={item.id} tone={item.tone} />
+                  <span className="max-w-full px-0.5 text-[10px] font-medium leading-tight text-white sm:text-[11px]">
+                    {label}
+                  </span>
+                </>
+              );
+
+              if (item.action === "locale") {
+                return (
+                  <button key={item.id} type="button" onClick={handleLocale} className={tileClass}>
+                    {content}
+                  </button>
+                );
+              }
+
+              if (item.action === "liveChat") {
+                return (
+                  <button key={item.id} type="button" onClick={handleLiveChat} className={tileClass}>
+                    {content}
+                  </button>
+                );
+              }
+
+              if (item.action === "download" && href) {
                 return (
                   <a
                     key={item.id}
                     href={href}
                     download
-                    aria-label={label}
-                    className={railClass}
+                    onClick={onClose}
+                    className={tileClass}
                   >
-                    {menuIconFor(item.id)}
+                    {content}
                   </a>
                 );
               }
-              if (item.kind === "external" && item.externalUrl) {
+
+              if (item.action === "member" && href) {
                 return (
-                  <a
+                  <button
                     key={item.id}
-                    href={item.externalUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    className={railClass}
+                    type="button"
+                    onClick={() => handleMemberNav(href)}
+                    className={tileClass}
                   >
-                    {menuIconFor(item.id)}
-                  </a>
+                    {content}
+                  </button>
                 );
               }
+
               if (href) {
                 return (
-                  <Link key={item.id} href={href} aria-label={label} className={railClass}>
-                    {menuIconFor(item.id)}
+                  <Link key={item.id} href={href} onClick={onClose} className={tileClass}>
+                    {content}
                   </Link>
                 );
               }
+
               return (
-                <button
-                  key={item.id}
-                  type="button"
-                  aria-label={label}
-                  onClick={() => onItemClick(item.id)}
-                  className={railClass}
-                >
-                  {menuIconFor(item.id)}
+                <button key={item.id} type="button" onClick={onClose} className={tileClass}>
+                  {content}
                 </button>
               );
             })}
           </div>
-        )}
-      </nav>
-    </aside>
+        </nav>
+      </aside>
+    </>
   );
 }

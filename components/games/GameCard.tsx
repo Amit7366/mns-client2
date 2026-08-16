@@ -7,8 +7,8 @@ import { useGamePlayGate } from "./GamePlayGateProvider";
 function BjMark() {
   return (
     <span className="text-[8px] font-bold leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] lg:text-[11px]">
-      <span className="text-white">bk</span>
-      <span className="text-[#ed1c24]">b</span>
+      <span className="text-[var(--gold)]">bk</span>
+      <span className="text-white">b</span>
     </span>
   );
 }
@@ -17,7 +17,7 @@ function GameImagePlaceholder({ title }: { title?: string }) {
   const displayTitle = title?.trim() || "Game";
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center bg-[#1f1f1f] px-2 py-3 text-center">
+    <div className="flex h-full w-full flex-col items-center justify-center bg-[var(--surface)] px-2 py-3 text-center">
       <p className="line-clamp-4 text-[10px] font-semibold leading-snug text-white sm:text-[11px] lg:text-xs">
         {displayTitle}
       </p>
@@ -52,7 +52,7 @@ export default function GameCard(props: GameCardProps) {
   const alt =
     props.title && props.provider ? `${props.title} — ${props.provider}` : "";
   const defaultClassName =
-    "group relative block w-full overflow-hidden rounded-md bg-[#141414] text-left shadow-[0_2px_10px_rgba(0,0,0,0.35)] transition-transform duration-200 active:scale-[0.98] lg:rounded-[10px] lg:shadow-[0_4px_16px_rgba(0,0,0,0.35)] lg:active:scale-100 lg:hover:scale-[1.02]";
+    "group relative block w-full overflow-hidden rounded-lg bg-[var(--surface-card)] text-left shadow-[0_2px_10px_rgba(0,0,0,0.35)] transition-transform duration-200 active:scale-[0.98] lg:rounded-[12px] lg:shadow-[0_4px_16px_rgba(0,0,0,0.35)] lg:active:scale-100 lg:hover:scale-[1.02]";
   const buttonClass = (props.className ?? defaultClassName).trim();
 
   function handleClick() {

@@ -101,7 +101,7 @@ export default function PromotionCard({ promo, variant = "grid", href }: Promoti
     return (
       <Link
         href={linkHref}
-        className="focus-ring group relative block w-[min(72vw,220px)] shrink-0 snap-start overflow-hidden rounded-xl border border-[#2a2a2a] bg-[#141414] shadow-[0_8px_24px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#178358]/40 sm:w-[200px]"
+        className="focus-ring group relative block w-[min(72vw,220px)] shrink-0 snap-start overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-card)] shadow-[0_8px_24px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--gold)]/40 sm:w-[200px]"
       >
         <PromoBanner promo={promoWithBadgeLabel} />
         <div className="px-3 py-2.5">
@@ -113,7 +113,7 @@ export default function PromotionCard({ promo, variant = "grid", href }: Promoti
 
   if (variant === "featured") {
     return (
-      <article className="group relative overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#141414] shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
+      <article className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-card)] shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
         <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr]">
           <PromoBanner promo={promoWithBadgeLabel} large />
 
@@ -152,7 +152,7 @@ export default function PromotionCard({ promo, variant = "grid", href }: Promoti
 
             <Link
               href={linkHref}
-              className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#178358] to-[#22c55e] px-5 py-3 text-[14px] font-bold text-white shadow-[0_4px_20px_rgba(23,131,88,0.35)] transition-all hover:from-[#1a9664] hover:to-[#34d399] sm:w-fit"
+              className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[#22c55e] px-5 py-3 text-[14px] font-bold text-white shadow-[0_4px_20px_rgba(23,131,88,0.35)] transition-all hover:from-[var(--gold-hover)] hover:to-[#34d399] sm:w-fit"
             >
               {p.depositCta}
               <ArrowIcon />
@@ -164,7 +164,7 @@ export default function PromotionCard({ promo, variant = "grid", href }: Promoti
   }
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#262626] bg-[#141414] shadow-[0_4px_20px_rgba(0,0,0,0.25)] transition-all duration-300 hover:-translate-y-1 hover:border-[#178358]/35 hover:shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-[var(--surface-elevated)] bg-[var(--surface-card)] shadow-[0_4px_20px_rgba(0,0,0,0.25)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--gold)]/35 hover:shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
       <PromoBanner promo={promoWithBadgeLabel} />
 
       <div className="flex flex-1 flex-col gap-3 p-4">
@@ -193,7 +193,7 @@ export default function PromotionCard({ promo, variant = "grid", href }: Promoti
 
         <Link
           href={linkHref}
-          className="focus-ring mt-auto inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#4ade80] transition-colors group-hover:text-[#86efac]"
+          className="focus-ring mt-auto inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--cyan)] transition-colors group-hover:text-[#86efac]"
         >
           {p.depositCta}
           <ArrowIcon />

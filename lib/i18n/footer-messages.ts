@@ -1,13 +1,18 @@
-import { footerAboutExpanded, footerAboutPreview } from "./footer-about-text";
+import { footerAboutExpanded } from "./footer-about-text";
 
 export type FooterMessages = {
   gaming: string;
   aboutBaji: string;
   features: string;
   help: string;
+  helpCenter: string;
+  gameCenter: string;
+  partners: string;
+  liveChat: string;
   sponsorships: string;
   brandAmbassadors: string;
   links: Record<string, string>;
+  gameCenterLinks: Record<string, string>;
   sponsorshipsData: Record<string, { name: string; role: string }>;
   ambassadorsData: Record<string, { name: string; years: string }>;
   bottom: {
@@ -28,11 +33,51 @@ export type FooterMessages = {
   };
 };
 
+const gameCenterEn = {
+  hotGames: "Hot Games",
+  favorites: "Favorites",
+  slots: "Slots",
+  live: "Live",
+  sports: "Sports",
+  esports: "E-Sports",
+  poker: "Poker",
+  fishing: "Fishing",
+  lottery: "Lottery",
+};
+
+const gameCenterBn = {
+  hotGames: "গরম খেলা",
+  favorites: "প্রিয় আইটেমস",
+  slots: "স্লট",
+  live: "লাইভ",
+  sports: "স্পোর্টস",
+  esports: "ই-স্পোর্টস",
+  poker: "পোকার",
+  fishing: "ফিশিং",
+  lottery: "লটারি",
+};
+
+const gameCenterHi = {
+  hotGames: "हॉट गेम्स",
+  favorites: "पसंदीदा",
+  slots: "स्लॉट",
+  live: "लाइव",
+  sports: "स्पोर्ट्स",
+  esports: "ई-स्पोर्ट्स",
+  poker: "पोकर",
+  fishing: "फिशिंग",
+  lottery: "लॉटरी",
+};
+
 export const footerEn: FooterMessages = {
   gaming: "Gaming",
   aboutBaji: "About BKBaji",
   features: "Features",
   help: "Help",
+  helpCenter: "Help Center",
+  gameCenter: "Game Center",
+  partners: "Partners",
+  liveChat: "Live Chat",
   sponsorships: "Sponsorships",
   brandAmbassadors: "Brand Ambassadors",
   links: {
@@ -55,6 +100,7 @@ export const footerEn: FooterMessages = {
     appDownload: "APP Download",
     bjForum: "BKBaji Forum",
   },
+  gameCenterLinks: gameCenterEn,
   sponsorshipsData: {
     quettaGladiators: { name: "Quetta Gladiators", role: "Titanium Sponsor, 2023" },
     sunrisersEasternCape: { name: "Sunrisers Eastern Cape", role: "Title Sponsor, 2023 - 2024" },
@@ -76,7 +122,8 @@ export const footerEn: FooterMessages = {
     gamingLicense: "Gaming License",
     responsibleGaming: "Responsible Gaming",
     aboutHeading: "BKBaji Bangladesh - Leading Online Gaming and Betting Platform in Bangladesh",
-    aboutText: footerAboutPreview,
+    aboutText:
+      "Our Website is an innovative online sportsbook and casino. Offering a wide variety of sports and betting markets with high odds, plus a rich selection of casino games from leading providers.",
     aboutTextMore: footerAboutExpanded,
     showMore: "Show more",
     showLess: "Show less",
@@ -97,6 +144,10 @@ export const footerBn: FooterMessages = {
   aboutBaji: "BKBaji সম্পর্কে",
   features: "ফিচার",
   help: "সাহায্য",
+  helpCenter: "সাহায্য কেন্দ্র",
+  gameCenter: "গেম সেন্টার",
+  partners: "অংশীদার",
+  liveChat: "লাইভ চ্যাট",
   sponsorships: "স্পন্সরশিপ",
   brandAmbassadors: "ব্র্যান্ড অ্যাম্বাসেডর",
   links: {
@@ -119,6 +170,7 @@ export const footerBn: FooterMessages = {
     appDownload: "অ্যাপ ডাউনলোড",
     bjForum: "BKBaji ফোরাম",
   },
+  gameCenterLinks: gameCenterBn,
   sponsorshipsData: {
     quettaGladiators: { name: "Quetta Gladiators", role: "Titanium Sponsor, 2023" },
     sunrisersEasternCape: { name: "Sunrisers Eastern Cape", role: "Title Sponsor, 2023 - 2024" },
@@ -140,7 +192,8 @@ export const footerBn: FooterMessages = {
     gamingLicense: "গেমিং লাইসেন্স",
     responsibleGaming: "দায়িত্বশীল গেমিং",
     aboutHeading: "BKBaji বাংলাদেশ - বাংলাদেশের শীর্ষ অনলাইন গেমিং ও বেটিং প্ল্যাটফর্ম",
-    aboutText: footerAboutPreview,
+    aboutText:
+      "Our Website is an innovative online sportsbook and casino. Offering a wide variety of sports and betting markets with high odds, plus a rich selection of casino games from leading providers.",
     aboutTextMore: footerAboutExpanded,
     showMore: "আরও দেখুন",
     showLess: "কম দেখুন",
@@ -161,6 +214,10 @@ export const footerHi: FooterMessages = {
   aboutBaji: "BKBaji के बारे में",
   features: "फीचर्स",
   help: "सहायता",
+  helpCenter: "सहायता केंद्र",
+  gameCenter: "गेम सेंटर",
+  partners: "पार्टनर",
+  liveChat: "लाइव चैट",
   sponsorships: "प्रायोजन",
   brandAmbassadors: "ब्रांड एंबेसडर",
   links: {
@@ -183,6 +240,7 @@ export const footerHi: FooterMessages = {
     appDownload: "ऐप डाउनलोड",
     bjForum: "BKBaji फोरम",
   },
+  gameCenterLinks: gameCenterHi,
   sponsorshipsData: {
     quettaGladiators: { name: "Quetta Gladiators", role: "Titanium Sponsor, 2023" },
     sunrisersEasternCape: { name: "Sunrisers Eastern Cape", role: "Title Sponsor, 2023 - 2024" },
@@ -204,7 +262,8 @@ export const footerHi: FooterMessages = {
     gamingLicense: "गेमिंग लाइसेंस",
     responsibleGaming: "जिम्मेदार गेमिंग",
     aboutHeading: "BKBaji Bangladesh - बांग्लादेश में अग्रणी ऑनलाइन गेमिंग और बेटिंग प्लेटफॉर्म",
-    aboutText: footerAboutPreview,
+    aboutText:
+      "Our Website is an innovative online sportsbook and casino. Offering a wide variety of sports and betting markets with high odds, plus a rich selection of casino games from leading providers.",
     aboutTextMore: footerAboutExpanded,
     showMore: "और देखें",
     showLess: "कम देखें",

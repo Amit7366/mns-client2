@@ -10,33 +10,21 @@ import CurrencyLanguageModal from "./CurrencyLanguageModal";
 import { ToastProvider } from "./ToastProvider";
 import GameReturnHandler from "./GameReturnHandler";
 import { GamePlayGateProvider } from "./games/GamePlayGateProvider";
-
-import { useLocale } from "./LocaleProvider";
+import { siteShellClass } from "@/lib/theme";
 
 function isHomePath(pathname: string): boolean {
   return /^\/(bn|en|hi)\/?$/.test(pathname);
 }
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
-  const { t } = useLocale();
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [profileSheetOpen, setProfileSheetOpen] = useState(false);
 
   const toggleSidebar = useCallback(() => {
     setSidebarExpanded((open) => !open);
   }, []);
 
-  const openSidebar = useCallback(() => setSidebarExpanded(true), []);
-
-  const handleRailItemClick = useCallback((id: string) => {
-    setExpandedId(id);
-    setSidebarExpanded(true);
-  }, []);
-
-  const toggleItem = useCallback((id: string) => {
-    setExpandedId((current) => (current === id ? null : id));
-  }, []);
+  const closeSidebar = useCallback(() => setSidebarExpanded(false), []);
 
   const pathname = usePathname();
 
@@ -58,30 +46,17 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <ToastProvider>
     <GamePlayGateProvider>
     <GameReturnHandler />
-    <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-[#0a0a0a]">
+    <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-[var(--bg)]">
       <TopNavbar onMenuClick={toggleSidebar} menuOpen={sidebarExpanded} />
 
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
-        {sidebarExpanded ? (
-          <button
-            type="button"
-            aria-label={t.ui.closeMenu}
-            onClick={() => setSidebarExpanded(false)}
-            className="absolute inset-0 z-10 bg-black/50 lg:hidden"
-          />
-        ) : null}
-
-        <SideNavigation
-          expanded={sidebarExpanded}
-          expandedId={expandedId}
-          onToggleItem={toggleItem}
-          onItemClick={handleRailItemClick}
-          onExpand={openSidebar}
-        />
+        <SideNavigation expanded={sidebarExpanded} onClose={closeSidebar} />
 
         <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-[calc(3.5rem+env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch] lg:pb-0">
-          {children}
-          {isHomePath(pathname) ? <SiteFooter /> : null}
+          <div className={siteShellClass}>
+            {children}
+            {isHomePath(pathname) ? <SiteFooter /> : null}
+          </div>
         </main>
       </div>
 

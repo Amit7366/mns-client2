@@ -99,14 +99,14 @@ type NavItemProps = {
 
 function NavItem({ active, label, icon, onClick, href, ariaExpanded }: NavItemProps) {
   const className = `focus-ring relative flex min-h-[56px] flex-1 flex-col items-center justify-center gap-0.5 px-0.5 py-1.5 transition-colors ${
-    active ? "text-white" : "text-[#a3a3a3] hover:text-[#d4d4d4]"
+    active ? "text-[var(--cyan)]" : "text-[var(--text-muted)] hover:text-[var(--text)]"
   }`;
 
   const content = (
     <>
       {active ? (
         <span
-          className="absolute inset-x-1 top-0 h-0.5 rounded-full bg-[#178358] lg:hidden"
+          className="absolute inset-x-1 top-0 h-0.5 rounded-full bg-[var(--gold)] lg:hidden"
           aria-hidden
         />
       ) : null}
@@ -163,7 +163,7 @@ export default function MobileBottomNav({
   return (
     <>
       <nav
-        className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#2a2a2a] bg-[#1a1a1a] pb-[env(safe-area-inset-bottom)] lg:hidden"
+        className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--border)] bg-[var(--bg-header)] pb-[env(safe-area-inset-bottom)] lg:hidden"
         aria-label={t.ui.bottomNavigation}
       >
         <div className="mx-auto flex w-full max-w-lg items-stretch">

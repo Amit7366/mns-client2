@@ -21,7 +21,7 @@ function VipCoinIcon() {
 function TakaIcon() {
   return (
     <span
-      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#178358] text-[13px] font-bold text-white"
+      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--cyan)] text-[13px] font-bold text-[#00332b]"
       aria-hidden
     >
       ৳
@@ -155,7 +155,7 @@ export default function LoggedInWalletBar() {
 
   return (
     <div className="flex items-center gap-1 sm:max-w-none sm:gap-2 [&::-webkit-scrollbar]:hidden">
-      <div className="flex items-center gap-1 rounded-md bg-[#2a2a2a] px-1.5 py-1 sm:gap-1.5 sm:px-2 sm:py-1.5">
+      <div className="flex items-center gap-1 rounded-md bg-[var(--surface)] px-1.5 py-1 sm:gap-1.5 sm:px-2 sm:py-1.5">
         <div className="hidden items-center gap-1 sm:flex sm:gap-1.5">
           <VipCoinIcon />
           <span className="min-w-[1ch] text-[12px] font-semibold text-white tabular-nums sm:text-[13px]">
@@ -163,7 +163,7 @@ export default function LoggedInWalletBar() {
           </span>
         </div>
 
-        <span className="mx-0.5 hidden h-5 w-px bg-[#444] sm:block" aria-hidden />
+        <span className="mx-0.5 hidden h-5 w-px bg-[var(--border-strong)] sm:block" aria-hidden />
 
         <div className="flex items-center gap-1 sm:gap-1.5">
           <TakaIcon />
@@ -175,7 +175,7 @@ export default function LoggedInWalletBar() {
         <button
           type="button"
           onClick={() => setHidden((v) => !v)}
-          className="focus-ring hidden h-7 w-7 items-center justify-center rounded text-[#9ca3af] transition-colors hover:text-white sm:flex"
+          className="focus-ring hidden h-7 w-7 items-center justify-center rounded text-[var(--text-muted)] transition-colors hover:text-white sm:flex"
           aria-label={hidden ? t.navbar.showBalance : t.navbar.hideBalance}
         >
           <EyeIcon hidden={hidden} />
@@ -185,7 +185,7 @@ export default function LoggedInWalletBar() {
           type="button"
           onClick={onRefresh}
           disabled={refreshing || balanceSyncing}
-          className="focus-ring flex h-7 w-7 shrink-0 items-center justify-center rounded text-[#9ca3af] transition-colors hover:text-white disabled:opacity-50"
+          className="focus-ring flex h-7 w-7 shrink-0 items-center justify-center rounded text-[var(--text-muted)] transition-colors hover:text-white disabled:opacity-50"
           aria-label={t.navbar.refreshBalance}
         >
           <RefreshIcon spinning={refreshing || balanceSyncing} />
@@ -210,14 +210,14 @@ export default function LoggedInWalletBar() {
 
       <Link
         href={depositHref}
-        className="focus-ring hidden h-8 shrink-0 items-center justify-center rounded-md bg-[#178358] px-2.5 text-[11px] font-semibold text-white transition-colors hover:bg-[#1a9664] sm:flex sm:h-9 sm:px-3 sm:text-[13px]"
+        className="focus-ring hidden h-8 shrink-0 items-center justify-center rounded-md bg-[var(--gold)] px-2.5 text-[11px] font-semibold text-[#1a1400] transition-colors hover:bg-[var(--gold-hover)] sm:flex sm:h-9 sm:px-3 sm:text-[13px]"
       >
         {t.navbar.deposit}
       </Link>
 
       <Link
         href={withdrawHref}
-        className="focus-ring hidden h-8 shrink-0 items-center justify-center rounded-md bg-[#2a2a2a] px-2.5 text-[11px] font-semibold text-white transition-colors hover:bg-[#333] sm:flex sm:h-9 sm:px-3 sm:text-[13px]"
+        className="focus-ring hidden h-8 shrink-0 items-center justify-center rounded-md bg-[var(--surface)] px-2.5 text-[11px] font-semibold text-white transition-colors hover:bg-[var(--surface-elevated)] sm:flex sm:h-9 sm:px-3 sm:text-[13px]"
       >
         {t.navbar.withdraw}
       </Link>

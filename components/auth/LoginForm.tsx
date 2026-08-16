@@ -101,7 +101,7 @@ export default function LoginForm() {
         <div className="flex justify-end">
           <Link
             href={`${base}/forgot-password`}
-            className="text-[13px] font-medium text-[#178358] hover:text-[#1a9664]"
+            className="text-[13px] font-medium text-[var(--gold)] hover:text-[var(--gold-hover)]"
           >
             {a.forgotPassword}
           </Link>
@@ -112,7 +112,7 @@ export default function LoginForm() {
         type="submit"
         disabled={loading}
         aria-busy={loading}
-        className="focus-ring mt-auto flex w-full min-h-12 items-center justify-center rounded-md bg-[#0d4a2e] py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[#178358] disabled:cursor-not-allowed disabled:opacity-60"
+        className="focus-ring mt-auto flex w-full min-h-12 items-center justify-center rounded-md bg-[var(--cyan)] py-3.5 text-[15px] font-bold text-[#00332b] transition-colors hover:bg-[var(--cyan-dim)] disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? (
           <>

@@ -31,7 +31,7 @@ function BackIcon() {
 function GiftIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
-      <rect x="3" y="9" width="16" height="10" rx="1.5" fill="#178358" />
+      <rect x="3" y="9" width="16" height="10" rx="1.5" fill="var(--gold)" />
       <path d="M11 9V19M3 12h16" stroke="#0d4a2e" strokeWidth="1.2" />
       <path
         d="M11 9c-2.5 0-4-1.2-4-3s1.2-3 4-3 4 1.2 4 3-1.5 3-4 3z"
@@ -82,8 +82,8 @@ export default function PromotionsPageContent() {
   const gridItems = featured ? filtered.filter((item) => item.id !== featured.id) : filtered;
 
   return (
-    <div className="min-h-full bg-[#0a0a0a]">
-      <header className="sticky top-0 z-30 border-b border-[#1f1f1f] bg-[#0a0a0a]/95 backdrop-blur-sm">
+    <div className="min-h-full bg-[var(--bg)]">
+      <header className="sticky top-0 z-30 border-b border-[#1f1f1f] bg-[var(--bg)]/95 backdrop-blur-sm">
         <div className="mx-auto flex h-[48px] w-full max-w-[1400px] items-center gap-2 px-3 sm:px-4 lg:px-10 xl:px-16">
           <Link
             href={base}
@@ -98,11 +98,11 @@ export default function PromotionsPageContent() {
 
       <section className="relative overflow-hidden border-b border-[#1f1f1f]">
         <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#0d2818] via-[#111111] to-[#0a0a0a]"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#0d2818] via-[#111111] to-[var(--bg)]"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full bg-[#178358]/20 blur-3xl"
+          className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full bg-[var(--gold)]/20 blur-3xl"
           aria-hidden
         />
         <div
@@ -113,9 +113,9 @@ export default function PromotionsPageContent() {
         <div className="relative mx-auto w-full max-w-[1400px] px-3 py-6 sm:px-4 sm:py-8 lg:px-10 xl:px-16">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#178358]/30 bg-[#178358]/10 px-3 py-1">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/30 bg-[var(--gold)]/10 px-3 py-1">
                 <GiftIcon />
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#4ade80]">
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-[var(--cyan)]">
                   {p.pageTitle}
                 </span>
               </div>
@@ -126,7 +126,7 @@ export default function PromotionsPageContent() {
                 {p.pageSubtitle}
               </p>
             </div>
-            <div className="shrink-0 rounded-xl border border-[#2a2a2a] bg-[#141414]/80 px-4 py-3 backdrop-blur-sm">
+            <div className="shrink-0 rounded-xl border border-[var(--border)] bg-[var(--surface-card)]/80 px-4 py-3 backdrop-blur-sm">
               <p className="text-[28px] font-black leading-none text-[#f5c518]">
                 {loading ? "…" : filtered.length}
               </p>
@@ -136,7 +136,7 @@ export default function PromotionsPageContent() {
         </div>
       </section>
 
-      <div className="sticky top-[48px] z-20 border-b border-[#1f1f1f] bg-[#0a0a0a]/95 backdrop-blur-sm">
+      <div className="sticky top-[48px] z-20 border-b border-[#1f1f1f] bg-[var(--bg)]/95 backdrop-blur-sm">
         <div className="mx-auto w-full max-w-[1400px] px-3 py-3 sm:px-4 lg:px-10 xl:px-16">
           <div className="flex gap-2 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {PROMOTION_FILTER_IDS.map((id) => {
@@ -148,8 +148,8 @@ export default function PromotionsPageContent() {
                   onClick={() => setActiveFilter(id)}
                   className={`focus-ring shrink-0 rounded-full px-4 py-2 text-[12px] font-semibold transition-all sm:text-[13px] ${
                     active
-                      ? "bg-gradient-to-r from-[#178358] to-[#22c55e] text-white shadow-[0_4px_16px_rgba(23,131,88,0.35)]"
-                      : "border border-[#2a2a2a] bg-[#141414] text-[#9ca3af] hover:border-[#404040] hover:text-white"
+                      ? "bg-gradient-to-r from-[var(--gold)] to-[#22c55e] text-white shadow-[0_4px_16px_rgba(23,131,88,0.35)]"
+                      : "border border-[var(--border)] bg-[var(--surface-card)] text-[#9ca3af] hover:border-[#404040] hover:text-white"
                   }`}
                 >
                   {p.filters[id]}
@@ -162,23 +162,23 @@ export default function PromotionsPageContent() {
 
       <div className="mx-auto w-full max-w-[1400px] px-3 py-5 sm:px-4 sm:py-6 lg:px-10 xl:px-16">
         {loading ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-[#2a2a2a] bg-[#141414] px-6 py-16 text-center">
-            <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#178358] border-t-transparent" />
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface-card)] px-6 py-16 text-center">
+            <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[var(--gold)] border-t-transparent" />
             <p className="text-[14px] text-[#9ca3af]">{p.loading}</p>
           </div>
         ) : error ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#2a2a2a] bg-[#141414] px-6 py-16 text-center">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface-card)] px-6 py-16 text-center">
             <p className="max-w-md text-[14px] leading-relaxed text-[#9ca3af]">{p.loadError}</p>
             <button
               type="button"
               onClick={() => void loadPromotions()}
-              className="focus-ring mt-5 rounded-full border border-[#404040] bg-[#1f1f1f] px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:border-[#178358] hover:bg-[#178358]/10"
+              className="focus-ring mt-5 rounded-full border border-[#404040] bg-[#1f1f1f] px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:border-[var(--gold)] hover:bg-[var(--gold)]/10"
             >
               {p.filters.all}
             </button>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#2a2a2a] bg-[#141414] px-6 py-16 text-center">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface-card)] px-6 py-16 text-center">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#1f1f1f]">
               <GiftIcon />
             </div>
@@ -186,7 +186,7 @@ export default function PromotionsPageContent() {
             <button
               type="button"
               onClick={() => setActiveFilter("all")}
-              className="focus-ring mt-5 rounded-full border border-[#404040] bg-[#1f1f1f] px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:border-[#178358] hover:bg-[#178358]/10"
+              className="focus-ring mt-5 rounded-full border border-[#404040] bg-[#1f1f1f] px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:border-[var(--gold)] hover:bg-[var(--gold)]/10"
             >
               {p.filters.all}
             </button>

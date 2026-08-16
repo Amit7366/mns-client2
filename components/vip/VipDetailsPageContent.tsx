@@ -26,8 +26,8 @@ export default function VipDetailsPageContent() {
   const base = `/${preferences.locale}`;
 
   return (
-    <div className="min-h-full bg-[#0a0a0a]">
-      <header className="sticky top-0 z-30 border-b border-[#1f1f1f] bg-[#0a0a0a]/95 backdrop-blur-sm">
+    <div className="min-h-full bg-[var(--bg)]">
+      <header className="sticky top-0 z-30 border-b border-[#1f1f1f] bg-[var(--bg)]/95 backdrop-blur-sm">
         <div className="flex h-[48px] items-center gap-2 px-3 sm:px-4 lg:px-6">
           <Link
             href={base}
@@ -41,7 +41,7 @@ export default function VipDetailsPageContent() {
       </header>
 
       <div className="mx-auto max-w-5xl px-3 py-4 sm:px-4 sm:py-5 lg:px-6">
-        <section className="relative overflow-hidden rounded-xl bg-gradient-to-r from-[#0a0a0a] via-[#0d2818] to-[#178358] p-4 sm:rounded-2xl sm:p-5 lg:p-6">
+        <section className="relative overflow-hidden rounded-xl bg-gradient-to-r from-[var(--bg)] via-[#0d2818] to-[var(--gold)] p-4 sm:rounded-2xl sm:p-5 lg:p-6">
           <div
             className="pointer-events-none absolute -right-8 top-0 h-40 w-40 rounded-full bg-[#22c55e]/20 blur-3xl"
             aria-hidden
@@ -60,7 +60,7 @@ export default function VipDetailsPageContent() {
               </p>
               <button
                 type="button"
-                className="focus-ring mt-4 rounded-full bg-gradient-to-r from-[#ffe566] via-[#f5c518] to-[#e5a800] px-6 py-2.5 text-[14px] font-bold text-[#1a1a1a] shadow-[0_4px_16px_rgba(245,197,24,0.35)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                className="focus-ring mt-4 rounded-full bg-gradient-to-r from-[#ffe566] via-[#f5c518] to-[#e5a800] px-6 py-2.5 text-[14px] font-bold text-[var(--surface)] shadow-[0_4px_16px_rgba(245,197,24,0.35)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 {v.joinNow}
               </button>

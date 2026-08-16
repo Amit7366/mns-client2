@@ -36,7 +36,7 @@ function StepIndicator({ step, labels }: { step: number; labels: [string, string
       <div className="relative flex items-center">
         <div className="absolute left-[14px] right-[14px] top-[13px] h-[2px] bg-[#3f3f3f]" />
         <div
-          className="absolute left-[14px] top-[13px] h-[2px] bg-[#178358] transition-all duration-300"
+          className="absolute left-[14px] top-[13px] h-[2px] bg-[var(--gold)] transition-all duration-300"
           style={{ width: step === 0 ? "0%" : step === 1 ? "calc(50% - 14px)" : "calc(100% - 28px)" }}
         />
         {items.map((item, i) => {
@@ -46,14 +46,14 @@ function StepIndicator({ step, labels }: { step: number; labels: [string, string
             <div key={item.n} className="relative z-[1] flex flex-1 flex-col items-center">
               <span
                 className={`flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-bold ${
-                  active || done ? "bg-[#178358] text-white" : "bg-[#2a2a2a] text-[#9ca3af]"
+                  active || done ? "bg-[var(--gold)] text-white" : "bg-[var(--border)] text-[#9ca3af]"
                 }`}
               >
                 {item.n}
               </span>
               <span
                 className={`mt-2 text-center text-[11px] font-medium sm:text-[12px] ${
-                  active ? "text-[#178358]" : "text-[#9ca3af]"
+                  active ? "text-[var(--gold)]" : "text-[#9ca3af]"
                 }`}
               >
                 {item.label}
@@ -245,7 +245,7 @@ export default function RegisterForm() {
 
             <AuthField label={a.phoneNumber}>
               <div className="flex gap-2">
-                <div className="flex shrink-0 items-center gap-1.5 rounded-md border border-[#178358] bg-[#1f1f1f] px-2.5 py-3">
+                <div className="flex shrink-0 items-center gap-1.5 rounded-md border border-[var(--gold)] bg-[#1f1f1f] px-2.5 py-3">
                   <BangladeshFlag />
                   <span className="text-[14px] text-white">{phonePrefix}</span>
                   <span className="text-[10px] text-[#6b7280]">▾</span>
@@ -294,7 +294,7 @@ export default function RegisterForm() {
         type="submit"
         disabled={formDisabled}
         aria-busy={loading || deviceCheckLoading}
-        className="focus-ring mt-8 flex w-full min-h-12 items-center justify-center rounded-md bg-[#0d4a2e] py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[#178358] disabled:cursor-not-allowed disabled:opacity-60"
+        className="focus-ring mt-8 flex w-full min-h-12 items-center justify-center rounded-md bg-[var(--gold)] py-3.5 text-[15px] font-bold text-[#1a1400] transition-colors hover:bg-[var(--gold-hover)] disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? (
           <>

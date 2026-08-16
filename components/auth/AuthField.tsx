@@ -14,7 +14,7 @@ export function AuthField({
 }
 
 export function authInputClass(focused?: boolean) {
-  return `focus-ring w-full rounded-md border bg-[#1f1f1f] px-3 py-3 text-[15px] text-white placeholder:text-[#6b7280] ${
-    focused ? "border-[#178358]" : "border-[#2a2a2a] focus:border-[#178358]"
+  return `focus-ring w-full rounded-md border bg-[var(--surface)] px-3 py-3 text-[15px] text-white placeholder:text-[var(--text-muted)] ${
+    focused ? "border-[var(--cyan)]" : "border-[var(--border)] focus:border-[var(--cyan)]"
   }`;
 }

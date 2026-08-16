@@ -57,7 +57,7 @@ function CountryPanel({
               onClick={() => setPreferences(country, language.locale)}
               className={`h-10 w-full rounded-lg text-[14px] font-medium transition-colors ${
                 active
-                  ? "bg-[#178358] text-white"
+                  ? "bg-[var(--gold)] text-white"
                   : "bg-[#333333] text-[#b8b8b8] hover:bg-[#3a3a3a]"
               }`}
             >
@@ -104,7 +104,7 @@ export default function CurrencyLanguageModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="currency-language-title"
-        className="relative z-[101] w-full max-w-[560px] rounded-2xl bg-[#1a1a1a] p-5 shadow-2xl sm:p-6"
+        className="relative z-[101] w-full max-w-[560px] rounded-2xl bg-[var(--surface)] p-5 shadow-2xl sm:p-6"
       >
         <div className="mb-5 flex items-center justify-between">
           <h2 id="currency-language-title" className="text-[18px] font-medium text-white">
@@ -114,7 +114,7 @@ export default function CurrencyLanguageModal() {
             type="button"
             aria-label="Close"
             onClick={closeModal}
-            className="flex h-8 w-8 items-center justify-center rounded-md text-[#d0d0d0] transition-colors hover:bg-[#2a2a2a] hover:text-white"
+            className="flex h-8 w-8 items-center justify-center rounded-md text-[#d0d0d0] transition-colors hover:bg-[var(--border)] hover:text-white"
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
               <path

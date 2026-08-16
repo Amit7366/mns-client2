@@ -39,8 +39,8 @@ export const viewport: Viewport = {
   userScalable: false,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#111111" },
-    { media: "(prefers-color-scheme: dark)", color: "#111111" },
+    { media: "(prefers-color-scheme: light)", color: "#00332B" },
+    { media: "(prefers-color-scheme: dark)", color: "#00332B" },
   ],
   colorScheme: "dark",
 };
@@ -63,7 +63,7 @@ export default async function RootLayout({
     >
       <body
         suppressHydrationWarning
-        className={`flex h-dvh flex-col overflow-hidden bg-[#0a0a0a] ${localeFontClass(locale)}`}
+        className={`flex h-dvh flex-col overflow-hidden bg-[var(--bg)] ${localeFontClass(locale)}`}
       >
         <DisablePinchZoom />
         {children}

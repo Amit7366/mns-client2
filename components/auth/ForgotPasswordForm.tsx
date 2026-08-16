@@ -27,7 +27,7 @@ function RuleIcon({ met }: { met: boolean }) {
   if (met) {
     return (
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden className="shrink-0">
-        <circle cx="8" cy="8" r="7" fill="#178358" />
+        <circle cx="8" cy="8" r="7" fill="var(--gold)" />
         <path
           d="M5 8l2 2 4-4"
           stroke="white"
@@ -187,7 +187,7 @@ export default function ForgotPasswordForm() {
         type="submit"
         disabled={!canSubmit}
         aria-busy={loading}
-        className="focus-ring mt-8 flex w-full min-h-12 items-center justify-center rounded-md bg-[#0d4a2e] py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[#178358] disabled:cursor-not-allowed disabled:opacity-60"
+        className="focus-ring mt-8 flex w-full min-h-12 items-center justify-center rounded-md bg-[var(--cyan)] py-3.5 text-[15px] font-bold text-[#00332b] transition-colors hover:bg-[var(--cyan-dim)] disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? (
           <>

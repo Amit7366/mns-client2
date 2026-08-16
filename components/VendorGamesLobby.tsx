@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Messages } from "@/lib/i18n/messages";
@@ -164,7 +164,7 @@ function pushLobbyUrl(
 function ProviderFilterAvatar({ label }: { label: string }) {
   const initials = label.replace(/[^a-zA-Z0-9]/g, "").slice(0, 2).toUpperCase() || "?";
   return (
-    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#262626] text-[10px] font-bold text-[#d4d4d4]">
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--surface-elevated)] text-[10px] font-bold text-[#d4d4d4]">
       {initials}
     </div>
   );
@@ -182,8 +182,9 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
   const { t } = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const categoryLabel = lobbyCategoryLabel(t, kind);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(() => searchParams.get("q")?.trim() ?? "");
   const [menuOpen, setMenuOpen] = useState(false);
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [sortMode, setSortMode] = useState<LobbySortMode>("recommend");
@@ -341,7 +342,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
   }
 
   return (
-    <div className="min-h-full bg-[#0a0a0a] pb-8 lg:pb-8 max-lg:pb-mobile-nav">
+    <div className="min-h-full bg-[var(--bg)] pb-8 lg:pb-8 max-lg:pb-mobile-nav">
       <div className="border-b border-[#1f1f1f]">
         <div className="mx-auto w-full max-w-[1400px] px-3 py-3 sm:px-4 lg:px-10 xl:px-16">
         <div className="mb-3 flex items-center justify-between">
@@ -368,7 +369,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                 id="lobby-category-menu"
                 role="menu"
                 aria-label={t.lobby.pickCategory}
-                className="absolute left-0 top-[calc(100%+6px)] z-50 min-w-[min(100vw-2rem,280px)] overflow-hidden rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] py-1 shadow-[0_12px_40px_rgba(0,0,0,0.65)]"
+                className="absolute left-0 top-[calc(100%+6px)] z-50 min-w-[min(100vw-2rem,280px)] overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface)] py-1 shadow-[0_12px_40px_rgba(0,0,0,0.65)]"
               >
                 {LOBBY_HEADER_MENU_KINDS.map((menuKind) => {
                   const href = lobbyCategoryHref(locale, menuKind);
@@ -380,7 +381,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                       role="menuitem"
                       href={href}
                       onClick={() => setMenuOpen(false)}
-                      className={`flex items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-[#262626] ${active ? "bg-[#2a2a2a]" : ""
+                      className={`flex items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-[var(--surface-elevated)] ${active ? "bg-[var(--border)]" : ""
                         }`}
                     >
                       <span className="flex h-8 w-8 shrink-0 items-center justify-center">{menuIconFor(itemIconId)}</span>
@@ -420,7 +421,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                   id="lobby-sort-menu"
                   role="menu"
                   aria-label={t.lobby.pickSort}
-                  className="absolute right-0 top-[calc(100%+6px)] z-50 min-w-[200px] overflow-hidden rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] py-1 shadow-[0_12px_40px_rgba(0,0,0,0.65)]"
+                  className="absolute right-0 top-[calc(100%+6px)] z-50 min-w-[200px] overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface)] py-1 shadow-[0_12px_40px_rgba(0,0,0,0.65)]"
                 >
                   {SORT_OPTIONS.map((mode) => (
                     <button
@@ -431,7 +432,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                         setSortMode(mode);
                         setSortMenuOpen(false);
                       }}
-                      className={`flex w-full px-3 py-2.5 text-left text-[14px] font-medium text-white transition-colors hover:bg-[#262626] ${sortMode === mode ? "bg-[#2a2a2a]" : ""
+                      className={`flex w-full px-3 py-2.5 text-left text-[14px] font-medium text-white transition-colors hover:bg-[var(--surface-elevated)] ${sortMode === mode ? "bg-[var(--border)]" : ""
                         }`}
                     >
                       {sortLabel(t, mode)}
@@ -443,7 +444,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
           </div>
         </div>
 
-        <div className="relative flex items-center gap-2 rounded-md border border-[#2a2a2a] bg-[#1a1a1a] px-3 py-2.5">
+        <div className="relative flex items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5">
           <SearchIcon />
           <input
             type="search"
@@ -462,7 +463,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                 <button
                   key={`v-${code}`}
                   type="button"
-                  className="inline-flex max-w-full items-center gap-1.5 rounded-md bg-[#2a2a2a] py-1 pl-2.5 pr-1.5 text-left text-[13px] font-medium text-[#e5e5e5] transition-colors hover:bg-[#333333]"
+                  className="inline-flex max-w-full items-center gap-1.5 rounded-md bg-[var(--border)] py-1 pl-2.5 pr-1.5 text-left text-[13px] font-medium text-[#e5e5e5] transition-colors hover:bg-[#333333]"
                   aria-label={`${t.lobby.removeFilterTag}: ${name}`}
                   onClick={() => removeVendorChip(code)}
                 >
@@ -479,7 +480,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                 <button
                   key={`t-${typeId}`}
                   type="button"
-                  className="inline-flex max-w-full items-center gap-1.5 rounded-md bg-[#2a2a2a] py-1 pl-2.5 pr-1.5 text-left text-[13px] font-medium text-[#e5e5e5] transition-colors hover:bg-[#333333]"
+                  className="inline-flex max-w-full items-center gap-1.5 rounded-md bg-[var(--border)] py-1 pl-2.5 pr-1.5 text-left text-[13px] font-medium text-[#e5e5e5] transition-colors hover:bg-[#333333]"
                   aria-label={`${t.lobby.removeFilterTag}: ${name}`}
                   onClick={() => removeTypeChip(typeId)}
                 >
@@ -508,13 +509,13 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
               sizes="(max-width: 640px) 33vw, (max-width: 1023px) 25vw, 12.5vw"
               imageClassName="transition-transform duration-200 group-hover:scale-105"
               ariaLabel={`${game.title} — ${game.providerLabel}`}
-              className="group relative aspect-[3/4] overflow-hidden rounded-md bg-[#141414]"
+              className="group relative aspect-[3/4] overflow-hidden rounded-md bg-[var(--surface-card)]"
             />
           ))}
         </div>
 
         {totalGames === 0 ? (
-          <p className="mx-auto mt-8 max-w-md rounded-lg border border-dashed border-[#2a2a2a] bg-[#141414] px-4 py-10 text-center text-sm text-[#9ca3af]">
+          <p className="mx-auto mt-8 max-w-md rounded-lg border border-dashed border-[var(--border)] bg-[var(--surface-card)] px-4 py-10 text-center text-sm text-[#9ca3af]">
             {t.lobby.noGamesFound}
           </p>
         ) : null}
@@ -526,20 +527,20 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                 type="button"
                 disabled={loadingMore}
                 onClick={handleLoadMore}
-                className="focus-ring min-h-11 min-w-[140px] rounded-md bg-[#2a2a2a] px-8 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-[#353535] disabled:cursor-wait disabled:opacity-70"
+                className="focus-ring min-h-11 min-w-[140px] rounded-md bg-[var(--border)] px-8 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-[var(--surface-elevated)] disabled:cursor-wait disabled:opacity-70"
               >
                 {loadingMore ? "…" : t.lobby.loadMore}
               </button>
             ) : null}
             <div
-              className="h-1 w-full max-w-md overflow-hidden rounded-full bg-[#2a2a2a]"
+              className="h-1 w-full max-w-md overflow-hidden rounded-full bg-[var(--border)]"
               role="progressbar"
               aria-valuenow={Math.round(progressPct)}
               aria-valuemin={0}
               aria-valuemax={100}
             >
               <div
-                className="h-full rounded-full bg-[#178358] transition-[width] duration-300 ease-out"
+                className="h-full rounded-full bg-[var(--gold)] transition-[width] duration-300 ease-out"
                 style={{ width: `${progressPct}%` }}
               />
             </div>
@@ -567,7 +568,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
               onClick={() => setFilterOpen(false)}
             >
               <aside
-                className="flex max-h-[min(92dvh,100dvh)] w-full flex-col rounded-t-2xl bg-[#121212] shadow-2xl lg:h-full lg:max-h-none lg:max-w-md lg:rounded-none"
+                className="flex max-h-[min(92dvh,100dvh)] w-full flex-col rounded-t-2xl bg-[var(--bg-header)] shadow-2xl lg:h-full lg:max-h-none lg:max-w-md lg:rounded-none"
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="lobby-filter-title"
@@ -577,7 +578,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                   <span className="h-1 w-10 rounded-full bg-[#555]" />
                 </div>
 
-                <header className="flex shrink-0 items-center justify-between border-b border-[#2a2a2a] px-4 py-3">
+                <header className="flex shrink-0 items-center justify-between border-b border-[var(--border)] px-4 py-3">
                   <h2 id="lobby-filter-title" className="text-lg font-bold text-white">
                     {t.lobby.filterPanelTitle}
                   </h2>
@@ -592,7 +593,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                 </header>
 
                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 pb-4 [-webkit-overflow-scrolling:touch]">
-                  <div className="border-b border-[#2a2a2a]">
+                  <div className="border-b border-[var(--border)]">
                     <button
                       type="button"
                       className="flex w-full items-center justify-between px-2 py-3 text-left"
@@ -611,7 +612,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                           return (
                             <li key={row.vendorCode}>
                               <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-md px-2 py-2.5 hover:bg-white/[0.04]">
-                                <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded border border-[#404040] bg-[#1a1a1a]">
+                                <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded border border-[#404040] bg-[var(--surface)]">
                                   <input
                                     type="checkbox"
                                     className="peer sr-only"
@@ -639,7 +640,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                     ) : null}
                   </div>
 
-                  <div className="border-b border-[#2a2a2a]">
+                  <div className="border-b border-[var(--border)]">
                     <button
                       type="button"
                       className="flex w-full items-center justify-between px-2 py-3 text-left"
@@ -656,7 +657,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                           return (
                             <li key={typeId}>
                               <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-md px-2 py-2.5 hover:bg-white/[0.04]">
-                                <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded border border-[#404040] bg-[#1a1a1a]">
+                                <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded border border-[#404040] bg-[var(--surface)]">
                                   <input
                                     type="checkbox"
                                     className="peer sr-only"
@@ -684,7 +685,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                   </div>
                 </div>
 
-                <footer className="safe-bottom flex shrink-0 gap-2 border-t border-[#2a2a2a] bg-[#121212] p-3">
+                <footer className="safe-bottom flex shrink-0 gap-2 border-t border-[var(--border)] bg-[var(--bg-header)] p-3">
                   <button
                     type="button"
                     className="focus-ring min-h-11 flex-1 rounded-md border border-[#3f3f3f] py-3 text-[14px] font-semibold text-[#d4d4d4] transition-colors hover:bg-white/[0.06]"
@@ -694,7 +695,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
                   </button>
                   <button
                     type="button"
-                    className="focus-ring min-h-11 flex-[1.15] rounded-md bg-[#178358] py-3 text-[14px] font-bold text-white transition-colors hover:bg-[#1a9664]"
+                    className="focus-ring min-h-11 flex-[1.15] rounded-md bg-[var(--gold)] py-3 text-[14px] font-bold text-[#1a1400] transition-colors hover:bg-[var(--gold-hover)]"
                     onClick={applyFiltersToUrl}
                   >
                     {t.lobby.filterApply}

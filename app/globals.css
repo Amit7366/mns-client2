@@ -1,5 +1,26 @@
 @import "tailwindcss";
 
+:root {
+  --bg: #00332b;
+  --bg-deep: #002822;
+  --bg-header: #014038;
+  --surface: #0a4a40;
+  --surface-elevated: #0d564a;
+  --surface-card: #0c3f36;
+  --border: #1a5c50;
+  --border-strong: #2a7a6a;
+  --gold: #d4af37;
+  --gold-bright: #f5c518;
+  --gold-hover: #e0c04a;
+  --cyan: #00e5ff;
+  --cyan-dim: #00b8cc;
+  --cyan-muted: rgba(0, 229, 255, 0.15);
+  --text: #f2f7f5;
+  --text-muted: #9bb5ad;
+  --danger: #e85d4a;
+  --focus-ring: rgba(0, 229, 255, 0.45);
+}
+
 @layer base {
   html,
   body {
@@ -7,6 +28,8 @@
     -ms-touch-action: pan-x pan-y;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    background-color: var(--bg);
+    color: var(--text);
   }
   .font-bengali {
     font-family: var(--font-bengali), sans-serif;
@@ -192,7 +215,23 @@
   }
 
   .focus-ring {
-    @apply outline-none focus-visible:ring-2 focus-visible:ring-[#178358]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a];
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)];
+  }
+
+  .btn-cyan {
+    @apply inline-flex items-center justify-center rounded-md bg-[var(--cyan)] px-3 py-2 text-[12px] font-semibold text-[#00332b] transition-colors hover:bg-[var(--cyan-dim)] sm:text-[13px];
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center justify-center rounded-md bg-[var(--gold)] px-3 py-2 text-[12px] font-semibold text-[#1a1400] transition-colors hover:bg-[var(--gold-hover)] sm:text-[13px];
+  }
+
+  .home-game-grid {
+    @apply grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-2.5 md:grid-cols-5 lg:gap-3;
+  }
+
+  .section-title-gold {
+    @apply text-[15px] font-semibold tracking-wide text-[var(--gold)] sm:text-[16px];
   }
 
   .touch-target {
@@ -277,6 +316,74 @@
   animation: spin-ticker 12s linear infinite;
 }
 
+@keyframes jackpot-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.45), 0 0 20px rgba(212, 175, 55, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 14px rgba(245, 197, 24, 0.7), 0 0 28px rgba(212, 175, 55, 0.35);
+  }
+}
+
+.animate-jackpot-glow {
+  animation: jackpot-glow 2.4s ease-in-out infinite;
+}
+
+@keyframes hero-slide-pop {
+  0% {
+    opacity: 0.35;
+    transform: translateY(var(--hero-pop-from, 22px)) scale(0.86) translateZ(-120px);
+    filter: brightness(0.75);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.03) translateZ(0);
+    filter: brightness(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) translateZ(0);
+    filter: brightness(1);
+  }
+}
+
+.hero-slide-pop {
+  animation: hero-slide-pop 0.52s cubic-bezier(0.22, 1.15, 0.36, 1) both;
+  transform-style: preserve-3d;
+}
+
+/* CV666-style hero Swiper: pill pagination */
+.hero-swiper .swiper {
+  padding-bottom: 1.25rem;
+  overflow: hidden;
+}
+
+.hero-swiper .swiper-pagination {
+  bottom: 0 !important;
+  position: relative !important;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.hero-swiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 4px;
+  margin: 0 !important;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.8);
+  opacity: 1;
+  transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.hero-swiper .swiper-pagination-bullet-active {
+  width: 18px;
+  background: var(--cyan);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-float-slow,
   .animate-float-medium,
@@ -291,7 +398,9 @@
   .animate-game-launch-spin-slow,
   .animate-game-launch-ping,
   .animate-game-launch-bar,
-  .animate-spin-ticker {
+  .animate-spin-ticker,
+  .animate-jackpot-glow,
+  .hero-slide-pop {
     animation: none;
   }
 
