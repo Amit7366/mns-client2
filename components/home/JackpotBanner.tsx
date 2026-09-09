@@ -64,7 +64,7 @@ function JackpotCounter({ value }: { value: number }) {
 
 function LoadingCard() {
   return (
-    <div className="flex aspect-[3/4] w-[72px] shrink-0 items-center justify-center rounded-lg bg-[#c8c8c8] sm:w-[82px] lg:w-[90px]">
+    <div className="flex aspect-[3/4] w-[72px] shrink-0 items-center justify-center rounded-lg bg-[#c8c8c8] sm:w-[82px] lg:w-[72px]">
       <span className="h-6 w-6 animate-spin rounded-full border-[3px] border-white border-t-transparent" />
     </div>
   );
@@ -124,7 +124,7 @@ export default function JackpotBanner({ games = [] }: { games?: GameTile[] }) {
               title={game.title}
               provider={game.providerLabel}
               sizes="90px"
-              className="w-[72px] shrink-0 sm:w-[82px] lg:w-[90px]"
+              className="w-[72px] shrink-0 sm:w-[82px] lg:w-[72px]"
             />
           ))}
           {Array.from({ length: placeholders }, (_, i) => (

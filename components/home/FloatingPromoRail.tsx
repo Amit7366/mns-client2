@@ -175,7 +175,7 @@ export default function FloatingPromoRail() {
             collapsed ? "max-h-0 opacity-0" : "max-h-[28rem] opacity-100"
           }`}
         >
-          <div className="-mt-5 flex w-[58px] flex-col items-center rounded-[28px] bg-[#141414]/95 pb-1.5 pt-6 shadow-[0_8px_24px_rgba(0,0,0,0.45)] sm:w-[66px] sm:pt-7">
+          <div className="-mt-5 flex w-[58px] flex-col items-center rounded-[28px] bg-black/70 pb-1.5 pt-6 shadow-[0_8px_24px_rgba(0,0,0,0.45)] sm:w-[66px] sm:pt-7">
             {PROMO_ITEMS.map((item, index) => (
               <button
                 key={item.id}

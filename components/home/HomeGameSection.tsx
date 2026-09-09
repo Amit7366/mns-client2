@@ -55,7 +55,7 @@ export default function HomeGameSection({
               title={game.title}
               provider={game.providerLabel}
               priority={index < 5}
-              sizes="(max-width: 640px) 20vw, (max-width: 1023px) 16vw, 10vw"
+              sizes="(max-width: 640px) 20vw, (max-width: 1023px) 16vw, 8vw"
             />
           </div>
         ))}

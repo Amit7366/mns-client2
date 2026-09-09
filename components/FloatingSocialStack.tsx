@@ -5,9 +5,12 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { useLocale } from "@/components/LocaleProvider";
 import { memberLiveChatHref } from "@/lib/member-routes";
-import { socialLinks } from "@/lib/footer-social-data";
 
-const FLOAT_SOCIAL_IDS = ["facebook", "telegram", "whatsapp"] as const;
+const FLOAT_SOCIAL_ITEMS = [
+  { id: "facebook", href: "https://facebook.com", color: "#1877f2", label: "Facebook" },
+  { id: "telegram", href: "https://t.me", color: "#229ed9", label: "Telegram" },
+  { id: "whatsapp", href: "https://wa.me", color: "#25d366", label: "WhatsApp" },
+] as const;
 
 function SocialGlyph({ id }: { id: string }) {
   if (id === "facebook") {
@@ -46,19 +49,18 @@ export default function FloatingSocialStack() {
     router.push(href);
   }
 
-  const floatItems = FLOAT_SOCIAL_IDS.map((id) => {
-    const meta = socialLinks.find((s) => s.id === id);
-    return { id, color: meta?.color ?? "#00e5ff", label: meta?.label ?? id };
-  });
+  const floatItems = FLOAT_SOCIAL_ITEMS;
 
   return (
     <div className="fixed right-1.5 z-30 flex flex-col items-center gap-2 bottom-[calc(4.35rem+env(safe-area-inset-bottom))] lg:right-8 lg:bottom-8">
       {floatItems.map((item) => (
         <a
           key={item.id}
-          href="#"
-          aria-label={item.id}
-          className="hidden h-10 w-10 items-center justify-center rounded-full text-white shadow-[0_4px_14px_rgba(0,0,0,0.35)] transition-transform hover:scale-105 active:scale-95 lg:flex lg:h-12 lg:w-12"
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={item.label}
+          className="flex h-10 w-10 items-center justify-center rounded-full text-white shadow-[0_4px_14px_rgba(0,0,0,0.35)] transition-transform hover:scale-105 active:scale-95 lg:h-12 lg:w-12"
           style={{ backgroundColor: item.color }}
         >
           <SocialGlyph id={item.id} />

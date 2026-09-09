@@ -497,7 +497,7 @@ export default function VendorGamesLobby({ locale, kind, vendors, activeTypes, g
       </div>
 
       <div className="mx-auto w-full max-w-[1400px] px-3 pt-4 sm:px-4 lg:px-10 xl:px-16">
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-2.5 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-7">
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-2.5 md:grid-cols-3 lg:grid-cols-8 xl:grid-cols-9">
           {visibleGames.map((game) => (
             <GameCard
               key={game.id}

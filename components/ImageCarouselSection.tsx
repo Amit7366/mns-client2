@@ -113,8 +113,8 @@ export default function ImageCarouselSection({
 
   const itemClass =
     variant === "banner"
-      ? "relative h-[150px] w-[min(88vw,360px)] shrink-0 snap-start overflow-hidden rounded-lg sm:h-[128px] sm:w-[min(88vw,380px)] lg:h-[200px] lg:w-[min(32vw,420px)]"
-      : "relative h-[138px] w-[91px] shrink-0 snap-start overflow-hidden rounded-md sm:h-[166px] sm:w-[108px] lg:h-[186px] lg:w-[121px]";
+      ? "relative h-[150px] w-[min(88vw,360px)] shrink-0 snap-start overflow-hidden rounded-lg sm:h-[128px] sm:w-[min(88vw,380px)] lg:h-[160px] lg:w-[min(32vw,336px)]"
+      : "relative h-[138px] w-[91px] shrink-0 snap-start overflow-hidden rounded-md sm:h-[166px] sm:w-[108px] lg:h-[149px] lg:w-[97px]";
 
   return (
     <section
