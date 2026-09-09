@@ -62,6 +62,20 @@ function GridIcon({ id, tone }: { id: string; tone: SidebarGridItem["tone"] }) {
           <path d="M14 18c2 1.5 6 1.5 8 0" stroke="#7EC8F0" strokeWidth="2" strokeLinecap="round" />
         </svg>
       );
+    case "affiliate":
+      return (
+        <svg {...common}>
+          <circle cx="18" cy="8" r="4" fill={c} />
+          <circle cx="8" cy="24" r="4" fill={c} />
+          <circle cx="28" cy="24" r="4" fill={c} />
+          <path
+            d="M15 11.5L10.5 20.5M21 11.5l4.5 9M12 24h12"
+            stroke="#7EC8F0"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+      );
     case "favorites":
       return (
         <svg {...common}>
@@ -260,6 +274,7 @@ function GridIcon({ id, tone }: { id: string; tone: SidebarGridItem["tone"] }) {
 function resolveHref(locale: string, item: SidebarGridItem): string | null {
   if (item.action === "home") return `/${locale}`;
   if (item.action === "locale" || item.action === "liveChat") return null;
+  if (item.action === "external") return item.externalUrl ?? null;
   if (item.action === "download") return BKBAJI_ANDROID_APP_PATH;
   if (item.action === "page") {
     if (item.routeKey === "referral") return `/${locale}/referral`;
@@ -353,6 +368,20 @@ export default function SideNavigation({ expanded, onClose }: SideNavigationProp
                   <button key={item.id} type="button" onClick={handleLiveChat} className={tileClass}>
                     {content}
                   </button>
+                );
+              }
+
+              if (item.action === "external" && href) {
+                return (
+                  <a
+                    key={item.id}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={tileClass}
+                  >
+                    {content}
+                  </a>
                 );
               }
 

@@ -12,9 +12,12 @@ export type SidebarGridItem = {
     | "locale"
     | "home"
     | "download"
-    | "liveChat";
+    | "liveChat"
+    | "external";
   /** Extra route key when action needs one */
   routeKey?: string;
+  /** Absolute URL when action is `external` */
+  externalUrl?: string;
 };
 
 /**
@@ -23,6 +26,7 @@ export type SidebarGridItem = {
 export const sidebarGridItems: SidebarGridItem[] = [
   { id: "hotGames", tone: "coral", action: "lobby", routeKey: "exclusive" },
   { id: "inviteFriends", tone: "sky", action: "page", routeKey: "referral" },
+  { id: "affiliate", tone: "sky", action: "external", externalUrl: "https://aff.bkb444.site/" },
   { id: "favorites", tone: "coral", action: "lobby", routeKey: "exclusive" },
   { id: "offers", tone: "gold", action: "page", routeKey: "promotion" },
   { id: "slots", tone: "coral", action: "lobby", routeKey: "slot" },
