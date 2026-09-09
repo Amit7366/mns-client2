@@ -2,13 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import HomePromoSliderModal from "./HomePromoSliderModal";
+import HomeAnnouncementModal from "@/components/home-announcement/HomeAnnouncementModal";
 
-const DISMISS_KEY_PREFIX = "bkbaji.homePromo.dismissed.";
-
-function todayKey(): string {
-  return new Date().toISOString().slice(0, 10);
-}
+const DISMISS_KEY = "bkbaji.homeAnnouncement.dismissed";
 
 function isHomePath(pathname: string): boolean {
   return /^\/(bn|en|hi)\/?$/.test(pathname);
@@ -25,8 +21,7 @@ export default function HomePromoGate() {
     }
 
     try {
-      const dismissKey = `${DISMISS_KEY_PREFIX}${todayKey()}`;
-      if (sessionStorage.getItem(dismissKey) === "1") return;
+      if (localStorage.getItem(DISMISS_KEY) === "1") return;
     } catch {
       // Ignore storage errors
     }
@@ -37,12 +32,12 @@ export default function HomePromoGate() {
 
   const handleClose = useCallback(() => {
     try {
-      sessionStorage.setItem(`${DISMISS_KEY_PREFIX}${todayKey()}`, "1");
+      localStorage.setItem(DISMISS_KEY, "1");
     } catch {
       // Ignore storage errors
     }
     setOpen(false);
   }, []);
 
-  return <HomePromoSliderModal open={open} onClose={handleClose} />;
+  return <HomeAnnouncementModal open={open} onClose={handleClose} />;
 }

@@ -56,7 +56,7 @@ export default function AppDownloadPrompt({ onClose }: AppDownloadPromptProps) {
         type="button"
         onClick={onClose}
         aria-label={m.close}
-        className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-[#9ca3af] text-white"
+        className="absolute right-2.5 top-2.5 flex h-9 w-9 items-center justify-center rounded-full bg-[#9ca3af] text-white"
       >
         <CloseIcon />
       </button>

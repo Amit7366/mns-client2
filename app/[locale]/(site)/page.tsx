@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import FloatingSocialStack from "@/components/FloatingSocialStack";
 import HeroSlider from "@/components/HeroSlider";
 import HomeAppDownloadGate from "@/components/app-download/HomeAppDownloadGate";
@@ -6,7 +7,6 @@ import HomePromoGate from "@/components/home-promo/HomePromoGate";
 import HomeSpinWheelGate from "@/components/spin-wheel/HomeSpinWheelGate";
 import HomeCategoryIconBar from "@/components/home/HomeCategoryIconBar";
 import HomeGameSection from "@/components/home/HomeGameSection";
-import HomeSearchBar from "@/components/home/HomeSearchBar";
 import JackpotBanner from "@/components/home/JackpotBanner";
 import HomeJsonLd from "@/components/seo/HomeJsonLd";
 import { fetchExclusiveSlides, fetchPopularGames, fetchVendorGames } from "@/lib/games-api";
@@ -94,7 +94,7 @@ export default async function Home({ params }: PageProps) {
       <HomeAppDownloadGate />
       <HomePromoGate />
       <HomeSpinWheelGate />
-      <HomeSearchBar />
+      <AnnouncementBar />
       <HeroSlider />
       <HomeCategoryIconBar />
       <HomeGameSection
@@ -104,7 +104,12 @@ export default async function Home({ params }: PageProps) {
         ribbon="hot"
         limit={10}
       />
-      <JackpotBanner />
+      <JackpotBanner
+        games={
+          categoryResults.find((section) => section.kind === "slot")?.games ??
+          popularGames
+        }
+      />
       {categoryResults.map((section) => (
         <HomeGameSection
           key={section.kind}

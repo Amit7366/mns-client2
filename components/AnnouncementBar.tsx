@@ -3,18 +3,6 @@
 import { absoluteUrl, BKBAJI_ANDROID_APP_PATH } from "@/lib/seo/site-config";
 import { useLocale } from "./LocaleProvider";
 
-function MegaphoneIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
-      <path
-        d="M3 7.5 10 4.5v9L3 10.5V7.5zm10.5-1.5 2.25 1.35v4.3L13.5 12v-6z"
-        fill="#2cb86e"
-      />
-      <path d="M13.5 6v6c.9-.3 1.5-1.1 1.5-2.1v-1.8c0-1-.6-1.8-1.5-2.1z" fill="#8ef0b4" />
-    </svg>
-  );
-}
-
 const ANNOUNCEMENT_DOWNLOAD_URL = absoluteUrl(BKBAJI_ANDROID_APP_PATH);
 
 function AnnouncementText({ text }: { text: string }) {
@@ -29,7 +17,7 @@ function AnnouncementText({ text }: { text: string }) {
       <a
         href={BKBAJI_ANDROID_APP_PATH}
         download
-        className="pointer-events-auto font-medium text-[#2cb86e] underline decoration-[#2cb86e]/50 underline-offset-2 transition-colors hover:text-[#8ef0b4] hover:decoration-[#8ef0b4]"
+        className="pointer-events-auto font-semibold text-[#ffc44d] underline decoration-[#ffc44d]/50 underline-offset-2 transition-colors hover:text-[#ffe08a] hover:decoration-[#ffe08a]"
       >
         {ANNOUNCEMENT_DOWNLOAD_URL}
       </a>
@@ -44,27 +32,30 @@ export default function AnnouncementBar() {
   const items = Array.from({ length: 4 }, () => text);
 
   return (
-    <section className="border-y border-[#252525] bg-[#111111]">
-      <div className="mx-auto flex h-10 w-full max-w-[1400px] items-center gap-3 px-3 sm:px-4 lg:px-10 xl:px-16">
-        <div className="flex shrink-0 items-center justify-center rounded-md bg-[#178358]/15 p-1.5">
-          <MegaphoneIcon />
-        </div>
+    <section className="w-full pt-2" aria-label={text}>
+      <div className="flex h-7 items-center gap-2 rounded-full border border-[#1f6f6f] bg-[#071a1c] px-2 shadow-[0_4px_16px_rgba(0,0,0,0.45),0_0_0_1px_rgba(56,160,160,0.18),inset_0_1px_0_rgba(255,255,255,0.06)] sm:h-9 sm:px-3">
+        <span className="shrink-0 text-[13px] leading-none sm:text-[14px]" aria-hidden>
+          📣
+        </span>
 
         <div className="announcement-marquee relative min-w-0 flex-1 overflow-hidden">
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-[#111111] to-transparent" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-[#111111] to-transparent" />
-
           <div className="announcement-track flex w-max will-change-transform">
-            <div className="flex shrink-0 items-center gap-12 pr-12">
+            <div className="flex shrink-0 items-center gap-8 pr-8">
               {items.map((item, index) => (
-                <span key={`a-${index}`} className="whitespace-nowrap text-[13px] text-[#e8e8e8]">
+                <span
+                  key={`a-${index}`}
+                  className="whitespace-nowrap text-[11px] font-semibold text-[#f0b429] sm:text-[12px]"
+                >
                   <AnnouncementText text={item} />
                 </span>
               ))}
             </div>
-            <div className="flex shrink-0 items-center gap-12 pr-12" aria-hidden>
+            <div className="flex shrink-0 items-center gap-8 pr-8" aria-hidden>
               {items.map((item, index) => (
-                <span key={`b-${index}`} className="whitespace-nowrap text-[13px] text-[#e8e8e8]">
+                <span
+                  key={`b-${index}`}
+                  className="whitespace-nowrap text-[11px] font-semibold text-[#f0b429] sm:text-[12px]"
+                >
                   <AnnouncementText text={item} />
                 </span>
               ))}

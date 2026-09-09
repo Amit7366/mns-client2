@@ -294,27 +294,15 @@ export default function SideNavigation({ expanded, onClose }: SideNavigationProp
     return () => window.removeEventListener("keydown", onKey);
   }, [expanded, onClose]);
 
-  useEffect(() => {
-    if (!expanded) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [expanded]);
-
   function handleMemberNav(href: string) {
     if (!isAuthenticated) {
       router.push(`/${locale}/login?next=${encodeURIComponent(href)}`);
-      onClose();
       return;
     }
     router.push(href);
-    onClose();
   }
 
   function handleLocale() {
-    onClose();
     openModal();
   }
 
@@ -324,60 +312,29 @@ export default function SideNavigation({ expanded, onClose }: SideNavigationProp
   }
 
   return (
-    <>
-      <div
-        className={`fixed inset-0 z-[60] bg-black/55 transition-opacity duration-300 ${
-          expanded ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
-        }`}
-        aria-hidden={!expanded}
-        onClick={onClose}
-      />
-
-      <aside
-        className={`fixed bottom-0 left-0 top-0 z-[70] flex w-[min(78vw,280px)] max-w-full flex-col bg-[#042c2c] shadow-[8px_0_32px_rgba(0,0,0,0.45)] transition-transform duration-300 ease-out ${
-          expanded ? "translate-x-0" : "-translate-x-full"
-        }`}
-        aria-hidden={!expanded}
-        aria-label={t.ui.menu}
-      >
-        <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
-          <Link
-            href={`/${locale}`}
-            onClick={onClose}
-            className="focus-ring text-[18px] font-bold tracking-tight"
-          >
-            <span className="text-[var(--gold)]">BK</span>
-            <span className="text-white">Baji</span>
-          </Link>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label={t.ui.closeMenu}
-            className="focus-ring flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white transition-colors hover:bg-white/10"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
-              <path
-                d="M4 4l10 10M14 4L4 14"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2.5 py-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch]">
-          <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+    <aside
+      className={`flex h-full flex-col overflow-hidden bg-[#042c2c] transition-[width,transform] duration-300 ease-out max-lg:absolute max-lg:inset-y-0 max-lg:left-0 max-lg:z-30 max-lg:w-[220px] lg:relative lg:shrink-0 ${
+        expanded
+          ? "shadow-[4px_0_16px_rgba(0,0,0,0.25)] max-lg:translate-x-0 lg:w-[220px]"
+          : "pointer-events-none max-lg:-translate-x-full lg:w-0"
+      }`}
+      aria-hidden={!expanded}
+      aria-label={t.ui.menu}
+      inert={!expanded}
+    >
+      <div className="flex h-full w-[220px] flex-col">
+        <nav className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-2.5 py-3 [-ms-overflow-style:none] [scrollbar-width:none] [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden">
+          <div className="grid grid-cols-2 gap-2">
             {sidebarGridItems.map((item) => {
               const label = t.sidebar[item.id] ?? item.id;
               const href = resolveHref(locale, item);
               const tileClass =
-                "focus-ring flex min-h-[48px] flex-col items-center justify-center gap-1 rounded-xl bg-[#0a3d3d] px-1.5 py-1.5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-colors hover:bg-[#0f4a4a] active:scale-[0.98] sm:min-h-[52px]";
+                "focus-ring flex min-h-[72px] flex-col items-center justify-center gap-1.5 rounded-xl bg-[#0a3d3d] px-2 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-colors hover:bg-[#0f4a4a] active:scale-[0.98]";
 
               const content = (
                 <>
                   <GridIcon id={item.id} tone={item.tone} />
-                  <span className="max-w-full px-0.5 text-[10px] font-medium leading-tight text-white sm:text-[11px]">
+                  <span className="max-w-full px-0.5 text-[12px] font-medium leading-snug text-white">
                     {label}
                   </span>
                 </>
@@ -401,13 +358,7 @@ export default function SideNavigation({ expanded, onClose }: SideNavigationProp
 
               if (item.action === "download" && href) {
                 return (
-                  <a
-                    key={item.id}
-                    href={href}
-                    download
-                    onClick={onClose}
-                    className={tileClass}
-                  >
+                  <a key={item.id} href={href} download className={tileClass}>
                     {content}
                   </a>
                 );
@@ -428,21 +379,21 @@ export default function SideNavigation({ expanded, onClose }: SideNavigationProp
 
               if (href) {
                 return (
-                  <Link key={item.id} href={href} onClick={onClose} className={tileClass}>
+                  <Link key={item.id} href={href} className={tileClass}>
                     {content}
                   </Link>
                 );
               }
 
               return (
-                <button key={item.id} type="button" onClick={onClose} className={tileClass}>
+                <button key={item.id} type="button" className={tileClass}>
                   {content}
                 </button>
               );
             })}
           </div>
         </nav>
-      </aside>
-    </>
+      </div>
+    </aside>
   );
 }

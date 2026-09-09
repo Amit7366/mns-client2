@@ -151,6 +151,15 @@
   }
 }
 
+@keyframes game-card-shine {
+  from {
+    transform: rotate(45deg) translateX(-180%);
+  }
+  to {
+    transform: rotate(45deg) translateX(280%);
+  }
+}
+
 @layer utilities {
   .home-tab-icon-sprite {
     background-repeat: no-repeat;
@@ -227,7 +236,7 @@
   }
 
   .home-game-grid {
-    @apply grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-2.5 md:grid-cols-5 lg:gap-3;
+    @apply grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-2.5 md:grid-cols-4 lg:grid-cols-4 lg:gap-3 xl:grid-cols-6;
   }
 
   .section-title-gold {
@@ -254,6 +263,31 @@
 
 .animate-slide-up {
   animation: slide-up 0.25s ease-out;
+}
+
+.game-card-shine-beam {
+  position: absolute;
+  top: -90%;
+  left: -40%;
+  width: 42%;
+  height: 280%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 35%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.08) 65%,
+    transparent 100%
+  );
+  transform: rotate(45deg) translateX(-180%);
+  opacity: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .game-card-shine-beam {
+    opacity: 1;
+    animation: game-card-shine 0.9s ease-out;
+  }
 }
 
 @keyframes game-launch-spin {
@@ -404,7 +438,56 @@
     animation: none;
   }
 
+  .game-card-shine-beam {
+    animation: none !important;
+    opacity: 0;
+  }
+
   .announcement-track {
     animation: none;
+  }
+}
+
+.announcement-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #2ee6c4 #0a3d3a;
+}
+
+.announcement-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.announcement-scroll::-webkit-scrollbar-track {
+  background: #0a3d3a;
+  border-radius: 999px;
+}
+
+.announcement-scroll::-webkit-scrollbar-thumb {
+  background: #2ee6c4;
+  border-radius: 999px;
+}
+
+.home-game-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .home-game-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.625rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-game-grid {
+    gap: 0.75rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .home-game-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }

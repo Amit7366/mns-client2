@@ -20,15 +20,16 @@ export default function HeroSlider() {
   const { t } = useLocale();
 
   return (
-    <section className="hero-swiper relative w-full bg-[var(--bg)] pt-2 sm:pt-3">
+    <section className="hero-swiper relative w-full overflow-hidden bg-[var(--bg)] pt-2">
       <div className="relative mx-auto w-full">
         <Swiper
           modules={[Autoplay, Pagination]}
           centeredSlides
           loop
-          slidesPerView={1.18}
-          spaceBetween={10}
+          slidesPerView={1.08}
+          spaceBetween={8}
           breakpoints={{
+            0: { slidesPerView: 1.08, spaceBetween: 8 },
             640: { slidesPerView: 1.2, spaceBetween: 12 },
             1024: { slidesPerView: 1.22, spaceBetween: 14 },
           }}
@@ -39,7 +40,7 @@ export default function HeroSlider() {
         >
           {HERO_SLIDES.map((src, index) => (
             <SwiperSlide key={src} className="!h-auto">
-              <div className="relative h-[150px] w-full overflow-hidden rounded-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.4)] sm:h-[205px] sm:rounded-[14px] md:h-[245px] lg:h-[300px] lg:rounded-[16px]">
+              <div className="relative h-[132px] w-full overflow-hidden rounded-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.4)] sm:h-[205px] sm:rounded-[14px] md:h-[245px] lg:h-[300px] lg:rounded-[16px]">
                 <Image
                   src={src}
                   alt={`${t.ui.goToSlide} ${index + 1}`}

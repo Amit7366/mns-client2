@@ -79,7 +79,7 @@ export default function HomeGameTabs({ popularGames }: { popularGames: PopularGa
 
       {activeTab === "popular" ? (
         <div>
-          <div className="grid grid-cols-3 gap-1.5 sm:gap-2 lg:grid-cols-9 lg:gap-2.5">
+          <div className="grid grid-cols-3 gap-2 sm:gap-2.5 lg:grid-cols-7 lg:gap-3">
             {popularGames.map((game, index) => (
               <GameCard
                 key={game.id}
@@ -89,7 +89,6 @@ export default function HomeGameTabs({ popularGames }: { popularGames: PopularGa
                 provider={t.home.providers[game.providerKey] ?? game.providerKey}
                 image={game.image}
                 priority={index < 4}
-                className="group relative block w-full overflow-hidden rounded-md bg-[#141414] text-left shadow-[0_2px_10px_rgba(0,0,0,0.35)] transition-transform duration-200 active:scale-[0.98] lg:rounded-[10px] lg:shadow-[0_4px_16px_rgba(0,0,0,0.35)] lg:active:scale-100 lg:hover:scale-[1.02]"
               />
             ))}
           </div>

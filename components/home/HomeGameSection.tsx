@@ -26,7 +26,7 @@ export default function HomeGameSection({
   if (tiles.length === 0) return null;
 
   return (
-    <section className="w-full py-3">
+    <section className="w-full py-2.5 sm:py-3">
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 className="section-title-gold">{title}</h2>
         <Link
@@ -55,7 +55,7 @@ export default function HomeGameSection({
               title={game.title}
               provider={game.providerLabel}
               priority={index < 5}
-              sizes="(max-width: 640px) 33vw, (max-width: 1023px) 25vw, 12vw"
+              sizes="(max-width: 640px) 20vw, (max-width: 1023px) 16vw, 10vw"
             />
           </div>
         ))}

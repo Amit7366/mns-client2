@@ -108,6 +108,17 @@ const PROVIDER_ICONS: Record<string, ProviderIcon> = {
   tfgaming: sportbookIcon,
   "568winsportsbook": sportbookIcon,
   lucksport: sportbookIcon,
+  peacheseighteen: "https://i.ibb.co/XkS1mM4c/provider-Logo.png",
+  astargaming: "https://i.ibb.co/xtKTPtsR/AG-001-Astar-Gaming.png",
+  crowdplay: "https://i.ibb.co.com/prLyYdnR/images.png",
+  netent: "https://i.ibb.co.com/YBp2Wkm6/netent.png",
+  revenge: "https://i.ibb.co.com/zHX90YnY/Revenge.png",
+  ongaming: "https://i.ibb.co.com/qYHGQwzk/On-Gaming.png",
+  pragmaticplaylive: "https://i.ibb.co/q3WpN78W/Pragmatic-Play-Live-Logo.png",
+  redtiger: "https://i.ibb.co/FqVKb9sJ/images.png",
+  bigtimegaming: "https://i.ibb.co/CKrC3fKB/Big-Time-Gaming-Logo.png",
+  mac88: "https://i.ibb.co.com/5XrbqbBC/mac88-Logo.png",
+  nolimitcity: "https://i.ibb.co.com/dsDTJncN/nolimit-city-logo.png",
 };
 
 const PROVIDER_ICON_ALIASES: Record<string, string> = {

@@ -83,6 +83,8 @@ export type Messages = {
     esportsTitle: string;
     searchPlaceholder: string;
     seeAll: string;
+    playNow: string;
+    freeTrial: string;
     tabs: Record<string, string>;
     games: Record<string, string>;
     providers: Record<string, string>;
@@ -295,6 +297,8 @@ const en: Messages = {
     esportsTitle: "E-Sports",
     searchPlaceholder: "Search games",
     seeAll: "All",
+    playNow: "Play Now",
+    freeTrial: "Free Trial",
     tabs: {
       popular: "Popular",
       all: "All",
@@ -388,6 +392,16 @@ const en: Messages = {
       amigo: "Amigo",
       sevenfivenine: "759 Gaming",
       rectangle: "Rectangle",
+      peacheseighteen: "Peaches Eighteen",
+      astargaming: "Astar Gaming",
+      crowdplay: "Crowd Play",
+      revenge: "Revenge",
+      ongaming: "On Gaming",
+      pragmaticplaylive: "Pragmatic Play Live",
+      redtiger: "Red Tiger",
+      bigtimegaming: "Big Time Gaming",
+      mac88: "Mac88",
+      nolimitcity: "No Limit City",
       rich88: "Rich88",
       fachai: "Fa Chai",
       spadegaming: "Spadegaming",
@@ -475,7 +489,7 @@ const en: Messages = {
 
 const bn: Messages = {
   login: "লগইন",
-  signUp: "সাইন আপ",
+  signUp: "নিবন্ধন করুন",
   slots: "স্লট",
   casino: "ক্যাসিনো",
   liveSupport: "২৪/৭ লাইভ চ্যাট",
@@ -638,6 +652,8 @@ const bn: Messages = {
     esportsTitle: "ই-স্পোর্টস",
     searchPlaceholder: "গেম খুঁজুন",
     seeAll: "সবগুলো",
+    playNow: "এখন খেলুন",
+    freeTrial: "ফ্রি ট্রায়াল",
     tabs: {
       popular: "জনপ্রিয়",
       all: "সব",
@@ -731,6 +747,16 @@ const bn: Messages = {
       amigo: "Amigo",
       sevenfivenine: "759 Gaming",
       rectangle: "Rectangle",
+      peacheseighteen: "Peaches Eighteen",
+      astargaming: "Astar Gaming",
+      crowdplay: "Crowd Play",
+      revenge: "Revenge",
+      ongaming: "On Gaming",
+      pragmaticplaylive: "Pragmatic Play Live",
+      redtiger: "Red Tiger",
+      bigtimegaming: "Big Time Gaming",
+      mac88: "Mac88",
+      nolimitcity: "No Limit City",
       rich88: "Rich88",
       fachai: "Fa Chai",
       spadegaming: "Spadegaming",
@@ -981,6 +1007,8 @@ const hi: Messages = {
     esportsTitle: "ई-स्पोर्ट्स",
     searchPlaceholder: "गेम खोजें",
     seeAll: "सभी",
+    playNow: "अभी खेलें",
+    freeTrial: "फ्री ट्रायल",
     tabs: {
       popular: "लोकप्रिय",
       all: "सभी",
@@ -1074,6 +1102,16 @@ const hi: Messages = {
       amigo: "Amigo",
       sevenfivenine: "759 Gaming",
       rectangle: "Rectangle",
+      peacheseighteen: "Peaches Eighteen",
+      astargaming: "Astar Gaming",
+      crowdplay: "Crowd Play",
+      revenge: "Revenge",
+      ongaming: "On Gaming",
+      pragmaticplaylive: "Pragmatic Play Live",
+      redtiger: "Red Tiger",
+      bigtimegaming: "Big Time Gaming",
+      mac88: "Mac88",
+      nolimitcity: "No Limit City",
       rich88: "Rich88",
       fachai: "Fa Chai",
       spadegaming: "Spadegaming",

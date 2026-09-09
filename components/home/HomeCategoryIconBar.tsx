@@ -25,18 +25,6 @@ const CATEGORY_ITEMS: CategoryItem[] = [
   { id: "lottery", hrefKind: "lottery" },
 ];
 
-const LABELS: Record<string, { en: string; bn: string; hi: string }> = {
-  hotGames: { en: "HOT GAMES", bn: "HOT GAMES", hi: "HOT GAMES" },
-  favorites: { en: "FAVORITES", bn: "FAVORITES", hi: "FAVORITES" },
-  slots: { en: "SLOTS", bn: "SLOTS", hi: "SLOTS" },
-  live: { en: "LIVE", bn: "LIVE", hi: "LIVE" },
-  sports: { en: "SPORTS", bn: "SPORTS", hi: "SPORTS" },
-  esports: { en: "E-SPORTS", bn: "E-SPORTS", hi: "E-SPORTS" },
-  poker: { en: "POKER", bn: "POKER", hi: "POKER" },
-  fish: { en: "FISH", bn: "FISH", hi: "FISH" },
-  lottery: { en: "LOTTERY", bn: "LOTTERY", hi: "LOTTERY" },
-};
-
 function CategoryIcon({ id }: { id: string }) {
   const common = {
     width: 28,
@@ -154,7 +142,7 @@ function CategoryIcon({ id }: { id: string }) {
 }
 
 export default function HomeCategoryIconBar() {
-  const { preferences } = useLocale();
+  const { t, preferences } = useLocale();
   const locale = preferences.locale;
 
   function hrefFor(item: CategoryItem): string {
@@ -163,15 +151,20 @@ export default function HomeCategoryIconBar() {
   }
 
   function labelFor(id: string): string {
-    const entry = LABELS[id];
-    if (!entry) return id;
-    if (locale === "bn") return entry.bn;
-    if (locale === "hi") return entry.hi;
-    return entry.en;
+    if (id === "hotGames") return t.home.hotGamesTitle;
+    if (id === "favorites") return t.sidebar.favorites;
+    if (id === "slots") return t.home.tabs.slots;
+    if (id === "live") return t.home.tabs.live;
+    if (id === "sports") return t.home.tabs.sports;
+    if (id === "esports") return t.home.esportsTitle;
+    if (id === "poker") return t.sidebar.poker;
+    if (id === "fish") return t.home.tabs.fishing;
+    if (id === "lottery") return t.home.tabs.lottery;
+    return id;
   }
 
   return (
-    <section className="home-category-bar w-full py-3">
+    <section className="home-category-bar w-full overflow-hidden py-2 sm:py-3">
       <Swiper
         modules={[FreeMode]}
         freeMode={{ enabled: true, momentumRatio: 0.65 }}
@@ -183,10 +176,10 @@ export default function HomeCategoryIconBar() {
           <SwiperSlide key={item.id} className="!w-auto">
             <Link
               href={hrefFor(item)}
-              className="focus-ring flex h-[72px] w-[78px] flex-col items-center justify-center gap-1 rounded-xl bg-[#0a4545] px-1.5 text-center transition-colors hover:bg-[#0d5252] active:scale-[0.98] sm:h-[80px] sm:w-[88px] sm:rounded-[14px]"
+              className="focus-ring flex h-[68px] w-[70px] flex-col items-center justify-center gap-1 rounded-xl bg-[#0a4545] px-1 text-center transition-colors hover:bg-[#0d5252] active:scale-[0.98] sm:h-[80px] sm:w-[88px] sm:rounded-[14px] sm:px-1.5"
             >
               <CategoryIcon id={item.id} />
-              <span className="max-w-full truncate text-[9px] font-bold uppercase tracking-wide text-white sm:text-[10px]">
+              <span className="line-clamp-2 max-w-full px-0.5 text-center text-[9px] font-bold leading-tight text-white sm:text-[10px]">
                 {labelFor(item.id)}
               </span>
             </Link>

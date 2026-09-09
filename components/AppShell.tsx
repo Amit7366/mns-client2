@@ -11,9 +11,14 @@ import { ToastProvider } from "./ToastProvider";
 import GameReturnHandler from "./GameReturnHandler";
 import { GamePlayGateProvider } from "./games/GamePlayGateProvider";
 import { siteShellClass } from "@/lib/theme";
+import { useLocale } from "./LocaleProvider";
 
 function isHomePath(pathname: string): boolean {
   return /^\/(bn|en|hi)\/?$/.test(pathname);
+}
+
+function isDesktopViewport(): boolean {
+  return window.matchMedia("(min-width: 1024px)").matches;
 }
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
@@ -27,10 +32,19 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const closeSidebar = useCallback(() => setSidebarExpanded(false), []);
 
   const pathname = usePathname();
+  const { t } = useLocale();
 
   useEffect(() => {
-    setSidebarExpanded(false);
+    setSidebarExpanded(isDesktopViewport());
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => setSidebarExpanded(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
     setProfileSheetOpen(false);
+    if (!isDesktopViewport()) setSidebarExpanded(false);
   }, [pathname]);
 
   const handleProfileClick = useCallback(() => {
@@ -51,12 +65,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
         <SideNavigation expanded={sidebarExpanded} onClose={closeSidebar} />
+        {sidebarExpanded ? (
+          <button
+            type="button"
+            className="absolute inset-0 z-20 bg-black/50 lg:hidden"
+            aria-label={t.ui.closeMenu}
+            onClick={closeSidebar}
+          />
+        ) : null}
 
         <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain pb-[calc(3.5rem+env(safe-area-inset-bottom))] [-webkit-overflow-scrolling:touch] lg:pb-0">
           <div className={siteShellClass}>
             {children}
-            {isHomePath(pathname) ? <SiteFooter /> : null}
           </div>
+          {isHomePath(pathname) ? <SiteFooter /> : null}
         </main>
       </div>
 

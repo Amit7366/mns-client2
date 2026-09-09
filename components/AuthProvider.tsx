@@ -137,16 +137,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
   }, [authReady, session?.accessToken, session?.role, refreshSession]);
 
-  /** On load: pull authoritative Mongo balance into auth session. */
+  /** On load: restore game wallet. Do not GET Mongo until withdraw has cleared the pending flag. */
   useEffect(() => {
     if (!authReady || !session?.accessToken || !session.memberId) return;
     void (async () => {
-      await refreshWalletBalance();
+      try {
+        await handleGameReturnBalance();
+      } catch {
+        /* gameSessionActive stays true; retry on next focus / game tap */
+      }
+      if (!isBalanceUpdatePending()) {
+        await refreshWalletBalance();
+      }
       refreshSession();
     })();
   }, [authReady, session?.accessToken, session?.memberId, refreshSession]);
 
-  /** Tab focus: return-withdraw if pending, else refresh Mongo balance. */
+  /** Tab focus: always try return-withdraw (no-op if no game session), then refresh. */
   useEffect(() => {
     if (!authReady || !session?.accessToken || !session.memberId) return;
 
@@ -155,12 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const elapsed = Date.now() - lastWalletSyncRef.current;
       if (elapsed < WALLET_FOCUS_DEBOUNCE_MS) return;
 
-      if (isBalanceUpdatePending()) {
-        void syncWalletFromServer({ gameReturn: true });
-        return;
-      }
-
-      void syncWalletFromServer();
+      void syncWalletFromServer({ gameReturn: true });
     };
 
     window.addEventListener("focus", onVisible);
@@ -183,10 +185,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [authReady, session?.memberId, syncWalletFromServer]);
 
   const refreshBalance = useCallback(async () => {
-    await syncWalletFromServer({
-      gameReturn: isBalanceUpdatePending(),
-      forceDb: true,
-    });
+    await syncWalletFromServer({ gameReturn: true });
   }, [syncWalletFromServer]);
 
   const logout = useCallback(async () => {

@@ -35,7 +35,7 @@ export default function LocaleMenuButton() {
       type="button"
       aria-label={t.ui.changeLocale}
       onClick={openModal}
-      className="focus-ring ml-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-opacity hover:opacity-80"
+      className="focus-ring ml-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-opacity hover:opacity-80 sm:h-10 sm:w-10"
     >
       {preferences.country === "bd" ? <BangladeshFlagIcon /> : <IndiaFlagIcon />}
     </button>

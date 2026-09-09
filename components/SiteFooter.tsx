@@ -9,6 +9,7 @@ import { lobbyCategoryHref, type LobbyKind } from "@/lib/vendor-routes";
 import { useAuth } from "./AuthProvider";
 import ProviderLogo from "./ProviderLogo";
 import { useLocale } from "./LocaleProvider";
+import { siteShellClass } from "@/lib/theme";
 
 function BrandSeal() {
   return (
@@ -118,7 +119,7 @@ export default function SiteFooter() {
 
   return (
     <footer className="safe-bottom mt-6 border-t border-white/10 bg-[#003936] text-white">
-      <div className="w-full py-8 sm:py-10">
+      <div className={`${siteShellClass} py-8 sm:py-10`}>
         <div className="flex flex-col gap-8 lg:flex-row lg:gap-10">
           {/* Left nav columns */}
           <div className="flex shrink-0 gap-10 sm:gap-14">

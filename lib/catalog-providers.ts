@@ -87,15 +87,26 @@ const PROVIDER_LOBBY_KINDS: Record<string, LobbyKind[]> = {
   amigo: ["crash", "slot"],
   sevenfivenine: ["slot"],
   rectangle: ["slot", "arcade", "table", "crash", "lottery"],
+  peacheseighteen: ["slot"],
+  astargaming: ["casino"],
+  crowdplay: ["slot"],
+  netent: ["slot"],
+  revenge: ["slot"],
+  ongaming: ["casino"],
+  pragmaticplaylive: ["casino"],
+  redtiger: ["slot"],
+  bigtimegaming: ["slot"],
+  mac88: ["slot", "crash", "casino", "table"],
+  nolimitcity: ["slot"],
 };
 
 /** Home tab → provider keys shown in HomeGameTabs grid. */
 const HOME_TAB_PROVIDER_KEYS: Record<HomeCategoryTabId, string[]> = {
-  slots: ["pg", "jili", "pragmatic", "playngo", "fachai", "eazygaming", "relaxgaming", "evoplay", "ideal", "jdb", "cq9", "yellowBat", "playtech", "spribe", "rich88", "inout", "fastspin", "nextspin", "microgaming", "hacksaw", "eeai", "penguinking", "topbet", "twoj", "funkygames", "spadegaming", "psg", "atg", "galaxsys", "smartsoft", "koolbet", "pix", "kygaming", "hp", "habanero", "amigo", "sevenfivenine", "rectangle"],
-  casino: ["evolution", "ezugi", "jili", "dreamgaming", "hacksaw", "eeai", "auragaming", "funkygames", "spadegaming", "psg", "atg", "smartsoft", "creedroomz"],
-  crash: ["spribe", "pg", "topbet", "turbogames", "twoj", "mini", "auragaming", "funkygames", "spadegaming", "veliplay", "psg", "atg", "galaxsys", "smartsoft", "koolbet", "pix", "hp", "amigo", "rectangle"],
+  slots: ["pg", "jili", "pragmatic", "playngo", "fachai", "eazygaming", "relaxgaming", "evoplay", "ideal", "jdb", "cq9", "yellowBat", "playtech", "spribe", "rich88", "inout", "fastspin", "nextspin", "microgaming", "hacksaw", "eeai", "penguinking", "topbet", "twoj", "funkygames", "spadegaming", "psg", "atg", "galaxsys", "smartsoft", "koolbet", "pix", "kygaming", "hp", "habanero", "amigo", "sevenfivenine", "rectangle", "peacheseighteen", "crowdplay", "netent", "revenge", "redtiger", "bigtimegaming", "mac88", "nolimitcity"],
+  casino: ["evolution", "ezugi", "jili", "dreamgaming", "hacksaw", "eeai", "auragaming", "funkygames", "spadegaming", "psg", "atg", "smartsoft", "creedroomz", "astargaming", "ongaming", "pragmaticplaylive", "mac88"],
+  crash: ["spribe", "pg", "topbet", "turbogames", "twoj", "mini", "auragaming", "funkygames", "spadegaming", "veliplay", "psg", "atg", "galaxsys", "smartsoft", "koolbet", "pix", "hp", "amigo", "rectangle", "mac88"],
   fishing: ["jili", "fachai", "jdb", "fastspin", "nextspin", "microgaming", "twoj", "spadegaming", "galaxsys"],
-  table: ["km", "jili", "playngo", "rich88", "eeai", "twoj", "creedroomz", "gamesoft", "koolbet", "pix", "kygaming", "hp", "habanero", "rectangle"],
+  table: ["km", "jili", "playngo", "rich88", "eeai", "twoj", "creedroomz", "gamesoft", "koolbet", "pix", "kygaming", "hp", "habanero", "rectangle", "mac88"],
   arcade: ["fachai", "jdb", "cq9", "rich88", "nextspin", "microgaming", "hacksaw", "eeai", "penguinking", "turbogames", "twoj", "funkygames", "atg", "galaxsys", "smartsoft", "koolbet", "pix", "kygaming", "hp", "rectangle"],
   lottery: ["cq9", "jdb", "rich88", "yellowBat", "eeai", "turbogames", "mini", "pix", "kygaming", "hp", "rectangle"],
   sports: ["bti", "sabasport", "9wicket", "betby", "cmd", "tfgaming", "sabasportsphp", "unitedgaming", "568winsportsbook", "sbosportsbook", "sbovirtualsports", "lucksport", "cockfight"],
@@ -163,6 +174,17 @@ export const ACTIVE_CATALOG_PROVIDERS: CatalogProvider[] = [
   { providerKey: "amigo", vendorCode: "awcv2_amigo", labelKey: "amigo", initials: "AM", color: "#eab308", defaultLobbyKind: "slot" },
   { providerKey: "sevenfivenine", vendorCode: "awcv2_sevenfivenine", labelKey: "sevenfivenine", initials: "79", color: "#a855f7", defaultLobbyKind: "slot" },
   { providerKey: "rectangle", vendorCode: "awcv2_rectangle", labelKey: "rectangle", initials: "RC", color: "#64748b", defaultLobbyKind: "slot" },
+  { providerKey: "peacheseighteen", vendorCode: "awcv2_peacheseighteen", labelKey: "peacheseighteen", initials: "P8", color: "#fb7185", defaultLobbyKind: "slot" },
+  { providerKey: "astargaming", vendorCode: "awcv2_astargaming", labelKey: "astargaming", initials: "AS", color: "#6366f1", defaultLobbyKind: "casino" },
+  { providerKey: "crowdplay", vendorCode: "awcv2_crowdplay", labelKey: "crowdplay", initials: "CP", color: "#0ea5e9", defaultLobbyKind: "slot" },
+  { providerKey: "netent", vendorCode: "awcv2_netent", labelKey: "netent", initials: "NE", color: "#f59e0b", defaultLobbyKind: "slot" },
+  { providerKey: "revenge", vendorCode: "awcv2_revenge", labelKey: "revenge", initials: "RV", color: "#dc2626", defaultLobbyKind: "slot" },
+  { providerKey: "ongaming", vendorCode: "awcv2_ongaming", labelKey: "ongaming", initials: "ON", color: "#22c55e", defaultLobbyKind: "casino" },
+  { providerKey: "pragmaticplaylive", vendorCode: "awcv2_pragmaticplaylive", labelKey: "pragmaticplaylive", initials: "PL", color: "#ea580c", defaultLobbyKind: "casino" },
+  { providerKey: "redtiger", vendorCode: "awcv2_redtiger", labelKey: "redtiger", initials: "RT", color: "#ef4444", defaultLobbyKind: "slot" },
+  { providerKey: "bigtimegaming", vendorCode: "awcv2_bigtimegaming", labelKey: "bigtimegaming", initials: "BT", color: "#a855f7", defaultLobbyKind: "slot" },
+  { providerKey: "mac88", vendorCode: "awcv2_mac88", labelKey: "mac88", initials: "M8", color: "#eab308", defaultLobbyKind: "casino" },
+  { providerKey: "nolimitcity", vendorCode: "awcv2_nolimitcity", labelKey: "nolimitcity", initials: "NL", color: "#1d4ed8", defaultLobbyKind: "slot" },
 ];
 
 /*
