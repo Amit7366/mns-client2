@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { fetchSpinStatus, type SpinStatus } from "@/lib/spin-api";
+import { OPEN_SPIN_WHEEL_EVENT } from "@/lib/spin-wheel-events";
 import SpinWheelModal from "./SpinWheelModal";
 
 const DISMISS_KEY_PREFIX = "bkbaji.spin.dismissed.";
@@ -52,6 +53,23 @@ export default function HomeSpinWheelGate() {
       checkedRef.current = false;
       setOpen(false);
     }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    const onOpen = () => {
+      if (!isAuthenticated) return;
+      void (async () => {
+        try {
+          const data = await fetchSpinStatus();
+          setStatus(data);
+        } catch {
+          setStatus(null);
+        }
+        setOpen(true);
+      })();
+    };
+    window.addEventListener(OPEN_SPIN_WHEEL_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_SPIN_WHEEL_EVENT, onOpen);
   }, [isAuthenticated]);
 
   const handleClose = useCallback(() => {

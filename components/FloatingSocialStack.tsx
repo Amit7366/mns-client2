@@ -52,7 +52,7 @@ export default function FloatingSocialStack() {
   });
 
   return (
-    <div className="fixed right-1.5 z-30 flex flex-col items-center gap-2 bottom-[calc(4.35rem+env(safe-area-inset-bottom))] lg:right-8 lg:top-1/2 lg:bottom-auto lg:-translate-y-1/2">
+    <div className="fixed right-1.5 z-30 flex flex-col items-center gap-2 bottom-[calc(4.35rem+env(safe-area-inset-bottom))] lg:right-8 lg:bottom-8">
       {floatItems.map((item) => (
         <a
           key={item.id}

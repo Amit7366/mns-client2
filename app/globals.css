@@ -446,6 +446,10 @@
   .announcement-track {
     animation: none;
   }
+
+  .promo-rail-bob {
+    animation: none;
+  }
 }
 
 .announcement-scroll {
@@ -486,8 +490,16 @@
   }
 }
 
-@media (min-width: 1280px) {
-  .home-game-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+.promo-rail-bob {
+  animation: promo-rail-bob 2.4s ease-in-out infinite;
+}
+
+@keyframes promo-rail-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
   }
 }

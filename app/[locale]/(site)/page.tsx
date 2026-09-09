@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import FloatingSocialStack from "@/components/FloatingSocialStack";
+import FloatingPromoRail from "@/components/home/FloatingPromoRail";
 import HeroSlider from "@/components/HeroSlider";
 import HomeAppDownloadGate from "@/components/app-download/HomeAppDownloadGate";
 import HomePromoGate from "@/components/home-promo/HomePromoGate";
@@ -119,6 +120,7 @@ export default async function Home({ params }: PageProps) {
           limit={section.limit}
         />
       ))}
+      <FloatingPromoRail />
       <FloatingSocialStack />
     </>
   );
