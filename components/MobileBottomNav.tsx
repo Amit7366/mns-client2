@@ -1,92 +1,97 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { lobbyCategoryHref } from "@/lib/vendor-routes";
-import { getProfileMessages } from "@/lib/i18n/profile-messages";
-import { getMemberCenterMessages } from "@/lib/i18n/member-center-messages";
-import { BottomProfileNavIcon } from "./profile/ProfileMenuIcons";
-import ProfileMobileSheet from "./profile/ProfileMobileSheet";
-import { CasinoSpadeIcon, Slots777Icon } from "./SidebarIcons";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "./AuthProvider";
 import { useLocale } from "./LocaleProvider";
+import { getBottomNavMessages } from "@/lib/i18n/bottom-nav-messages";
+import { memberCenterHref, memberRewardCenterHref } from "@/lib/member-routes";
 
-function BottomMenuIcon() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
-      <defs>
-        <linearGradient id="bnMenuG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#8ef0b4" />
-          <stop offset="100%" stopColor="#157a47" />
-        </linearGradient>
-      </defs>
-      <rect x="5" y="7" width="18" height="2.5" rx="1.25" fill="url(#bnMenuG)" />
-      <rect x="5" y="12.75" width="18" height="2.5" rx="1.25" fill="url(#bnMenuG)" />
-      <rect x="5" y="18.5" width="18" height="2.5" rx="1.25" fill="url(#bnMenuG)" />
-    </svg>
-  );
-}
+const ICON_COLOR = "#7ee8c8";
+const ICON_ACTIVE = "#f5c518";
 
-function BottomGiftIcon() {
+function HomeIcon({ active }: { active: boolean }) {
+  const c = active ? ICON_ACTIVE : ICON_COLOR;
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
-      <defs>
-        <linearGradient id="bnGiftG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#8ef0b4" />
-          <stop offset="100%" stopColor="#157a47" />
-        </linearGradient>
-        <linearGradient id="bnGiftGold" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#ffe566" />
-          <stop offset="100%" stopColor="#c48a0a" />
-        </linearGradient>
-      </defs>
-      <rect x="5" y="12" width="18" height="11" rx="2" fill="url(#bnGiftG)" />
-      <path d="M14 12v11" stroke="url(#bnGiftGold)" strokeWidth="2" />
-      <path d="M5 15.5h18" stroke="url(#bnGiftGold)" strokeWidth="2" />
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden>
       <path
-        d="M14 12c-2.5 0-4.5-1.2-4.5-3s2-3.2 4.5-1.5c2.3-1.7 4.5-.8 4.5 1.5s-2 3-4.5 3z"
-        fill="url(#bnGiftGold)"
+        d="M4 12.2L13 4.5l9 7.7V21a1.5 1.5 0 01-1.5 1.5h-5.2v-6.2h-5.6V22.5H5.5A1.5 1.5 0 014 21V12.2z"
+        stroke={c}
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+        fill={active ? "rgba(245,197,24,0.18)" : "none"}
       />
-      <ellipse cx="10" cy="14" rx="3" ry="2" fill="#fff" opacity="0.2" />
     </svg>
   );
 }
 
-function BottomMemberIcon() {
+function PromotionIcon({ active }: { active: boolean }) {
+  const c = active ? ICON_ACTIVE : ICON_COLOR;
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
-      <defs>
-        <linearGradient id="bnMemberG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#8ef0b4" />
-          <stop offset="100%" stopColor="#157a47" />
-        </linearGradient>
-      </defs>
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden>
+      <rect x="5" y="11" width="16" height="11" rx="1.6" stroke={c} strokeWidth="1.8" />
+      <path d="M13 11v11M5 15.5h16" stroke={c} strokeWidth="1.6" />
       <path
-        d="M8 5h12l5 7-11 11L3 12l5-7z"
-        fill="url(#bnMemberG)"
-        stroke="url(#bnMemberG)"
+        d="M13 11c-2.2 0-4-1.2-4-2.7S10.6 5.6 13 7.4c2.4-1.8 4-.4 4 1.9S15.2 11 13 11z"
+        stroke={c}
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function InviteIcon({ active }: { active: boolean }) {
+  const c = active ? ICON_ACTIVE : ICON_COLOR;
+  return (
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden>
+      <circle cx="13" cy="8.2" r="3.1" stroke={c} strokeWidth="1.7" />
+      <circle cx="6.4" cy="10.2" r="2.3" stroke={c} strokeWidth="1.6" />
+      <circle cx="19.6" cy="10.2" r="2.3" stroke={c} strokeWidth="1.6" />
+      <path d="M8.2 18.8c.4-2.6 2.4-4.2 4.8-4.2s4.4 1.6 4.8 4.2" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M4.4 19.4c.3-1.8 1.5-3 3.1-3.2" stroke={c} strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M21.6 19.4c-.3-1.8-1.5-3-3.1-3.2" stroke={c} strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function RewardIcon({ active }: { active: boolean }) {
+  const c = active ? ICON_ACTIVE : ICON_COLOR;
+  return (
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden>
+      <rect x="4.5" y="11" width="17" height="10.5" rx="1.8" stroke={c} strokeWidth="1.8" />
+      <path d="M4.5 15.2h17" stroke={c} strokeWidth="1.6" />
+      <path d="M13 11v10.5" stroke={c} strokeWidth="1.6" />
+      <path
+        d="M9.2 7.2c0-1.5 1.2-2.6 2.6-2.2.6.2 1.2.8 1.2 1.6 0 .9-.5 1.6-1.2 2.2H9.8C9.4 8.4 9.2 7.8 9.2 7.2z"
+        stroke={c}
         strokeWidth="1.5"
         strokeLinejoin="round"
       />
       <path
-        d="M3.6 12h20.8M8 5l3 7 3 10.5M20 5l-3 7-3 10.5M11 12l3-7 3 7"
-        stroke="#0a0a0a"
-        strokeWidth="1.1"
+        d="M16.8 7.2c0-1.5-1.2-2.6-2.6-2.2-.6.2-1.2.8-1.2 1.6 0 .9.5 1.6 1.2 2.2h2c.4-.4.6-1 .6-1.6z"
+        stroke={c}
+        strokeWidth="1.5"
         strokeLinejoin="round"
-        opacity="0.55"
       />
-      <path d="M9 7.5l2.5-1.5" stroke="#fff" strokeWidth="1.4" strokeLinecap="round" opacity="0.8" />
     </svg>
   );
 }
 
-type MobileBottomNavProps = {
-  onMenuClick: () => void;
-  menuOpen?: boolean;
-  profileOpen?: boolean;
-  onProfileClick: () => void;
-  onProfileClose: () => void;
-};
+function MemberIcon({ active }: { active: boolean }) {
+  const c = active ? ICON_ACTIVE : ICON_COLOR;
+  return (
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden>
+      <circle cx="13" cy="9" r="3.4" stroke={c} strokeWidth="1.8" />
+      <path
+        d="M5.8 21c.8-4.2 3.5-6.4 7.2-6.4s6.4 2.2 7.2 6.4"
+        stroke={c}
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 
 type NavItemProps = {
   active: boolean;
@@ -94,26 +99,20 @@ type NavItemProps = {
   icon: React.ReactNode;
   onClick?: () => void;
   href?: string;
-  ariaExpanded?: boolean;
 };
 
-function NavItem({ active, label, icon, onClick, href, ariaExpanded }: NavItemProps) {
-  const className = `focus-ring relative flex min-h-[56px] flex-1 flex-col items-center justify-center gap-0.5 px-0.5 py-1.5 transition-colors ${
-    active ? "text-[var(--cyan)]" : "text-[var(--text-muted)] hover:text-[var(--text)]"
+function NavItem({ active, label, icon, onClick, href }: NavItemProps) {
+  const className = `relative flex min-h-[58px] flex-1 flex-col items-center justify-center gap-0.5 px-0.5 pt-1.5 pb-1 ${
+    active ? "text-[#f5c518]" : "text-[#7ee8c8]"
   }`;
 
   const content = (
     <>
       {active ? (
-        <span
-          className="absolute inset-x-1 top-0 h-0.5 rounded-full bg-[var(--gold)] lg:hidden"
-          aria-hidden
-        />
+        <span className="absolute inset-x-4 top-0 h-[3px] rounded-full bg-[#f5c518]" aria-hidden />
       ) : null}
       <span className="flex h-7 w-7 items-center justify-center">{icon}</span>
-      <span className="max-w-full truncate text-[10px] font-medium leading-tight sm:text-[11px]">
-        {label}
-      </span>
+      <span className="max-w-full truncate text-[11px] font-semibold leading-tight">{label}</span>
     </>
   );
 
@@ -126,93 +125,84 @@ function NavItem({ active, label, icon, onClick, href, ariaExpanded }: NavItemPr
   }
 
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={className}
-      aria-expanded={ariaExpanded}
-      aria-label={label}
-    >
+    <button type="button" onClick={onClick} className={className} aria-label={label}>
       {content}
     </button>
   );
 }
 
-export default function MobileBottomNav({
-  onMenuClick,
-  menuOpen,
-  profileOpen,
-  onProfileClick,
-  onProfileClose,
-}: MobileBottomNavProps) {
+type MobileBottomNavProps = {
+  onMenuClick?: () => void;
+  menuOpen?: boolean;
+  profileOpen?: boolean;
+  onProfileClick?: () => void;
+  onProfileClose?: () => void;
+};
+
+export default function MobileBottomNav(_props: MobileBottomNavProps) {
   const { preferences, t } = useLocale();
-  const { isUser, authReady } = useAuth();
+  const { isUser } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
   const locale = preferences.locale;
   const base = `/${locale}`;
-  const p = getProfileMessages(locale);
-  const mc = getMemberCenterMessages(locale);
+  const labels = getBottomNavMessages(locale);
 
-  const isCasino = pathname === `${base}/casino` || pathname.startsWith(`${base}/casino?`);
-  const isSlot = pathname === `${base}/slot` || pathname.startsWith(`${base}/slot?`);
-  const isPromotion =
-    pathname === `${base}/promotion` || pathname.startsWith(`${base}/promotion?`);
-  const isMember = pathname === `${base}/member` || pathname.startsWith(`${base}/member/`);
-  const isProfileActive = !!profileOpen;
+  const isHome = /^\/(bn|en|hi)\/?$/.test(pathname);
+  const isPromotion = pathname === `${base}/promotion` || pathname.startsWith(`${base}/promotion/`);
+  const isInvite =
+    pathname === `${base}/referral` ||
+    pathname.startsWith(`${base}/referral/`) ||
+    pathname.includes("/my-referral");
+  const isReward = pathname.includes("/reward-center");
+  const isMember =
+    (pathname === `${base}/member` || pathname.startsWith(`${base}/member/`)) && !isReward && !isInvite;
+
+  function goAuthed(href: string) {
+    if (!isUser) {
+      router.push(`/${locale}/login?next=${encodeURIComponent(href)}`);
+      return;
+    }
+    router.push(href);
+  }
 
   return (
-    <>
-      <nav
-        className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--border)] bg-[var(--bg-header)] pb-[env(safe-area-inset-bottom)] lg:hidden"
-        aria-label={t.ui.bottomNavigation}
-      >
-        <div className="mx-auto flex w-full max-w-lg items-stretch">
-          <NavItem
-            active={!!menuOpen}
-            label={t.ui.menu}
-            icon={<BottomMenuIcon />}
-            onClick={onMenuClick}
-            ariaExpanded={menuOpen}
-          />
-          {/* <NavItem
-            active={isCasino}
-            label={t.casino}
-            icon={<CasinoSpadeIcon />}
-            href={lobbyCategoryHref(locale, "casino")}
-          /> */}
-          <NavItem
-            active={isSlot}
-            label={t.slots}
-            icon={<Slots777Icon />}
-            href={lobbyCategoryHref(locale, "slot")}
-          />
-          <NavItem
-            active={isPromotion}
-            label={t.promotions}
-            icon={<BottomGiftIcon />}
-            href={`${base}/promotion`}
-          />
-          {authReady && isUser ? (
-            <NavItem
-              active={isMember}
-              label={mc.navLabel}
-              icon={<BottomMemberIcon />}
-              href={`${base}/member`}
-            />
-          ) : null}
-          {authReady && isUser ? (
-            <NavItem
-              active={isProfileActive}
-              label={p.navLabel}
-              icon={<BottomProfileNavIcon />}
-              onClick={onProfileClick}
-              ariaExpanded={profileOpen}
-            />
-          ) : null}
-        </div>
-      </nav>
-
-      {authReady && isUser ? <ProfileMobileSheet open={!!profileOpen} onClose={onProfileClose} /> : null}
-    </>
+    <nav
+      className="fixed bottom-0 left-0 right-0 z-40 rounded-t-[22px] border-t border-[#1a6b63] bg-[#043834] pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_rgba(0,0,0,0.35)] lg:hidden"
+      aria-label={t.ui.bottomNavigation}
+    >
+      <div className="mx-auto flex w-full max-w-lg items-stretch">
+        <NavItem
+          active={isHome}
+          label={labels.home}
+          icon={<HomeIcon active={isHome} />}
+          href={base}
+        />
+        <NavItem
+          active={isPromotion}
+          label={labels.promotion}
+          icon={<PromotionIcon active={isPromotion} />}
+          href={`${base}/promotion`}
+        />
+        <NavItem
+          active={isInvite}
+          label={labels.invite}
+          icon={<InviteIcon active={isInvite} />}
+          onClick={() => goAuthed(`/${locale}/referral`)}
+        />
+        <NavItem
+          active={isReward}
+          label={labels.reward}
+          icon={<RewardIcon active={isReward} />}
+          onClick={() => goAuthed(memberRewardCenterHref(locale))}
+        />
+        <NavItem
+          active={isMember}
+          label={labels.member}
+          icon={<MemberIcon active={isMember} />}
+          onClick={() => goAuthed(memberCenterHref(locale))}
+        />
+      </div>
+    </nav>
   );
 }

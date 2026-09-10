@@ -34,7 +34,7 @@ function NavbarAuthActions() {
   if (!authReady) {
     return (
       <div
-        className="h-9 w-[9.5rem] shrink-0 animate-pulse rounded-md bg-[var(--surface)] sm:w-[11rem]"
+        className="h-7 w-[6.75rem] shrink-0 animate-pulse rounded-md bg-[var(--surface)] sm:h-9 sm:w-[11rem]"
         aria-hidden
       />
     );
@@ -45,10 +45,10 @@ function NavbarAuthActions() {
   }
 
   return (
-    <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
+    <div className="flex shrink-0 items-center gap-1 sm:gap-3">
       <Link
         href={`/${locale}/login`}
-        className="focus-ring inline-flex h-8 shrink-0 items-center justify-center rounded-[12px] px-2.5 text-[12px] font-extrabold leading-none sm:h-10 sm:rounded-[14px] sm:px-4 sm:text-[14px]"
+        className="focus-ring inline-flex h-7 shrink-0 items-center justify-center whitespace-nowrap rounded-[10px] px-2 text-[10px] font-extrabold leading-none sm:h-10 sm:rounded-[14px] sm:px-4 sm:text-[14px]"
         style={{
           color: "#e8b56a",
           textShadow: "1px 1px 0 rgba(32, 16, 6, 0.85)",
@@ -62,7 +62,7 @@ function NavbarAuthActions() {
       </Link>
       <Link
         href={`/${locale}/register`}
-        className="focus-ring inline-flex h-8 shrink-0 items-center justify-center rounded-[12px] px-2.5 text-[12px] font-extrabold leading-none sm:h-10 sm:rounded-[14px] sm:px-4 sm:text-[14px]"
+        className="focus-ring inline-flex h-7 shrink-0 items-center justify-center whitespace-nowrap rounded-[10px] px-2 text-[10px] font-extrabold leading-none sm:h-10 sm:rounded-[14px] sm:px-4 sm:text-[14px]"
         style={{
           color: "#8a3f14",
           textShadow: "0 1px 0 rgba(255, 236, 160, 0.55)",
@@ -93,16 +93,16 @@ export default function TopNavbar({
   const isAuthVariant = variant === "auth";
 
   return (
-    <header className="sticky top-0 z-50 w-full shrink-0 border-b border-[var(--border)] bg-[var(--bg-header)] pt-[env(safe-area-inset-top)]">
-      <nav className={`flex min-h-[52px] items-center justify-between gap-1.5 py-1.5 sm:min-h-[60px] sm:gap-2 sm:py-2.5 ${siteShellClass}`}>
-        <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3 lg:gap-4">
+    <header className="site-topbar sticky top-0 z-50 w-full shrink-0 border-b border-[var(--border)] bg-[var(--bg-header)] pt-[env(safe-area-inset-top)]">
+      <nav className={`flex min-h-[48px] items-center justify-between gap-1 py-1 sm:min-h-[60px] sm:gap-2 sm:py-2.5 ${siteShellClass}`}>
+        <div className="flex min-w-0 flex-1 items-center gap-1 sm:gap-3 lg:gap-4">
           {!isAuthVariant ? (
             <button
               type="button"
               aria-label={t.ui.openMenu}
               aria-expanded={menuOpen}
               onClick={onMenuClick}
-              className="focus-ring flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-transparent text-white sm:h-10 sm:w-10"
+              className="focus-ring flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-transparent text-white sm:h-10 sm:w-10"
             >
               <MenuIcon />
             </button>
@@ -110,7 +110,7 @@ export default function TopNavbar({
 
           <Link
             href={`/${locale}`}
-            className="focus-ring flex shrink-0 items-center rounded-md"
+            className="focus-ring flex min-w-0 items-center rounded-md"
           >
             <Image
               src="/bkbaji-wintk-logo.png"
@@ -118,7 +118,7 @@ export default function TopNavbar({
               width={211}
               height={36}
               priority
-              className="h-7 w-auto sm:h-9"
+              className="h-[18px] w-auto max-w-[6.6rem] object-contain object-left sm:h-8 sm:max-w-none lg:h-9"
             />
           </Link>
 
@@ -129,7 +129,7 @@ export default function TopNavbar({
           ) : null}
         </div>
 
-        <div className="flex shrink-0 items-center gap-1 sm:gap-1.5 lg:gap-3">
+        <div className="flex shrink-0 items-center gap-0.5 sm:gap-1.5 lg:gap-3">
           {isAuthVariant ? null : <NavbarAuthActions />}
           <LocaleMenuButton />
         </div>

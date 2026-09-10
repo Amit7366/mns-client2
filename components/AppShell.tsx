@@ -6,6 +6,7 @@ import TopNavbar from "./TopNavbar";
 import SideNavigation from "./SideNavigation";
 import SiteFooter from "./SiteFooter";
 import MobileBottomNav from "./MobileBottomNav";
+import HomeAppDownloadGate from "./app-download/HomeAppDownloadGate";
 import CurrencyLanguageModal from "./CurrencyLanguageModal";
 import { ToastProvider } from "./ToastProvider";
 import GameReturnHandler from "./GameReturnHandler";
@@ -61,6 +62,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <GamePlayGateProvider>
     <GameReturnHandler />
     <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-[var(--bg)]">
+      <HomeAppDownloadGate />
       <TopNavbar onMenuClick={toggleSidebar} menuOpen={sidebarExpanded} />
 
       <div className="relative flex min-h-0 flex-1 overflow-hidden">

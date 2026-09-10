@@ -476,6 +476,10 @@
   border-radius: 999px;
 }
 
+:has(.app-download-top-bar) .site-topbar {
+  padding-top: 0;
+}
+
 .home-game-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

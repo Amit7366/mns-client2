@@ -176,10 +176,10 @@ export default function HomeCategoryIconBar() {
           <SwiperSlide key={item.id} className="!w-auto">
             <Link
               href={hrefFor(item)}
-              className="focus-ring flex h-[68px] w-[70px] flex-col items-center justify-center gap-1 rounded-xl bg-[#0a4545] px-1 text-center transition-colors hover:bg-[#0d5252] active:scale-[0.98] sm:h-[80px] sm:w-[88px] sm:rounded-[14px] sm:px-1.5"
+              className="focus-ring flex h-11 items-center gap-1.5 whitespace-nowrap rounded-xl bg-[#0a4545] px-2.5 transition-colors hover:bg-[#0d5252] active:scale-[0.98] sm:h-[80px] sm:w-[88px] sm:flex-col sm:justify-center sm:gap-1 sm:whitespace-normal sm:rounded-[14px] sm:px-1.5 sm:text-center"
             >
               <CategoryIcon id={item.id} />
-              <span className="line-clamp-2 max-w-full px-0.5 text-center text-[9px] font-bold leading-tight text-white sm:text-[10px]">
+              <span className="text-[11px] font-bold leading-none text-white sm:line-clamp-2 sm:max-w-full sm:px-0.5 sm:text-center sm:text-[10px] sm:leading-tight">
                 {labelFor(item.id)}
               </span>
             </Link>

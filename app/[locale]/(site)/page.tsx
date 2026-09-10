@@ -3,7 +3,6 @@ import AnnouncementBar from "@/components/AnnouncementBar";
 import FloatingSocialStack from "@/components/FloatingSocialStack";
 import FloatingPromoRail from "@/components/home/FloatingPromoRail";
 import HeroSlider from "@/components/HeroSlider";
-import HomeAppDownloadGate from "@/components/app-download/HomeAppDownloadGate";
 import HomePromoGate from "@/components/home-promo/HomePromoGate";
 import HomeSpinWheelGate from "@/components/spin-wheel/HomeSpinWheelGate";
 import HomeCategoryIconBar from "@/components/home/HomeCategoryIconBar";
@@ -92,7 +91,6 @@ export default async function Home({ params }: PageProps) {
   return (
     <>
       <HomeJsonLd locale={locale} />
-      <HomeAppDownloadGate />
       <HomePromoGate />
       <HomeSpinWheelGate />
       <AnnouncementBar />

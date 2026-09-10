@@ -5,11 +5,7 @@ import { usePathname } from "next/navigation";
 import { usePwaInstall } from "@/lib/use-pwa-install";
 import AppDownloadPrompt from "./AppDownloadPrompt";
 
-const DISMISS_KEY = "bkbaji.appDownload.dismissed";
-
-function isHomePath(pathname: string): boolean {
-  return /^\/(bn|en|hi)\/?$/.test(pathname);
-}
+const DISMISS_KEY = "bkbaji.appDownload.topBar.dismissed";
 
 export default function HomeAppDownloadGate() {
   const pathname = usePathname();
@@ -17,15 +13,18 @@ export default function HomeAppDownloadGate() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!isHomePath(pathname) || isStandalone) {
+    if (isStandalone) {
       setOpen(false);
       return;
     }
 
     try {
-      if (localStorage.getItem(DISMISS_KEY) === "1") return;
+      if (localStorage.getItem(DISMISS_KEY) === "1") {
+        setOpen(false);
+        return;
+      }
     } catch {
-      // Ignore storage errors (private browsing, etc.)
+      // Ignore storage errors
     }
 
     setOpen(true);
