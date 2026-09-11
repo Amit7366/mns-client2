@@ -194,6 +194,7 @@ export default function GameCard(props: GameCardProps) {
             >
               {t.home.playNow}
             </button>
+            {/* Free Trial — hidden for now; Play Now launches the real game.
             <button
               type="button"
               onClick={(e) => {
@@ -205,6 +206,7 @@ export default function GameCard(props: GameCardProps) {
             >
               {t.home.freeTrial}
             </button>
+            */}
           </div>
 
           <div
