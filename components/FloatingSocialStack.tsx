@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { useLocale } from "@/components/LocaleProvider";
 import { memberLiveChatHref } from "@/lib/member-routes";
+import { openAuthModal } from "@/lib/auth-modal-events";
 
 const FLOAT_SOCIAL_ITEMS = [
   { id: "facebook", href: "https://facebook.com", color: "#1877f2", label: "Facebook" },
@@ -43,7 +44,7 @@ export default function FloatingSocialStack() {
   function goLiveChat() {
     const href = memberLiveChatHref(preferences.locale);
     if (!isAuthenticated) {
-      router.push(`/${preferences.locale}/login?next=${encodeURIComponent(href)}`);
+      openAuthModal("login", href);
       return;
     }
     router.push(href);

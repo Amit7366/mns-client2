@@ -8,6 +8,7 @@ import SiteFooter from "./SiteFooter";
 import MobileBottomNav from "./MobileBottomNav";
 import HomeAppDownloadGate from "./app-download/HomeAppDownloadGate";
 import CurrencyLanguageModal from "./CurrencyLanguageModal";
+import AuthModal from "./auth/AuthModal";
 import { ToastProvider } from "./ToastProvider";
 import GameReturnHandler from "./GameReturnHandler";
 import { GamePlayGateProvider } from "./games/GamePlayGateProvider";
@@ -92,6 +93,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         onProfileClose={handleProfileClose}
       />
       <CurrencyLanguageModal />
+      <AuthModal />
     </div>
     </GamePlayGateProvider>
     </ToastProvider>

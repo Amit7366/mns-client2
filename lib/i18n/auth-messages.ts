@@ -18,6 +18,14 @@ export type AuthMessages = {
   forgotPasswordError: string;
   passwordStrengthInvalid: string;
   logInButton: string;
+  loginTitle: string;
+  registerTitle: string;
+  noAccount: string;
+  registerNow: string;
+  haveAccount: string;
+  loginNow: string;
+  rememberMe: string;
+  close: string;
   chooseCurrency: string;
   phoneNumber: string;
   continue: string;
@@ -46,7 +54,7 @@ const en: AuthMessages = {
   password: "Password",
   enterUsername: "Enter your username",
   enterPassword: "Enter your password",
-  forgotPassword: "Forgot password?",
+  forgotPassword: "Forgot password",
   forgotPasswordTitle: "Forgot password",
   enterPhone: "Enter your phone number",
   newPassword: "New password",
@@ -58,6 +66,14 @@ const en: AuthMessages = {
   forgotPasswordError: "Could not submit password reset request.",
   passwordStrengthInvalid: "Password does not meet the required rules.",
   logInButton: "Log in",
+  loginTitle: "Log in",
+  registerTitle: "Register",
+  noAccount: "Don't have an account?",
+  registerNow: "Register",
+  haveAccount: "Already have an account?",
+  loginNow: "Log in",
+  rememberMe: "Remember me",
+  close: "Close",
   chooseCurrency: "Choose currency",
   phoneNumber: "Phone number",
   continue: "Continue",
@@ -83,11 +99,11 @@ const en: AuthMessages = {
 const bn: AuthMessages = {
   logInTab: "লগ ইন",
   signUpTab: "সাইন আপ",
-  username: "ব্যবহারকারীর নাম",
+  username: "ইউজারনেম",
   password: "পাসওয়ার্ড",
-  enterUsername: "আপনার ইউজার নেম লিখুন",
-  enterPassword: "আপনার পাসওয়ার্ড লিখুন",
-  forgotPassword: "পাসওয়ার্ড ভুলে গেছেন?",
+  enterUsername: "ইউজারনেম",
+  enterPassword: "পাসওয়ার্ড",
+  forgotPassword: "পাসওয়ার্ড ভুলে গিয়েছেন",
   forgotPasswordTitle: "ফরগেট পাসওয়ার্ড",
   enterPhone: "আপনার ফোন নম্বর লিখুন",
   newPassword: "নতুন পাসওয়ার্ড",
@@ -98,14 +114,22 @@ const bn: AuthMessages = {
     "অনুরোধ জমা হয়েছে। অ্যাডমিন অনুমোদনের পর নতুন পাসওয়ার্ড দিয়ে লগইন করুন।",
   forgotPasswordError: "পাসওয়ার্ড রিসেট অনুরোধ জমা দেওয়া যায়নি।",
   passwordStrengthInvalid: "পাসওয়ার্ড প্রয়োজনীয় নিয়ম পূরণ করে না।",
-  logInButton: "লগ ইন",
+  logInButton: "লগইন",
+  loginTitle: "লগইন",
+  registerTitle: "নিবন্ধন",
+  noAccount: "এখানে কোন অ্যাকাউন্ট নেই?",
+  registerNow: "নিবন্ধন করুন",
+  haveAccount: "ইতিমধ্যে অ্যাকাউন্ট আছে?",
+  loginNow: "লগইন করুন",
+  rememberMe: "মনে রাখুন",
+  close: "বন্ধ করুন",
   chooseCurrency: "মুদ্রা বেছে নিন",
   phoneNumber: "ফোন নম্বর",
   continue: "চালিয়ে যান",
   stepContact: "যোগাযোগ",
   stepUsername: "ইউজারনেম",
   stepPassword: "পাসওয়ার্ড",
-  signUpButton: "সাইন আপ",
+  signUpButton: "নিবন্ধন করুন",
   showPassword: "পাসওয়ার্ড দেখুন",
   hidePassword: "পাসওয়ার্ড লুকান",
   home: "হোম",
@@ -140,6 +164,14 @@ const hi: AuthMessages = {
   forgotPasswordError: "पासवर्ड रीसेट अनुरोध जमा नहीं हो सका।",
   passwordStrengthInvalid: "पासवर्ड आवश्यक नियमों को पूरा नहीं करता।",
   logInButton: "लॉग इन",
+  loginTitle: "लॉगिन",
+  registerTitle: "रजिस्टर",
+  noAccount: "खाता नहीं है?",
+  registerNow: "रजिस्टर करें",
+  haveAccount: "पहले से खाता है?",
+  loginNow: "लॉगिन करें",
+  rememberMe: "याद रखें",
+  close: "बंद करें",
   chooseCurrency: "मुद्रा चुनें",
   phoneNumber: "फ़ोन नंबर",
   continue: "जारी रखें",

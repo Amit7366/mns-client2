@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { useLocale } from "@/components/LocaleProvider";
 import { memberLiveChatHref } from "@/lib/member-routes";
+import { openAuthModal } from "@/lib/auth-modal-events";
 
 export default function FloatingLiveChatButton() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function FloatingLiveChatButton() {
   function goLiveChat() {
     const href = memberLiveChatHref(preferences.locale);
     if (!isAuthenticated) {
-      router.push(`/${preferences.locale}/login?next=${encodeURIComponent(href)}`);
+      openAuthModal("login", href);
       return;
     }
     router.push(href);

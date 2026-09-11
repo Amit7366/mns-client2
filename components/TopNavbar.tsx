@@ -7,6 +7,7 @@ import LoggedInWalletBar from "./nav/LoggedInWalletBar";
 import ProfileDropdown from "./profile/ProfileDropdown";
 import { useAuth } from "./AuthProvider";
 import { useLocale } from "./LocaleProvider";
+import { openAuthModal } from "@/lib/auth-modal-events";
 import { siteShellClass } from "@/lib/theme";
 
 function MenuIcon() {
@@ -27,9 +28,8 @@ function MenuIcon() {
 }
 
 function NavbarAuthActions() {
-  const { preferences, t } = useLocale();
+  const { t } = useLocale();
   const { isUser, authReady } = useAuth();
-  const locale = preferences.locale;
 
   if (!authReady) {
     return (
@@ -46,8 +46,9 @@ function NavbarAuthActions() {
 
   return (
     <div className="flex shrink-0 items-center gap-1 sm:gap-3">
-      <Link
-        href={`/${locale}/login`}
+      <button
+        type="button"
+        onClick={() => openAuthModal("login")}
         className="focus-ring inline-flex h-7 shrink-0 items-center justify-center whitespace-nowrap rounded-[10px] px-2 text-[10px] font-extrabold leading-none sm:h-10 sm:rounded-[14px] sm:px-4 sm:text-[14px]"
         style={{
           color: "#e8b56a",
@@ -59,9 +60,10 @@ function NavbarAuthActions() {
         }}
       >
         {t.login}
-      </Link>
-      <Link
-        href={`/${locale}/register`}
+      </button>
+      <button
+        type="button"
+        onClick={() => openAuthModal("register")}
         className="focus-ring inline-flex h-7 shrink-0 items-center justify-center whitespace-nowrap rounded-[10px] px-2 text-[10px] font-extrabold leading-none sm:h-10 sm:rounded-[14px] sm:px-4 sm:text-[14px]"
         style={{
           color: "#8a3f14",
@@ -73,7 +75,7 @@ function NavbarAuthActions() {
         }}
       >
         {t.signUp}
-      </Link>
+      </button>
     </div>
   );
 }

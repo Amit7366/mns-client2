@@ -5,12 +5,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useLocale } from "@/components/LocaleProvider";
 import { checkDeviceRegistrationStatus, registerAndLogin } from "@/lib/auth/api";
 import { getAuthMessages } from "@/lib/i18n/auth-messages";
-import { AuthField, authInputClass } from "./AuthField";
-import AuthSubmitLoader from "./AuthSubmitLoader";
-import PasswordInput from "./PasswordInput";
-
-const STEPS = ["contact", "username", "password"] as const;
-type RegisterStep = (typeof STEPS)[number];
+import {
+  AuthCard,
+  AuthError,
+  AuthGoldButton,
+  AuthPillInput,
+  AuthPillPassword,
+  AuthSwitchLine,
+  PhoneIcon,
+  UserIcon,
+} from "./AuthCard";
 
 function BangladeshFlag() {
   return (
@@ -21,48 +25,6 @@ function BangladeshFlag() {
       }}
       aria-hidden
     />
-  );
-}
-
-function StepIndicator({ step, labels }: { step: number; labels: [string, string, string] }) {
-  const items = [
-    { n: 1, label: labels[0] },
-    { n: 2, label: labels[1] },
-    { n: 3, label: labels[2] },
-  ] as const;
-
-  return (
-    <div className="mb-8">
-      <div className="relative flex items-center">
-        <div className="absolute left-[14px] right-[14px] top-[13px] h-[2px] bg-[#3f3f3f]" />
-        <div
-          className="absolute left-[14px] top-[13px] h-[2px] bg-[var(--gold)] transition-all duration-300"
-          style={{ width: step === 0 ? "0%" : step === 1 ? "calc(50% - 14px)" : "calc(100% - 28px)" }}
-        />
-        {items.map((item, i) => {
-          const active = step === i;
-          const done = step > i;
-          return (
-            <div key={item.n} className="relative z-[1] flex flex-1 flex-col items-center">
-              <span
-                className={`flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-bold ${
-                  active || done ? "bg-[var(--gold)] text-white" : "bg-[var(--border)] text-[#9ca3af]"
-                }`}
-              >
-                {item.n}
-              </span>
-              <span
-                className={`mt-2 text-center text-[11px] font-medium sm:text-[12px] ${
-                  active ? "text-[var(--gold)]" : "text-[#9ca3af]"
-                }`}
-              >
-                {item.label}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-    </div>
   );
 }
 
@@ -92,16 +54,19 @@ function authErrorMessage(
   return fallback;
 }
 
-export default function RegisterForm() {
+type RegisterFormProps = {
+  onSuccess?: () => void;
+  onSwitchToLogin?: () => void;
+};
+
+export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const refIdFromURL =
-    searchParams.get("refId") || searchParams.get("ref") || "";
+  const refIdFromURL = searchParams.get("refId") || searchParams.get("ref") || "";
   const { preferences } = useLocale();
   const a = getAuthMessages(preferences.locale);
   const base = `/${preferences.locale}`;
 
-  const [step, setStep] = useState<RegisterStep>("contact");
   const [currency, setCurrency] = useState<"BDT" | "INR">(preferences.currency);
   const [phone, setPhone] = useState("");
   const [username, setUsername] = useState("");
@@ -118,7 +83,6 @@ export default function RegisterForm() {
       try {
         const status = await checkDeviceRegistrationStatus();
         if (cancelled) return;
-
         if (!status.canRegister) {
           setRegistrationBlocked(true);
           setError(a.deviceAccountLimitError);
@@ -126,49 +90,31 @@ export default function RegisterForm() {
       } catch {
         /* allow registration attempt; server enforces the limit */
       } finally {
-        if (!cancelled) {
-          setDeviceCheckLoading(false);
-        }
+        if (!cancelled) setDeviceCheckLoading(false);
       }
     }
 
     void verifyDeviceRegistrationLimit();
-
     return () => {
       cancelled = true;
     };
   }, [a.deviceAccountLimitError]);
 
   const formDisabled = loading || deviceCheckLoading || registrationBlocked;
-
-  const stepIndex = STEPS.indexOf(step);
-  const stepTitle =
-    step === "contact" ? a.stepContact : step === "username" ? a.stepUsername : a.stepPassword;
-
   const phonePrefix = currency === "INR" ? "+91" : "+880";
-  const phoneMaxLen = currency === "INR" ? 10 : 10;
 
-  async function handleContinue(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
 
-    if (step === "contact") {
-      if (!phone.trim()) {
-        setError(a.phoneRequired);
-        return;
-      }
-      setStep("username");
+    if (!phone.trim()) {
+      setError(a.phoneRequired);
       return;
     }
-    if (step === "username") {
-      if (!username.trim()) {
-        setError(a.usernameRequired);
-        return;
-      }
-      setStep("password");
+    if (!username.trim()) {
+      setError(a.usernameRequired);
       return;
     }
-
     if (!password.trim()) {
       setError(a.passwordRequired);
       return;
@@ -187,6 +133,11 @@ export default function RegisterForm() {
         currency,
         ...(refIdFromURL ? { referredBy: refIdFromURL } : {}),
       });
+      if (onSuccess) {
+        onSuccess();
+        router.refresh();
+        return;
+      }
       router.push(base);
       router.refresh();
     } catch (err) {
@@ -204,109 +155,71 @@ export default function RegisterForm() {
     }
   }
 
+  function goLogin() {
+    if (onSwitchToLogin) {
+      onSwitchToLogin();
+      return;
+    }
+    router.push(`${base}/login`);
+  }
+
   return (
-    <form onSubmit={handleContinue} className="flex min-h-[420px] flex-1 flex-col">
-      <h2 className="mb-4 text-[15px] font-bold text-white">{stepTitle}</h2>
+    <AuthCard title={a.registerTitle}>
+      <AuthSwitchLine prompt={a.haveAccount} action={a.loginNow} onClick={goLogin} />
+      <form onSubmit={handleSubmit} className="auth-card-form">
+        <AuthError message={error} />
 
-      <StepIndicator step={stepIndex} labels={[a.stepContact, a.stepUsername, a.stepPassword]} />
-
-      {error ? (
-        <p
-          className="mb-4 rounded-md border border-[#7f1d1d] bg-[#2a1212] px-3 py-2 text-[13px] text-[#fca5a5]"
-          role="alert"
-        >
-          {error}
-        </p>
-      ) : null}
-
-      <div className="flex-1 space-y-5">
-        {step === "contact" ? (
-          <>
-            <AuthField label={a.chooseCurrency}>
-              <div className="relative">
-                <select
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value as "BDT" | "INR")}
-                  className={`${authInputClass()} cursor-pointer appearance-none pl-[4.5rem] pr-10 text-transparent`}
-                  disabled={formDisabled}
-                >
-                  <option value="BDT">BDT</option>
-                  <option value="INR">INR</option>
-                </select>
-                <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center gap-2">
-                  <BangladeshFlag />
-                  <span className="text-[14px] text-white">{currency}</span>
-                </span>
-                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#9ca3af]">
-                  ▾
-                </span>
-              </div>
-            </AuthField>
-
-            <AuthField label={a.phoneNumber}>
-              <div className="flex gap-2">
-                <div className="flex shrink-0 items-center gap-1.5 rounded-md border border-[var(--gold)] bg-[#1f1f1f] px-2.5 py-3">
-                  <BangladeshFlag />
-                  <span className="text-[14px] text-white">{phonePrefix}</span>
-                  <span className="text-[10px] text-[#6b7280]">▾</span>
-                </div>
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, phoneMaxLen))}
-                  placeholder="----------"
-                  className={`${authInputClass(true)} min-w-0 flex-1 tracking-[0.2em]`}
-                  disabled={formDisabled}
-                />
-              </div>
-            </AuthField>
-          </>
-        ) : null}
-
-        {step === "username" ? (
-          <AuthField label={a.username}>
-            <input
-              type="text"
-              autoComplete="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder={a.enterUsername}
-              className={authInputClass()}
+        <div className="auth-currency" role="group" aria-label={a.chooseCurrency}>
+          {(["BDT", "INR"] as const).map((code) => (
+            <button
+              key={code}
+              type="button"
               disabled={formDisabled}
-            />
-          </AuthField>
-        ) : null}
+              onClick={() => setCurrency(code)}
+              className={`auth-currency-chip ${currency === code ? "is-active" : ""}`}
+            >
+              {code === "BDT" ? <BangladeshFlag /> : null}
+              {code}
+            </button>
+          ))}
+        </div>
 
-        {step === "password" ? (
-          <AuthField label={a.password}>
-            <PasswordInput
-              value={password}
-              onChange={setPassword}
-              placeholder={a.enterPassword}
-              autoComplete="new-password"
-            />
-          </AuthField>
-        ) : null}
-      </div>
+        <label className="auth-pill">
+          <span className="auth-pill-icon">
+            <PhoneIcon />
+          </span>
+          <span className="auth-pill-prefix">{phonePrefix}</span>
+          <input
+            type="tel"
+            inputMode="numeric"
+            autoComplete="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+            placeholder={a.phoneNumber}
+            disabled={formDisabled}
+            className="auth-pill-input"
+          />
+        </label>
 
-      <button
-        type="submit"
-        disabled={formDisabled}
-        aria-busy={loading || deviceCheckLoading}
-        className="focus-ring mt-8 flex w-full min-h-12 items-center justify-center rounded-md bg-[var(--gold)] py-3.5 text-[15px] font-bold text-[#1a1400] transition-colors hover:bg-[var(--gold-hover)] disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {loading ? (
-          <>
-            <AuthSubmitLoader />
-            <span className="sr-only">{step === "password" ? a.signUpButton : a.continue}</span>
-          </>
-        ) : step === "password" ? (
-          a.signUpButton
-        ) : (
-          a.continue
-        )}
-      </button>
-    </form>
+        <AuthPillInput
+          icon={<UserIcon />}
+          autoComplete="username"
+          value={username}
+          onChange={setUsername}
+          placeholder={a.enterUsername}
+          disabled={formDisabled}
+        />
+        <AuthPillPassword
+          value={password}
+          onChange={setPassword}
+          placeholder={a.enterPassword}
+          autoComplete="new-password"
+          disabled={formDisabled}
+        />
+        <AuthGoldButton loading={loading} disabled={formDisabled}>
+          {a.signUpButton}
+        </AuthGoldButton>
+      </form>
+    </AuthCard>
   );
 }

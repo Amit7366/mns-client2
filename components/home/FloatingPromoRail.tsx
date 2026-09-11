@@ -5,18 +5,16 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { useLocale } from "@/components/LocaleProvider";
 import { getFloatingPromoMessages } from "@/lib/i18n/floating-promo-messages";
-import {
-  memberBonusRewardHref,
-  memberRewardCenterHref,
-  memberSignInRewardHref,
-} from "@/lib/member-routes";
+import { memberBonusRewardHref, memberRewardCenterHref } from "@/lib/member-routes";
+import { openGoldenEgg } from "@/lib/golden-egg-events";
 import { openSpinWheel } from "@/lib/spin-wheel-events";
+import { openAuthModal } from "@/lib/auth-modal-events";
 
 const CLOSED_KEY = "bkbaji.promoRail.closed";
 const COLLAPSED_KEY = "bkbaji.promoRail.collapsed";
 
 const PROMO_ITEMS = [
-  { id: "egg", src: "/egg.gif", go: "signIn" },
+  { id: "egg", src: "/golden-egg.png", go: "egg" },
   { id: "wheel", src: "/wheel.gif", go: "spin" },
   { id: "prize", src: "/prize.gif", go: "reward" },
   { id: "card", src: "/card.gif", go: "bonus" },
@@ -100,23 +98,23 @@ export default function FloatingPromoRail() {
 
   function goMember(href: string) {
     if (!isAuthenticated) {
-      router.push(`/${locale}/login?next=${encodeURIComponent(href)}`);
+      openAuthModal("login", href);
       return;
     }
     router.push(href);
   }
 
   function handleItem(go: (typeof PROMO_ITEMS)[number]["go"]) {
-    if (go === "spin") {
+    if (go === "spin" || go === "egg") {
       if (!isAuthenticated) {
-        router.push(`/${locale}/login?next=${encodeURIComponent(`/${locale}`)}`);
+        openAuthModal("login");
+        return;
+      }
+      if (go === "egg") {
+        openGoldenEgg();
         return;
       }
       openSpinWheel();
-      return;
-    }
-    if (go === "signIn") {
-      goMember(memberSignInRewardHref(locale));
       return;
     }
     if (go === "reward") {

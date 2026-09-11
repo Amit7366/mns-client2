@@ -6,6 +6,7 @@ import { useAuth } from "./AuthProvider";
 import { useLocale } from "./LocaleProvider";
 import { getBottomNavMessages } from "@/lib/i18n/bottom-nav-messages";
 import { memberCenterHref, memberRewardCenterHref } from "@/lib/member-routes";
+import { openAuthModal } from "@/lib/auth-modal-events";
 
 const ICON_COLOR = "#7ee8c8";
 const ICON_ACTIVE = "#f5c518";
@@ -160,7 +161,7 @@ export default function MobileBottomNav(_props: MobileBottomNavProps) {
 
   function goAuthed(href: string) {
     if (!isUser) {
-      router.push(`/${locale}/login?next=${encodeURIComponent(href)}`);
+      openAuthModal("login", href);
       return;
     }
     router.push(href);

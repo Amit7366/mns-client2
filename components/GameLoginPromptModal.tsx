@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect } from "react";
 import { useLocale } from "./LocaleProvider";
+import { openAuthModal } from "@/lib/auth-modal-events";
 
 function BjLogoLarge() {
   return (
@@ -36,8 +36,7 @@ type GameLoginPromptModalProps = {
 };
 
 export default function GameLoginPromptModal({ open, onClose }: GameLoginPromptModalProps) {
-  const { t, preferences } = useLocale();
-  const base = `/${preferences.locale}`;
+  const { t } = useLocale();
   const copy = t.gameLoginPrompt;
 
   useEffect(() => {
@@ -88,20 +87,26 @@ export default function GameLoginPromptModal({ open, onClose }: GameLoginPromptM
           <p className="mt-3 text-[13px] leading-relaxed text-[#b3b3b3] sm:text-[14px]">{copy.description}</p>
 
           <div className="mt-6 flex flex-col gap-3">
-            <Link
-              href={`${base}/register`}
-              onClick={onClose}
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                openAuthModal("register");
+              }}
               className="focus-ring flex min-h-11 items-center justify-center rounded-lg bg-[#2d7d5a] px-4 text-[15px] font-semibold text-white transition-colors hover:bg-[#35966d]"
             >
               {t.signUp}
-            </Link>
-            <Link
-              href={`${base}/login`}
-              onClick={onClose}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                openAuthModal("login");
+              }}
               className="focus-ring flex min-h-11 items-center justify-center rounded-lg border border-[#555555] bg-transparent px-4 text-[15px] font-semibold text-white transition-colors hover:border-[#777777] hover:bg-white/5"
             >
               {t.login}
-            </Link>
+            </button>
           </div>
         </div>
 

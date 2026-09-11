@@ -1,15 +1,22 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLocale } from "@/components/LocaleProvider";
 import { loginWithUsername } from "@/lib/auth/api";
 import { getAuthMessages } from "@/lib/i18n/auth-messages";
-import { AuthField, authInputClass } from "./AuthField";
-import AuthSubmitLoader from "./AuthSubmitLoader";
-import PasswordInput from "./PasswordInput";
 import { changePasswordHref } from "@/lib/member-profile-tabs";
+import {
+  AuthCard,
+  AuthError,
+  AuthGoldButton,
+  AuthPillInput,
+  AuthPillPassword,
+  AuthSwitchLine,
+  UserIcon,
+} from "./AuthCard";
+
+const REMEMBER_KEY = "bkbaji.auth.rememberUsername";
 
 function authErrorMessage(err: unknown, fallback: string, networkFallback: string): string {
   if (err instanceof TypeError) return networkFallback;
@@ -17,7 +24,13 @@ function authErrorMessage(err: unknown, fallback: string, networkFallback: strin
   return fallback;
 }
 
-export default function LoginForm() {
+type LoginFormProps = {
+  nextPath?: string | null;
+  onSuccess?: () => void;
+  onSwitchToRegister?: () => void;
+};
+
+export default function LoginForm({ nextPath, onSuccess, onSwitchToRegister }: LoginFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { preferences } = useLocale();
@@ -26,8 +39,21 @@ export default function LoginForm() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(REMEMBER_KEY);
+      if (saved) {
+        setUsername(saved);
+        setRemember(true);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -45,20 +71,30 @@ export default function LoginForm() {
     setLoading(true);
     try {
       const { session } = await loginWithUsername(username, password);
-      const next = searchParams.get("next");
+      try {
+        if (remember) localStorage.setItem(REMEMBER_KEY, username.trim());
+        else localStorage.removeItem(REMEMBER_KEY);
+      } catch {
+        // ignore
+      }
+
+      const next = nextPath ?? searchParams.get("next");
       const isChangePasswordNext = !!next && next.startsWith(changePasswordHref(preferences.locale));
-
-      // If password is already updated (`needsPasswordChange === false`),
-      // don't redirect back to the change-password page again.
-      const shouldGoHome =
-        isChangePasswordNext && session?.needsPasswordChange === false;
-
+      const shouldGoHome = isChangePasswordNext && session?.needsPasswordChange === false;
       const target =
         shouldGoHome
           ? base
           : next && next.startsWith(`/${preferences.locale}/`) && !next.includes("//")
             ? next
             : base;
+
+      if (onSuccess) {
+        onSuccess();
+        if (target !== base) router.push(target);
+        router.refresh();
+        return;
+      }
+
       router.push(target);
       router.refresh();
     } catch (err) {
@@ -68,61 +104,55 @@ export default function LoginForm() {
     }
   }
 
+  function goRegister() {
+    if (onSwitchToRegister) {
+      onSwitchToRegister();
+      return;
+    }
+    router.push(`${base}/register`);
+  }
+
+  function goForgot() {
+    router.push(`${base}/forgot-password`);
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="flex min-h-[420px] flex-1 flex-col">
-      <div className="space-y-5">
-        {error ? (
-          <p className="rounded-md border border-[#7f1d1d] bg-[#2a1212] px-3 py-2 text-[13px] text-[#fca5a5]" role="alert">
-            {error}
-          </p>
-        ) : null}
-
-        <AuthField label={a.username}>
-          <input
-            type="text"
-            autoComplete="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder={a.enterUsername}
-            className={authInputClass()}
-            disabled={loading}
-          />
-        </AuthField>
-
-        <AuthField label={a.password}>
-          <PasswordInput
-            value={password}
-            onChange={setPassword}
-            placeholder={a.enterPassword}
-            autoComplete="current-password"
-          />
-        </AuthField>
-
-        <div className="flex justify-end">
-          <Link
-            href={`${base}/forgot-password`}
-            className="text-[13px] font-medium text-[var(--gold)] hover:text-[var(--gold-hover)]"
-          >
+    <AuthCard title={a.loginTitle}>
+      <AuthSwitchLine prompt={a.noAccount} action={a.registerNow} onClick={goRegister} />
+      <form onSubmit={handleSubmit} className="auth-card-form">
+        <AuthError message={error} />
+        <AuthPillInput
+          icon={<UserIcon />}
+          autoComplete="username"
+          value={username}
+          onChange={setUsername}
+          placeholder={a.enterUsername}
+          disabled={loading}
+        />
+        <AuthPillPassword
+          value={password}
+          onChange={setPassword}
+          placeholder={a.enterPassword}
+          autoComplete="current-password"
+          disabled={loading}
+        />
+        <div className="auth-card-meta">
+          <label className="auth-remember">
+            <input
+              type="checkbox"
+              checked={remember}
+              onChange={(e) => setRemember(e.target.checked)}
+              className="auth-remember-input"
+            />
+            <span className="auth-remember-box" aria-hidden />
+            <span>{a.rememberMe}</span>
+          </label>
+          <button type="button" onClick={goForgot} className="auth-forgot">
             {a.forgotPassword}
-          </Link>
+          </button>
         </div>
-      </div>
-
-      <button
-        type="submit"
-        disabled={loading}
-        aria-busy={loading}
-        className="focus-ring mt-auto flex w-full min-h-12 items-center justify-center rounded-md bg-[var(--cyan)] py-3.5 text-[15px] font-bold text-[#00332b] transition-colors hover:bg-[var(--cyan-dim)] disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {loading ? (
-          <>
-            <AuthSubmitLoader />
-            <span className="sr-only">{a.logInButton}</span>
-          </>
-        ) : (
-          a.logInButton
-        )}
-      </button>
-    </form>
+        <AuthGoldButton loading={loading}>{a.logInButton}</AuthGoldButton>
+      </form>
+    </AuthCard>
   );
 }

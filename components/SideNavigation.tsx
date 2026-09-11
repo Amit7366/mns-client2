@@ -13,6 +13,7 @@ import {
   memberRewardCenterHref,
 } from "@/lib/member-routes";
 import { BKBAJI_ANDROID_APP_PATH } from "@/lib/seo/site-config";
+import { openAuthModal } from "@/lib/auth-modal-events";
 import { lobbyCategoryHref, type LobbyKind } from "@/lib/vendor-routes";
 
 type SideNavigationProps = {
@@ -311,7 +312,7 @@ export default function SideNavigation({ expanded, onClose }: SideNavigationProp
 
   function handleMemberNav(href: string) {
     if (!isAuthenticated) {
-      router.push(`/${locale}/login?next=${encodeURIComponent(href)}`);
+      openAuthModal("login", href);
       return;
     }
     router.push(href);

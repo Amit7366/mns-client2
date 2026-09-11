@@ -10,6 +10,7 @@ import { useAuth } from "./AuthProvider";
 import ProviderLogo from "./ProviderLogo";
 import { useLocale } from "./LocaleProvider";
 import { siteShellClass } from "@/lib/theme";
+import { openAuthModal } from "@/lib/auth-modal-events";
 
 function BrandSeal() {
   return (
@@ -111,7 +112,7 @@ export default function SiteFooter() {
   function goLiveChat() {
     const href = memberLiveChatHref(locale);
     if (!isAuthenticated) {
-      router.push(`/${locale}/login?next=${encodeURIComponent(href)}`);
+      openAuthModal("login", href);
       return;
     }
     router.push(href);
