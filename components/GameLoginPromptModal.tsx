@@ -4,14 +4,14 @@ import { useEffect } from "react";
 import { useLocale } from "./LocaleProvider";
 import { openAuthModal } from "@/lib/auth-modal-events";
 
-function BjLogoLarge() {
+function BrandLogoLarge() {
   return (
-    <span className="inline-block text-[52px] font-black leading-none tracking-tighter sm:text-[60px]">
-      <span className="bg-gradient-to-b from-[#f0f0f0] via-[#c0c0c0] to-[#707070] bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,0,0,0.45)]">
-        b
+    <span className="inline-block text-[40px] font-black leading-none tracking-tighter sm:text-[48px]">
+      <span className="bg-gradient-to-b from-[#ffe98a] via-[#f5c518] to-[#d49212] bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,0,0,0.45)]">
+        BB
       </span>
-      <span className="bg-gradient-to-b from-[#ffb347] via-[#ff8c00] to-[#e65100] bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,0,0,0.45)]">
-        j
+      <span className="bg-gradient-to-b from-[#f0f0f0] via-[#c0c0c0] to-[#8a8a8a] bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,0,0,0.45)]">
+        666
       </span>
     </span>
   );
@@ -77,7 +77,7 @@ export default function GameLoginPromptModal({ open, onClose }: GameLoginPromptM
           className="w-full rounded-2xl bg-[#222222] px-6 pb-6 pt-8 text-center shadow-[0_24px_80px_rgba(0,0,0,0.65)] sm:px-8 sm:pb-7 sm:pt-9"
         >
           <div className="mb-5 flex justify-center">
-            <BjLogoLarge />
+            <BrandLogoLarge />
           </div>
 
           <h2 id="game-login-prompt-title" className="text-[17px] font-bold leading-snug text-white sm:text-[18px]">

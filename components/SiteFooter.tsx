@@ -23,7 +23,7 @@ function BrandSeal() {
           <span>♣</span>
         </div>
         <div className="text-[13px] font-black tracking-tight text-[var(--gold)] sm:text-[14px]">
-          BK<span className="text-white">Baji</span>
+          BB<span className="text-white">666</span>
         </div>
       </div>
     </div>

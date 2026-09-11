@@ -71,7 +71,7 @@ const gameCenterHi = {
 
 export const footerEn: FooterMessages = {
   gaming: "Gaming",
-  aboutBaji: "About BKBaji",
+  aboutBaji: "About BB666",
   features: "Features",
   help: "Help",
   helpCenter: "Help Center",
@@ -98,7 +98,7 @@ export const footerEn: FooterMessages = {
     referral: "Referral",
     brandAmbassadors: "Brand Ambassadors",
     appDownload: "APP Download",
-    bjForum: "BKBaji Forum",
+    bjForum: "BB666 Forum",
   },
   gameCenterLinks: gameCenterEn,
   sponsorshipsData: {
@@ -121,14 +121,14 @@ export const footerEn: FooterMessages = {
     officialBrandPartner: "Official Brand Partner",
     gamingLicense: "Gaming License",
     responsibleGaming: "Responsible Gaming",
-    aboutHeading: "BKBaji Bangladesh - Leading Online Gaming and Betting Platform in Bangladesh",
+    aboutHeading: "BB666 Bangladesh - Leading Online Gaming and Betting Platform in Bangladesh",
     aboutText:
       "Our Website is an innovative online sportsbook and casino. Offering a wide variety of sports and betting markets with high odds, plus a rich selection of casino games from leading providers.",
     aboutTextMore: footerAboutExpanded,
     showMore: "Show more",
     showLess: "Show less",
     winLikeAKing: "Win Like A King",
-    copyright: "© 2026 BKBaji Copyrights. All Rights Reserved",
+    copyright: "© 2026 BB666 Copyrights. All Rights Reserved",
     legalOwnership:
       "is owned and operated by Northern Lights Limited Holdings Limited. registration number: 15839, registered address: Hamchhako, Mutsamudu, Autonomous Island of Anjouan, Union of Comoros.",
     legalContactPrefix: "Contact us",
@@ -141,7 +141,7 @@ export const footerEn: FooterMessages = {
 
 export const footerBn: FooterMessages = {
   gaming: "গেমিং",
-  aboutBaji: "BKBaji সম্পর্কে",
+  aboutBaji: "BB666 সম্পর্কে",
   features: "ফিচার",
   help: "সাহায্য",
   helpCenter: "সাহায্য কেন্দ্র",
@@ -168,7 +168,7 @@ export const footerBn: FooterMessages = {
     referral: "রেফারেল",
     brandAmbassadors: "ব্র্যান্ড অ্যাম্বাসেডর",
     appDownload: "অ্যাপ ডাউনলোড",
-    bjForum: "BKBaji ফোরাম",
+    bjForum: "BB666 ফোরাম",
   },
   gameCenterLinks: gameCenterBn,
   sponsorshipsData: {
@@ -191,14 +191,14 @@ export const footerBn: FooterMessages = {
     officialBrandPartner: "অফিসিয়াল ব্র্যান্ড পার্টনার",
     gamingLicense: "গেমিং লাইসেন্স",
     responsibleGaming: "দায়িত্বশীল গেমিং",
-    aboutHeading: "BKBaji বাংলাদেশ - বাংলাদেশের শীর্ষ অনলাইন গেমিং ও বেটিং প্ল্যাটফর্ম",
+    aboutHeading: "BB666 বাংলাদেশ - বাংলাদেশের শীর্ষ অনলাইন গেমিং ও বেটিং প্ল্যাটফর্ম",
     aboutText:
       "Our Website is an innovative online sportsbook and casino. Offering a wide variety of sports and betting markets with high odds, plus a rich selection of casino games from leading providers.",
     aboutTextMore: footerAboutExpanded,
     showMore: "আরও দেখুন",
     showLess: "কম দেখুন",
     winLikeAKing: "Win Like A King",
-    copyright: "© 2026 BKBaji Copyrights. All Rights Reserved",
+    copyright: "© 2026 BB666 Copyrights. All Rights Reserved",
     legalOwnership:
       "Northern Lights Limited Holdings Limited-এর মালিকানাধীন ও পরিচালিত। নিবন্ধন নম্বর: 15839, নিবন্ধিত ঠিকানা: Hamchhako, Mutsamudu, Autonomous Island of Anjouan, Union of Comoros।",
     legalContactPrefix: "যোগাযোগ করুন",
@@ -211,7 +211,7 @@ export const footerBn: FooterMessages = {
 
 export const footerHi: FooterMessages = {
   gaming: "गेमिंग",
-  aboutBaji: "BKBaji के बारे में",
+  aboutBaji: "BB666 के बारे में",
   features: "फीचर्स",
   help: "सहायता",
   helpCenter: "सहायता केंद्र",
@@ -238,7 +238,7 @@ export const footerHi: FooterMessages = {
     referral: "रेफरल",
     brandAmbassadors: "ब्रांड एंबेसडर",
     appDownload: "ऐप डाउनलोड",
-    bjForum: "BKBaji फोरम",
+    bjForum: "BB666 फोरम",
   },
   gameCenterLinks: gameCenterHi,
   sponsorshipsData: {
@@ -261,14 +261,14 @@ export const footerHi: FooterMessages = {
     officialBrandPartner: "आधिकारिक ब्रांड पार्टनर",
     gamingLicense: "गेमिंग लाइसेंस",
     responsibleGaming: "जिम्मेदार गेमिंग",
-    aboutHeading: "BKBaji Bangladesh - बांग्लादेश में अग्रणी ऑनलाइन गेमिंग और बेटिंग प्लेटफॉर्म",
+    aboutHeading: "BB666 Bangladesh - बांग्लादेश में अग्रणी ऑनलाइन गेमिंग और बेटिंग प्लेटफॉर्म",
     aboutText:
       "Our Website is an innovative online sportsbook and casino. Offering a wide variety of sports and betting markets with high odds, plus a rich selection of casino games from leading providers.",
     aboutTextMore: footerAboutExpanded,
     showMore: "और देखें",
     showLess: "कम देखें",
     winLikeAKing: "Win Like A King",
-    copyright: "© 2026 BKBaji Copyrights. All Rights Reserved",
+    copyright: "© 2026 BB666 Copyrights. All Rights Reserved",
     legalOwnership:
       "Northern Lights Limited Holdings Limited के स्वामित्व और संचालन में है। पंजीकरण संख्या: 15839, पंजीकृत पता: Hamchhako, Mutsamudu, Autonomous Island of Anjouan, Union of Comoros।",
     legalContactPrefix: "संपर्क करें",

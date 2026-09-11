@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import LocaleMenuButton from "./LocaleMenuButton";
+import SiteLogo from "./SiteLogo";
 import LoggedInWalletBar from "./nav/LoggedInWalletBar";
 import ProfileDropdown from "./profile/ProfileDropdown";
 import { useAuth } from "./AuthProvider";
@@ -114,14 +114,7 @@ export default function TopNavbar({
             href={`/${locale}`}
             className="focus-ring flex min-w-0 items-center rounded-md"
           >
-            <Image
-              src="/bkbaji-wintk-logo.png"
-              alt="BKBaji"
-              width={211}
-              height={36}
-              priority
-              className="h-[18px] w-auto max-w-[6.6rem] object-contain object-left sm:h-8 sm:max-w-none lg:h-9"
-            />
+            <SiteLogo compact />
           </Link>
 
           {!isAuthVariant && authReady && isUser ? (

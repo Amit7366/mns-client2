@@ -14,7 +14,7 @@ export const defaultSiteMetadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    "BKBaji is Bangladesh's trusted online gaming platform for casino, slots, crash, fishing, arcade, lottery and sports betting with fast BDT payments, VIP rewards and 24/7 support.",
+    "BB666 is Bangladesh's trusted online gaming platform for casino, slots, crash, fishing, arcade, lottery and sports betting with fast BDT payments, VIP rewards and 24/7 support.",
   applicationName: SITE_NAME,
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,

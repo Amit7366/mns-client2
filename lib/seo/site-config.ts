@@ -4,8 +4,8 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://bkbaji.com
   "",
 );
 
-export const SITE_NAME = "BKBaji";
-export const SITE_SHORT_NAME = "BKBaji";
+export const SITE_NAME = "BB666";
+export const SITE_SHORT_NAME = "BB666";
 
 export const SITE_LEGAL_NAME = "Northern Lights Limited Holdings Limited";
 export const SITE_CONTACT_EMAIL = "legal@northernlightsltd.com";
