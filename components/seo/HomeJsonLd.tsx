@@ -1,9 +1,11 @@
 import type { Locale } from "@/lib/locale";
 import { getHomeSeoCopy } from "@/lib/seo/home-metadata";
 import {
+  SITE_BRAND,
   SITE_CONTACT_EMAIL,
   SITE_ICONS,
   SITE_NAME,
+  SITE_TAGLINE,
   SITE_URL,
   absoluteUrl,
   localePath,
@@ -20,8 +22,10 @@ export default function HomeJsonLd({ locale }: { locale: Locale }) {
         "@type": "WebSite",
         "@id": `${SITE_URL}/#website`,
         url: SITE_URL,
-        name: SITE_NAME,
+        name: SITE_BRAND,
+        alternateName: SITE_NAME,
         description: seo.description,
+        slogan: SITE_TAGLINE,
         inLanguage: ["en", "bn", "hi"],
         publisher: { "@id": `${SITE_URL}/#organization` },
         potentialAction: {
@@ -40,22 +44,24 @@ export default function HomeJsonLd({ locale }: { locale: Locale }) {
         url: SITE_URL,
         logo: {
           "@type": "ImageObject",
-          url: SITE_ICONS.pwa192,
+          url: absoluteUrl(SITE_ICONS.pwa192),
           width: 192,
           height: 192,
         },
-        image: SITE_ICONS.ogImage,
+        image: absoluteUrl(SITE_ICONS.ogImage),
         email: SITE_CONTACT_EMAIL,
         areaServed: {
           "@type": "Country",
           name: "Bangladesh",
         },
         knowsAbout: [
-          "Online casino",
-          "Sports betting",
           "Slots",
-          "Live dealer games",
-          "Mobile gaming",
+          "Casino",
+          "Live games",
+          "Live sports",
+          "Football betting",
+          "Cricket betting",
+          "In-play betting",
         ],
       },
       {
@@ -69,7 +75,9 @@ export default function HomeJsonLd({ locale }: { locale: Locale }) {
         inLanguage: locale,
         primaryImageOfPage: {
           "@type": "ImageObject",
-          url: SITE_ICONS.ogImage,
+          url: absoluteUrl(SITE_ICONS.ogImage),
+          width: 1200,
+          height: 630,
         },
       },
       {

@@ -1,16 +1,16 @@
 {
   "id": "/",
-  "name": "BB666 — Online Casino & Sports Betting",
+  "name": "BB666.site — Play Big, Win Bigger",
   "short_name": "BB666",
-  "description": "Play casino, slots, crash, fishing and sports betting at BB666. Fast BDT payments, VIP rewards and 24/7 support.",
+  "description": "Slots, casino, live games and live sports at BB666.site. Fast & secure. Play big, win bigger.",
   "lang": "bn",
   "dir": "ltr",
   "start_url": "/bn",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0a0a0a",
-  "theme_color": "#111111",
+  "background_color": "#00332B",
+  "theme_color": "#00332B",
   "categories": ["games", "entertainment", "sports"],
   "icons": [
     {

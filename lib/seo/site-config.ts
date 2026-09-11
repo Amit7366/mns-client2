@@ -1,11 +1,14 @@
 /** Canonical public site URL (no trailing slash). */
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://bkbaji.com").replace(
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://bb666.site").replace(
   /\/$/,
   "",
 );
 
 export const SITE_NAME = "BB666";
 export const SITE_SHORT_NAME = "BB666";
+/** Public brand used in titles, Open Graph, and Twitter cards. */
+export const SITE_BRAND = "BB666.site";
+export const SITE_TAGLINE = "Play Big, Win Bigger";
 
 export const SITE_LEGAL_NAME = "Northern Lights Limited Holdings Limited";
 export const SITE_CONTACT_EMAIL = "legal@northernlightsltd.com";
@@ -22,11 +25,19 @@ export const SITE_ICONS = {
   appleTouchIcon: "/icons/apple-touch-icon.png",
   pwa192: "/icons/pwa-192.png",
   pwa512: "/icons/pwa-512.png",
-  ogImage: "https://img.b112j.com/upload/announcement/image_304033.jpg",
+  ogImage: "/og/bb666-og.jpg",
 } as const;
 
+export const SITE_OG_IMAGE = {
+  url: SITE_ICONS.ogImage,
+  width: 1200,
+  height: 630,
+  alt: `${SITE_BRAND} — ${SITE_TAGLINE} | Slots, Casino, Live Games & Live Sports`,
+  type: "image/jpeg" as const,
+};
+
 export const SITE_SOCIAL = {
-  twitter: "@bkbaji",
+  twitter: "@bb666site",
 } as const;
 
 export function absoluteUrl(path = ""): string {

@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_SOCKET_URL: https://bkbajiapi.xyz
-        NEXT_PUBLIC_SITE_URL: https://bkbaji.com
+        NEXT_PUBLIC_SITE_URL: https://bb666.site
     ports:
       - "3020:3000" # VPS host 3020 (3000 is used by another service)
     environment:
@@ -14,7 +14,7 @@ services:
       GAME_LAUNCH_URL: https://apivexo.com/api/game/v1/gamelaunch
       GAME_API_SECRET: 483fb0fd241d4f37feea9dc36a7f00e669941c5837cff2aca072aa909f6be8f8
       GAME_API_PREFIX: CTT2J
-      NEXT_PUBLIC_SITE_URL: https://bkbaji.com
+      NEXT_PUBLIC_SITE_URL: https://bb666.site
       NEXT_PUBLIC_SOCKET_URL: https://bkbajiapi.xyz
     restart: unless-stopped
 

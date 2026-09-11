@@ -1,25 +1,39 @@
 import type { Metadata } from "next";
 import {
+  SITE_BRAND,
   SITE_CONTACT_EMAIL,
   SITE_ICONS,
-  SITE_NAME,
+  SITE_OG_IMAGE,
   SITE_SHORT_NAME,
+  SITE_SOCIAL,
+  SITE_TAGLINE,
   SITE_URL,
 } from "./site-config";
 
 export const defaultSiteMetadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Online Casino, Slots & Sports Betting`,
-    template: `%s | ${SITE_NAME}`,
+    default: `${SITE_BRAND} — ${SITE_TAGLINE} | Slots, Casino & Live Sports`,
+    template: `%s | ${SITE_BRAND}`,
   },
   description:
-    "BB666 is Bangladesh's trusted online gaming platform for casino, slots, crash, fishing, arcade, lottery and sports betting with fast BDT payments, VIP rewards and 24/7 support.",
-  applicationName: SITE_NAME,
-  authors: [{ name: SITE_NAME, url: SITE_URL }],
-  creator: SITE_NAME,
-  publisher: SITE_NAME,
-  category: "games",
+    "BB666.site is a fast, secure playground for slots, casino tables, live games and live sports. Football, basketball, tennis, cricket and in-play betting — play big, win bigger.",
+  applicationName: SITE_BRAND,
+  authors: [{ name: SITE_BRAND, url: SITE_URL }],
+  creator: SITE_BRAND,
+  publisher: SITE_BRAND,
+  category: "entertainment",
+  keywords: [
+    "BB666.site",
+    "BB666",
+    "play big win bigger",
+    "slots",
+    "live casino",
+    "live sports",
+    "live games",
+    "football betting",
+    "cricket betting",
+  ],
   referrer: "origin-when-cross-origin",
   formatDetection: {
     email: false,
@@ -43,22 +57,26 @@ export const defaultSiteMetadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    siteName: SITE_NAME,
+    siteName: SITE_BRAND,
+    title: `${SITE_BRAND} — ${SITE_TAGLINE}`,
+    description:
+      "Slots, casino, live games and live sports at BB666.site. Fast & secure. Play big, win bigger.",
     locale: "bn_BD",
     alternateLocale: ["en_BD", "hi_BD"],
-    images: [
-      {
-        url: SITE_ICONS.ogImage,
-        width: 1200,
-        height: 630,
-        alt: `${SITE_NAME} — Online Casino & Sports Betting`,
-      },
-    ],
+    url: SITE_URL,
+    images: [SITE_OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@bkbaji",
-    creator: "@bkbaji",
+    site: SITE_SOCIAL.twitter,
+    creator: SITE_SOCIAL.twitter,
+    title: `${SITE_BRAND} — ${SITE_TAGLINE}`,
+    description:
+      "Slots, casino, live games and live sports at BB666.site. Fast & secure. Play big, win bigger.",
+    images: {
+      url: SITE_OG_IMAGE.url,
+      alt: SITE_OG_IMAGE.alt,
+    },
   },
   other: {
     contact: SITE_CONTACT_EMAIL,
