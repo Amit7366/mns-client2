@@ -1,13 +1,16 @@
 import type { AuthSession } from "@/lib/auth/session";
 import { refreshWalletBalance } from "@/lib/auth/api";
 import { checkGameLaunchEligibility } from "@/lib/game-eligibility-api";
-import { markGameSessionPending } from "@/lib/game-balance-sync";
+import {
+  markGameSessionPending,
+  prepareGameLaunchZero,
+} from "@/lib/game-balance-sync";
 import { dispatchGameDeparting } from "@/lib/game-return-events";
 
 export type GameLaunchClientPayload = {
   gameCode: string;
   playerId: string;
-  timestamp: number;
+  timestamp: string;
   balance: number;
   currencyCode: string;
   language: string;
@@ -71,7 +74,7 @@ export function buildGameLaunchPayload(
   return {
     gameCode: gameCode.toString(),
     playerId: buildGamePlayerId(memberId),
-    timestamp: Date.now(),
+    timestamp: Date.now().toString(),
     balance: resolveGameCreditAmount(session),
     currencyCode: "BDT",
     language: "en",
@@ -123,7 +126,7 @@ export async function requestGameLaunch(
 }
 
 /**
- * Fetch Mongo balance → launch with that credit (seamless: Mongo stays wallet) → redirect.
+ * Fetch Mongo balance → launch with that credit → zero Mongo → redirect.
  */
 export async function launchGameInBrowser(
   gameCode: string,
@@ -141,6 +144,7 @@ export async function launchGameInBrowser(
 
   const launchUrl = await requestGameLaunch(gameCode, launchSession);
 
+  await prepareGameLaunchZero();
   markGameSessionPending();
 
   if (typeof window !== "undefined") {

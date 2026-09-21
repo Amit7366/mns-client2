@@ -6,7 +6,7 @@ const API_BASE = (process.env.API_URL ?? "http://localhost:8000").replace(/\/$/,
 type GameLaunchBody = {
   gameCode?: string;
   playerId?: string;
-  timestamp?: string | number;
+  timestamp?: string;
   balance?: number | string;
   currencyCode?: string;
   language?: string;
@@ -93,7 +93,6 @@ export async function POST(request: Request) {
     const launchUrl = process.env.GAME_LAUNCH_URL;
     const apiSecret = process.env.GAME_API_SECRET;
     const prefix = process.env.GAME_API_PREFIX;
-    const callbackUrl = process.env.GAME_CALLBACK_URL;
 
     if (!launchUrl) {
       return NextResponse.json(
@@ -116,13 +115,6 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!callbackUrl) {
-      return NextResponse.json(
-        { error: "GAME_CALLBACK_URL is not configured" },
-        { status: 500 },
-      );
-    }
-
     const body = (await request.json()) as GameLaunchBody;
 
     if (!body.gameCode?.toString().trim()) {
@@ -133,20 +125,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "playerId is required" }, { status: 400 });
     }
 
-    const timestampMs = Number(body.timestamp);
     const payload: Record<string, unknown> = {
       apiSecret,
       prefix,
       gameCode: body.gameCode.toString(),
       playerId: body.playerId.trim(),
-      timestamp: Number.isFinite(timestampMs) ? timestampMs : Date.now(),
+      timestamp: body.timestamp ?? Date.now().toString(),
       balance: Number(body.balance ?? 0),
       currencyCode: body.currencyCode ?? "BDT",
       language: body.language ?? "en",
-      platform: Number(body.platform ?? 1) || 1,
+      platform: String(body.platform ?? 1),
       homeUrl: body.homeUrl ?? "",
       transfer_id: body.transfer_id ?? generateTransferId(),
-      callbackUrl,
     };
 
     let result = await postGameLaunch(launchUrl, payload);

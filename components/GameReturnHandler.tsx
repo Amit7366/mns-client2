@@ -9,7 +9,7 @@ import { handleGameReturnBalance } from "@/lib/game-balance-sync";
 import { AUTH_CHANGE_EVENT, readAuthSession } from "@/lib/auth/session";
 
 /**
- * After a game session: call return-withdraw (getWithdraw via Node) and update UI balance.
+ * After a game session: sync Mongo balance (seamless — no provider getwithdraw) and update UI.
  * Idempotent when no active game session on the server.
  */
 export default function GameReturnHandler() {

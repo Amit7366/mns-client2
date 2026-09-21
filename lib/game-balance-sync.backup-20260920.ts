@@ -76,10 +76,7 @@ async function fetchWithTimeout(
   ]);
 }
 
-/** Zero Mongo balance and mark gameSessionActive after launch URL is ready.
- *  Note: seamless v2 launch no longer calls this (balance stays on Mongo).
- *  Kept for manual/legacy use; server prepare-launch no longer zeros balance.
- */
+/** Zero Mongo balance and mark gameSessionActive after launch URL is ready. */
 export async function prepareGameLaunchZero(): Promise<{
   creditAmount: number;
   walletRevision: number;
@@ -119,7 +116,7 @@ export async function prepareGameLaunchZero(): Promise<{
 }
 
 /**
- * Call Node game-return (clears session flag; Mongo is already settled via seamless callback).
+ * Call Node return-withdraw (proxies getWithdraw.php) and update auth session balance.
  * Idempotent when no gameSessionActive on server.
  */
 export async function handleGameReturnBalance(): Promise<GameReturnWithdrawResult | null> {
