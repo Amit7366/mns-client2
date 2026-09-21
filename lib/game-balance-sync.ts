@@ -76,10 +76,7 @@ async function fetchWithTimeout(
   ]);
 }
 
-/** Zero Mongo balance and mark gameSessionActive after launch URL is ready.
- *  Note: seamless v2 launch no longer calls this (balance stays on Mongo).
- *  Kept for manual/legacy use; server prepare-launch no longer zeros balance.
- */
+/** Seed player_balances + mark gameSessionActive (does not zero site wallet UI). */
 export async function prepareGameLaunchZero(): Promise<{
   creditAmount: number;
   walletRevision: number;
@@ -106,8 +103,11 @@ export async function prepareGameLaunchZero(): Promise<{
 
   markGameSessionPending();
 
-  const zeroed = formatWalletBalance(0) ?? "0.00";
-  saveAuthSession({ ...session, balance: zeroed });
+  const keep =
+    formatWalletBalance(body.data.currentBalance) ??
+    formatWalletBalance(body.data.creditAmount) ??
+    session.balance;
+  saveAuthSession({ ...session, balance: keep });
   if (typeof window !== "undefined") {
     window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
   }

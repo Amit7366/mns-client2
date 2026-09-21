@@ -1,7 +1,10 @@
 import type { AuthSession } from "@/lib/auth/session";
 import { refreshWalletBalance } from "@/lib/auth/api";
 import { checkGameLaunchEligibility } from "@/lib/game-eligibility-api";
-import { markGameSessionPending } from "@/lib/game-balance-sync";
+import {
+  markGameSessionPending,
+  prepareGameLaunchZero,
+} from "@/lib/game-balance-sync";
 import { dispatchGameDeparting } from "@/lib/game-return-events";
 
 export type GameLaunchClientPayload = {
@@ -123,7 +126,7 @@ export async function requestGameLaunch(
 }
 
 /**
- * Fetch Mongo balance → launch with that credit (seamless: Mongo stays wallet) → redirect.
+ * Seed provider player_balances → launch → redirect (Mongo site wallet stays until bets settle).
  */
 export async function launchGameInBrowser(
   gameCode: string,
@@ -138,6 +141,9 @@ export async function launchGameInBrowser(
   if (!(credit > 0)) {
     throw new Error("Your balance is 0. Please deposit.");
   }
+
+  // Seed player_balances + mark gameSessionActive before Apivexo GetBalance
+  await prepareGameLaunchZero();
 
   const launchUrl = await requestGameLaunch(gameCode, launchSession);
 
