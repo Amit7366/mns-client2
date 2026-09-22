@@ -143,6 +143,39 @@ export async function failAutoPayDeposit(depositTransactionId: string): Promise<
   });
 }
 
+export type WinyPayDepositResult = {
+  payUrl: string;
+  orderId: string;
+};
+
+export async function createWinyPayDeposit(input: {
+  amount: number;
+  paymentMethod: "bkash" | "nagad";
+  promoCode?: string;
+  locale?: string;
+}): Promise<WinyPayDepositResult> {
+  return authFetchData<WinyPayDepositResult>("/transaction/deposit/winypay", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export type WinyPayOrder = {
+  _id: string;
+  amount: number;
+  status: "pending" | "success" | "failed";
+  invoiceId?: string;
+  bonusAmount?: number;
+  paymentMethod?: string;
+  transactionType?: "deposit" | "withdraw";
+};
+
+export async function fetchWinyPayOrder(orderId: string): Promise<WinyPayOrder> {
+  return authFetchData<WinyPayOrder>(
+    `/transaction/order/${encodeURIComponent(orderId)}`,
+  );
+}
+
 export function syncSessionBalance(currentBalance?: number) {
   const session = readAuthSession();
   if (!session?.memberId) return;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useLocale } from "@/components/LocaleProvider";
 import {
   MEMBER_PAGE_BG,
@@ -9,7 +9,11 @@ import {
   memberPagePaddingNarrow,
   MemberPageHeader,
 } from "@/components/member/shared/member-ui";
-import { depositMethodToUrlParam, fetchDepositBonusPreview, mapQuickDepositMethod } from "@/lib/deposit-api";
+import {
+  createWinyPayDeposit,
+  fetchDepositBonusPreview,
+  type DepositPaymentMethod,
+} from "@/lib/deposit-api";
 import DepositPromotionPicker, {
   DEFAULT_PROMO_CODE,
 } from "@/components/member/deposit/DepositPromotionPicker";
@@ -18,30 +22,11 @@ import {
   formatNormalBonusHint,
   type DepositBonusPreview,
 } from "@/lib/normal-deposit-bonus";
-import {
-  channelsForMethod,
-  defaultChannelIdForMethod,
-  fetchActiveDepositAccounts,
-  methodBadge,
-  methodDisplayLabel,
-  methodQuickId,
-  uniqueActiveMethods,
-  type DepositPaymentAccount,
-} from "@/lib/deposit-payment-accounts";
-import type { DepositPaymentMethod } from "@/lib/deposit-api";
 
-function CircleToggle({ active }: { active: boolean }) {
-  return (
-    <span
-      className={`inline-flex h-5 w-5 items-center justify-center rounded-full border ${
-        active ? "border-[#23c97f] bg-[#23c97f]" : "border-[#666] bg-transparent"
-      }`}
-      aria-hidden
-    >
-      {active ? <span className="h-2 w-2 rounded-full bg-white" /> : null}
-    </span>
-  );
-}
+const WINYPAY_METHODS: { id: DepositPaymentMethod; labelEn: string; labelBn: string; badge: string }[] = [
+  { id: "bkash", labelEn: "bKash", labelBn: "বিকাশ", badge: "✈" },
+  { id: "nagad", labelEn: "Nagad", labelBn: "নগদ", badge: "🎯" },
+];
 
 function InfoIcon() {
   return (
@@ -69,39 +54,19 @@ function Chevron({ open }: { open: boolean }) {
 
 export default function QuickDepositPage() {
   const { preferences } = useLocale();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const locale = preferences.locale;
   const isBn = locale === "bn";
 
-  const [activeAccounts, setActiveAccounts] = useState<DepositPaymentAccount[]>([]);
-  const [accountsLoading, setAccountsLoading] = useState(true);
-  const [accountsError, setAccountsError] = useState<string | null>(null);
-
-  const availableMethods = useMemo(
-    () => uniqueActiveMethods(activeAccounts),
-    [activeAccounts],
-  );
-
-  const methods = useMemo(
-    () =>
-      availableMethods.map((method) => ({
-        id: methodQuickId(method),
-        method,
-        label: methodDisplayLabel(method, isBn),
-        badge: methodBadge(method),
-      })),
-    [availableMethods, isBn],
-  );
-
-  const [selectedMethod, setSelectedMethod] = useState("");
-  const [selectedChannel, setSelectedChannel] = useState("");
+  const [selectedMethod, setSelectedMethod] = useState<DepositPaymentMethod>("bkash");
   const [amount, setAmount] = useState("");
   const [amountFocused, setAmountFocused] = useState(false);
   const [infoOpen, setInfoOpen] = useState(true);
   const [promoCode, setPromoCode] = useState(DEFAULT_PROMO_CODE);
   const [promoMinDeposit, setPromoMinDeposit] = useState(0);
   const [bonusPreview, setBonusPreview] = useState<DepositBonusPreview | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const promo = searchParams.get("promo")?.trim();
@@ -126,58 +91,6 @@ export default function QuickDepositPage() {
       cancelled = true;
     };
   }, [searchParams]);
-
-  const selectedPaymentMethod = useMemo<DepositPaymentMethod | null>(() => {
-    if (!selectedMethod) return null;
-    return mapQuickDepositMethod(selectedMethod);
-  }, [selectedMethod]);
-
-  const channels = useMemo(() => {
-    if (!selectedPaymentMethod) return [];
-    return channelsForMethod(activeAccounts, selectedPaymentMethod);
-  }, [activeAccounts, selectedPaymentMethod]);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setAccountsLoading(true);
-      setAccountsError(null);
-      try {
-        const active = await fetchActiveDepositAccounts();
-        if (cancelled) return;
-        setActiveAccounts(active);
-
-        const methodsList = uniqueActiveMethods(active);
-        if (methodsList.length === 0) return;
-
-        const firstMethod = methodsList[0];
-        setSelectedMethod(methodQuickId(firstMethod));
-        setSelectedChannel(defaultChannelIdForMethod(active, firstMethod));
-      } catch (err) {
-        if (!cancelled) {
-          setAccountsError(err instanceof Error ? err.message : "Failed to load payment options");
-        }
-      } finally {
-        if (!cancelled) setAccountsLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!selectedPaymentMethod) return;
-    const methodChannels = channelsForMethod(activeAccounts, selectedPaymentMethod);
-    if (methodChannels.length === 0) {
-      setSelectedChannel("");
-      return;
-    }
-    const stillValid = methodChannels.some((row) => row.channelId === selectedChannel);
-    if (stillValid) return;
-
-    setSelectedChannel(defaultChannelIdForMethod(activeAccounts, selectedPaymentMethod));
-  }, [selectedPaymentMethod, activeAccounts, selectedChannel]);
 
   const amountNum = Number.parseFloat(amount || "0");
 
@@ -213,12 +126,7 @@ export default function QuickDepositPage() {
     amountNum <= 30000;
   const amountTooLowForPromo =
     promoSelected && amount.length > 0 && amountNum > 0 && amountNum < minDepositRequired;
-  const canSubmit =
-    validAmount &&
-    Boolean(selectedChannel) &&
-    Boolean(selectedMethod) &&
-    methods.length > 0 &&
-    !accountsLoading;
+  const canSubmit = validAmount && !submitting;
 
   const handlePromoChange = (code: string, minDeposit: number) => {
     setPromoCode(code);
@@ -246,17 +154,28 @@ export default function QuickDepositPage() {
     setAmount(String(current + extra));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!canSubmit) return;
-    const paymentMethod = mapQuickDepositMethod(selectedMethod);
-    const q = new URLSearchParams({
-      amount: String(amountNum),
-      method: depositMethodToUrlParam(paymentMethod),
-      channel: selectedChannel,
-      promo: promoCode,
-    });
-    router.push(`/${locale}/member/deposit/quick/verify?${q.toString()}`);
+    setSubmitting(true);
+    setError(null);
+    try {
+      const result = await createWinyPayDeposit({
+        amount: amountNum,
+        paymentMethod: selectedMethod === "nagad" ? "nagad" : "bkash",
+        promoCode,
+        locale,
+      });
+      if (!result.payUrl) {
+        throw new Error(isBn ? "পেমেন্ট লিংক পাওয়া যায়নি" : "Payment link was not returned");
+      }
+      window.location.assign(result.payUrl);
+    } catch (err) {
+      setSubmitting(false);
+      setError(err instanceof Error ? err.message : isBn ? "ডিপোজিট ব্যর্থ" : "Deposit failed");
+    }
   };
+
+  const methodButtons = useMemo(() => WINYPAY_METHODS, []);
 
   return (
     <div className={MEMBER_PAGE_BG}>
@@ -267,26 +186,6 @@ export default function QuickDepositPage() {
       />
 
       <section className={`${memberContainerNarrow} ${memberPagePaddingNarrow} space-y-4`}>
-        {accountsLoading ? (
-          <p className="text-center text-[13px] text-[#9ca3af]">
-            {isBn ? "পেমেন্ট অপশন লোড হচ্ছে…" : "Loading payment options…"}
-          </p>
-        ) : null}
-
-        {accountsError ? (
-          <p className="rounded-sm border border-[#7f1d1d] bg-[#2a1515] px-3 py-2 text-[13px] text-[#fca5a5]">
-            {accountsError}
-          </p>
-        ) : null}
-
-        {!accountsLoading && methods.length === 0 ? (
-          <p className="rounded-sm border border-[#854d0e] bg-[#2a2415] px-3 py-3 text-[13px] text-[#fcd34d]">
-            {isBn
-              ? "এখন কোনো সক্রিয় ডিপোজিট পেমেন্ট পদ্ধতি নেই। অনুগ্রহ করে পরে আবার চেষ্টা করুন।"
-              : "No active deposit payment methods are available right now. Please try again later."}
-          </p>
-        ) : null}
-
         <DepositPromotionPicker
           isBn={isBn}
           selectedCode={promoCode}
@@ -295,13 +194,12 @@ export default function QuickDepositPage() {
 
         <div>
           <p className="mb-2 text-[13px] text-[#9ca3af]">{isBn ? "পেমেন্ট নির্বাচন করুন" : "Select payment"}</p>
-          <div className="grid grid-cols-3 gap-2">
-            {methods.map((m) => (
+          <div className="grid grid-cols-2 gap-2">
+            {methodButtons.map((m) => (
               <button
                 key={m.id}
                 type="button"
                 onClick={() => setSelectedMethod(m.id)}
-                disabled={accountsLoading}
                 className={`focus-ring rounded-sm border px-2 py-2 text-center transition-colors ${
                   selectedMethod === m.id
                     ? "border-[#23c97f] bg-[#1f2428]"
@@ -311,33 +209,7 @@ export default function QuickDepositPage() {
                 <span className="mx-auto mb-1 inline-flex h-7 min-w-7 items-center justify-center rounded bg-[#2b2f33] px-1.5 text-[10px] font-bold text-white">
                   {m.badge}
                 </span>
-                <p className="truncate text-[12px] font-medium text-white">{m.label}</p>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <p className="mb-2 text-[13px] text-[#9ca3af]">{isBn ? "ডিপোজিট চ্যানেল" : "Deposit channel"}</p>
-          <div className="space-y-2">
-            {channels.map((c) => (
-              <button
-                key={c.channelId}
-                type="button"
-                onClick={() => setSelectedChannel(c.channelId)}
-                className={`focus-ring flex w-full items-center rounded-sm border px-3 py-3 text-left transition-colors ${
-                  selectedChannel === c.channelId
-                    ? "border-[#23c97f] bg-[#1f2428]"
-                    : "border-[#2d2d2d] bg-[#1f2326] hover:border-[#3b3b3b]"
-                }`}
-              >
-                <span className="flex-1 text-[22px] font-semibold tracking-tight text-white">{c.channelName}</span>
-                {c.recommended ? (
-                  <span className="mr-2 rounded bg-[#1a6d52] px-2 py-0.5 text-[11px] font-medium text-[#57d1a4]">
-                    {isBn ? "সুপারিশ করুন" : "Recommended"}
-                  </span>
-                ) : null}
-                <CircleToggle active={selectedChannel === c.channelId} />
+                <p className="truncate text-[12px] font-medium text-white">{isBn ? m.labelBn : m.labelEn}</p>
               </button>
             ))}
           </div>
@@ -462,28 +334,38 @@ export default function QuickDepositPage() {
             <div className="border-t border-dashed border-[#3a3a3a] px-3 pb-3 pt-2 text-[13px] leading-6 text-[#a8adb3]">
               <p className="mb-2">
                 {isBn
-                  ? "প্রিয় সকল সদস্য, আপনার ডিপোজিট দ্রুত সফল করার জন্য অনুগ্রহ করে এই পদক্ষেপগুলি অনুসরণ করুন:"
-                  : "Please follow these steps to make your deposit successful quickly:"}
+                  ? "সাবমিট করার পর আপনি পেমেন্ট পেজে যাবেন। পেমেন্ট শেষ হলে ব্যালেন্স স্বয়ংক্রিয়ভাবে যোগ হবে।"
+                  : "After submit you will be redirected to pay. Your balance is credited when payment completes."}
               </p>
               <ol className="list-decimal space-y-1 pl-5">
-                <li>{isBn ? "ডিপোজিটের সময় যে নাম্বার দেখানো হবে সেই নাম্বারেই ক্যাশ আউট করুন।" : "Use the exact shown number while depositing."}</li>
-                <li>{isBn ? "আপনার নিজের আইডি ব্যবহার করুন।" : "Use your own account details only."}</li>
+                <li>{isBn ? "নিজের আইডি দিয়ে পেমেন্ট সম্পন্ন করুন।" : "Complete payment with your own account only."}</li>
                 <li>{isBn ? "আমাদের সাইটে সর্বনিম্ন ডিপোজিট ১০০ টাকা।" : "Minimum deposit amount is 100 BDT."}</li>
               </ol>
             </div>
           ) : null}
         </div>
 
+        {error ? (
+          <p className="text-[13px] text-[#f87171]" role="alert">
+            {error}
+          </p>
+        ) : null}
+
         <button
           type="button"
           disabled={!canSubmit}
-          onClick={handleSubmit}
+          onClick={() => void handleSubmit()}
           className="focus-ring mt-2 min-h-11 w-full rounded-sm bg-[#178358] px-4 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-[#1a9664] disabled:cursor-not-allowed disabled:opacity-45"
         >
-          {isBn ? "সাবমিট" : "Submit"}
+          {submitting
+            ? isBn
+              ? "রিডাইরেক্ট হচ্ছে…"
+              : "Redirecting…"
+            : isBn
+              ? "সাবমিট"
+              : "Submit"}
         </button>
       </section>
     </div>
   );
 }
-

@@ -32,6 +32,12 @@ export async function proxyToBackend(request: NextRequest, pathSegments: string[
     headers.set(key, value);
   });
   headers.set("Accept-Encoding", "identity");
+  const forwardedHost =
+    request.headers.get("x-forwarded-host") || request.nextUrl.host;
+  const forwardedProto =
+    (request.headers.get("x-forwarded-proto") || request.nextUrl.protocol.replace(":", "") || "https").split(",")[0];
+  headers.set("x-forwarded-host", forwardedHost);
+  headers.set("x-forwarded-proto", forwardedProto);
 
   const init: RequestInit = {
     method: request.method,
