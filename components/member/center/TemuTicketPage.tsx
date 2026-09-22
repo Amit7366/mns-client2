@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { useLocale } from "@/components/LocaleProvider";
 import { useToast } from "@/components/ToastProvider";
+import { applySessionBalance } from "@/lib/auth/api";
 import { copyTextToClipboard } from "@/lib/copy-text";
 import { getTemuTicketMessages } from "@/lib/i18n/temu-ticket-messages";
 import { memberRewardCenterHref, memberTemuTicketHistoryHref } from "@/lib/member-routes";
@@ -101,6 +102,7 @@ export default function TemuTicketPage() {
     try {
       const result = await claimTemuReward(locale);
       setStatus(result.status);
+      applySessionBalance(result.balance);
       await refreshBalance();
       showToast(
         `${labels.claimSuccess} (+${formatMoney(result.claim.addedAmount, locale)})`,

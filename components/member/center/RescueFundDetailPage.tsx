@@ -14,6 +14,7 @@ import {
   type RescueFundTierRow,
 } from "@/lib/rescue-fund-api";
 import { RESCUE_FUND_BOX_OFF_URL, RESCUE_FUND_HEADER_BANNER_URL } from "@/lib/rescue-fund-assets";
+import { applySessionBalance } from "@/lib/auth/api";
 import { AUTH_CHANGE_EVENT } from "@/lib/auth/session";
 import { HeaderBackIcon } from "./MemberCenterIcons";
 
@@ -156,6 +157,7 @@ export default function RescueFundDetailPage({ variant }: RescueFundDetailPagePr
     try {
       const result = await claimRescueFund(variant);
       setStatus(result.status);
+      applySessionBalance(result.balance);
       await refreshBalance();
       showToast(
         `${labels.claimSuccess} (+৳${formatMoney(result.claim.claimedAmount, locale)})`,

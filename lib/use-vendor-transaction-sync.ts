@@ -28,15 +28,16 @@ export function useVendorTransactionSync(enabled = true) {
 
     runningRef.current = true;
     try {
-      try {
-        await handleGameReturnBalance();
-      } catch {
-        /* retry on next focus */
-      }
-
       if (isBalanceUpdatePending() || isGameSessionPending()) {
-        refreshSession();
-        return;
+        try {
+          await handleGameReturnBalance();
+        } catch {
+          /* retry on next focus */
+        }
+        if (isBalanceUpdatePending() || isGameSessionPending()) {
+          refreshSession();
+          return;
+        }
       }
 
       const local = readLocalWallet(session.memberId);

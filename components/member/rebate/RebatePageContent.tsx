@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { useLocale } from "@/components/LocaleProvider";
 import { useToast } from "@/components/ToastProvider";
+import { applySessionBalance } from "@/lib/auth/api";
 import { MemberPageHeader } from "@/components/member/shared/member-ui";
 import { getRebateMessages, type RebateTab } from "@/lib/i18n/rebate-messages";
 import { memberCenterHref } from "@/lib/member-routes";
@@ -50,6 +51,7 @@ export default function RebatePageContent() {
     try {
       const result = await claimDailyRebate();
       setManualData(result.summary);
+      applySessionBalance(result.balance);
       await refreshBalance();
       showToast(labels.claimSuccess, { variant: "success" });
     } catch (err) {

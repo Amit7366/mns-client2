@@ -17,19 +17,19 @@ const en: BottomNavMessages = {
 };
 
 const bn: BottomNavMessages = {
-  home: "Home",
-  promotion: "Promotion",
-  invite: "Invite",
-  reward: "Reward",
-  member: "Member",
+  home: "হোম",
+  promotion: "প্রমোশন",
+  invite: "ইনভাইট",
+  reward: "রিওয়ার্ড",
+  member: "মেম্বার",
 };
 
 const hi: BottomNavMessages = {
-  home: "Home",
-  promotion: "Promotion",
-  invite: "Invite",
-  reward: "Reward",
-  member: "Member",
+  home: "होम",
+  promotion: "प्रमोशन",
+  invite: "इनवाइट",
+  reward: "रिवॉर्ड",
+  member: "सदस्य",
 };
 
 export function getBottomNavMessages(locale: Locale): BottomNavMessages {

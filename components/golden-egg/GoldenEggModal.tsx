@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { useLocale } from "@/components/LocaleProvider";
 import { useToast } from "@/components/ToastProvider";
+import { applySessionBalance } from "@/lib/auth/api";
 import {
   claimGoldenEgg,
   fetchGoldenEggStatus,
@@ -303,6 +304,7 @@ export default function GoldenEggModal({ open, onClose, initialStatus }: GoldenE
               }
             : prev
         );
+        applySessionBalance(result.currentBalance);
         await refreshBalance();
         showToast(m.winMessage.replace("{amount}", formatGoldenEggAmount(result.winAmount, locale)), {
           variant: "success",

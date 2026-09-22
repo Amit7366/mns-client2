@@ -25,6 +25,7 @@ import {
   saveAuthSession,
   type AuthSession,
 } from "@/lib/auth/session";
+import { subscribeWalletLocalChange } from "@/lib/wallet-local-state";
 
 type AuthContextValue = {
   session: AuthSession | null;
@@ -47,35 +48,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [balanceSyncing, setBalanceSyncing] = useState(false);
-  const walletSyncRef = useRef(false);
   const lastWalletSyncRef = useRef(0);
+  const syncChainRef = useRef(Promise.resolve());
 
   const refreshSession = useCallback(() => {
     setSession(readAuthSession());
   }, []);
 
   const syncWalletFromServer = useCallback(
-    async (opts?: { gameReturn?: boolean; forceDb?: boolean }) => {
-      const current = readAuthSession();
-      if (!current?.accessToken || !current.memberId) return;
-      if (walletSyncRef.current) return;
+    (opts?: { gameReturn?: boolean; forceDb?: boolean }) => {
+      const run = async () => {
+        const current = readAuthSession();
+        if (!current?.accessToken || !current.memberId) return;
 
-      walletSyncRef.current = true;
-      setBalanceSyncing(true);
-      try {
-        if (opts?.gameReturn || isBalanceUpdatePending()) {
-          await handleGameReturnBalance();
-        } else if (opts?.forceDb) {
-          await manualReanchorBalance();
-        } else {
-          await fetchWalletMeta();
+        setBalanceSyncing(true);
+        try {
+          const gamePending = isBalanceUpdatePending();
+          if ((opts?.gameReturn || gamePending) && gamePending) {
+            await handleGameReturnBalance();
+          }
+
+          if (opts?.forceDb) {
+            await manualReanchorBalance();
+          } else if (!isBalanceUpdatePending()) {
+            await fetchWalletMeta();
+          }
+          refreshSession();
+        } finally {
+          setBalanceSyncing(false);
+          lastWalletSyncRef.current = Date.now();
         }
-        refreshSession();
-      } finally {
-        setBalanceSyncing(false);
-        walletSyncRef.current = false;
-        lastWalletSyncRef.current = Date.now();
-      }
+      };
+
+      const next = syncChainRef.current.then(run, run);
+      syncChainRef.current = next.then(
+        () => undefined,
+        () => undefined,
+      );
+      return next;
     },
     [refreshSession],
   );
@@ -102,6 +112,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       window.removeEventListener(AUTH_CHANGE_EVENT, onAuthChange);
       window.removeEventListener("storage", onAuthChange);
     };
+  }, [refreshSession]);
+
+  useEffect(() => {
+    return subscribeWalletLocalChange(refreshSession);
   }, [refreshSession]);
 
   /** Log out and redirect when JWT expires while the app is open. */
@@ -137,14 +151,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
   }, [authReady, session?.accessToken, session?.role, refreshSession]);
 
-  /** On load: restore game wallet. Do not GET Mongo until withdraw has cleared the pending flag. */
+  /** On load: restore game wallet only if a session is pending, then GET site balance. */
   useEffect(() => {
     if (!authReady || !session?.accessToken || !session.memberId) return;
     void (async () => {
-      try {
-        await handleGameReturnBalance();
-      } catch {
-        /* gameSessionActive stays true; retry on next focus / game tap */
+      if (isBalanceUpdatePending()) {
+        try {
+          await handleGameReturnBalance();
+        } catch {
+          /* gameSessionActive stays true; retry on next focus / game tap */
+        }
       }
       if (!isBalanceUpdatePending()) {
         await refreshWalletBalance();
@@ -153,7 +169,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })();
   }, [authReady, session?.accessToken, session?.memberId, refreshSession]);
 
-  /** Tab focus: always try return-withdraw (no-op if no game session), then refresh. */
+  /** Tab focus: return from game if needed, otherwise refresh Mongo balance. */
   useEffect(() => {
     if (!authReady || !session?.accessToken || !session.memberId) return;
 
@@ -162,7 +178,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const elapsed = Date.now() - lastWalletSyncRef.current;
       if (elapsed < WALLET_FOCUS_DEBOUNCE_MS) return;
 
-      void syncWalletFromServer({ gameReturn: true });
+      void syncWalletFromServer({ gameReturn: isBalanceUpdatePending() });
     };
 
     window.addEventListener("focus", onVisible);
@@ -185,7 +201,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [authReady, session?.memberId, syncWalletFromServer]);
 
   const refreshBalance = useCallback(async () => {
-    await syncWalletFromServer({ gameReturn: true });
+    await syncWalletFromServer({
+      gameReturn: isBalanceUpdatePending(),
+      forceDb: true,
+    });
   }, [syncWalletFromServer]);
 
   const logout = useCallback(async () => {

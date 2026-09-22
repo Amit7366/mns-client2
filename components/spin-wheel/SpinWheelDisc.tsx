@@ -2,63 +2,75 @@
 
 import { useMemo } from "react";
 import type { SpinWheelSegment } from "@/lib/spin-api";
-import type { Locale } from "@/lib/locale";
-import { formatSpinAmount } from "@/lib/i18n/spin-wheel-messages";
-
-const SEGMENT_COLORS = [
-  "#1a5c3a",
-  "#2d7a52",
-  "#1e4d8c",
-  "#5c3d2e",
-  "#1a6b45",
-  "#2a5f8f",
-  "#4a3528",
-  "#1f7a4d",
-  "#234e8a",
-  "#3d5c30",
-] as const;
 
 const SIZE = 320;
 const CX = SIZE / 2;
 const CY = SIZE / 2;
 const RIM = 148;
-const LABEL_RADIUS = RIM - 26;
+const BULB_COUNT = 18;
 
-function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
+type PrizeIcon = "phone" | "coins" | "trophy" | "bag";
+
+const ICONS: PrizeIcon[] = [
+  "phone",
+  "coins",
+  "coins",
+  "trophy",
+  "coins",
+  "bag",
+  "coins",
+  "phone",
+  "trophy",
+  "coins",
+];
+
+function polar(cx: number, cy: number, r: number, angleDeg: number) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
   return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
 }
 
 function describeArc(cx: number, cy: number, r: number, startAngle: number, endAngle: number) {
-  const start = polarToCartesian(cx, cy, r, endAngle);
-  const end = polarToCartesian(cx, cy, r, startAngle);
+  const start = polar(cx, cy, r, endAngle);
+  const end = polar(cx, cy, r, startAngle);
   const largeArc = endAngle - startAngle <= 180 ? 0 : 1;
   return `M ${cx} ${cy} L ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y} Z`;
 }
 
-function BjHubLogo() {
+function PrizeGlyph({ kind, x, y, angle }: { kind: PrizeIcon; x: number; y: number; angle: number }) {
   return (
-    <text
-      x={CX}
-      y={CY + 8}
-      textAnchor="middle"
-      fontSize="28"
-      fontWeight="900"
-      fontFamily="system-ui, sans-serif"
-    >
-      <tspan fill="#e8e8e8">b</tspan>
-      <tspan fill="#ffb347">j</tspan>
-    </text>
+    <g transform={`translate(${x} ${y}) rotate(${angle})`}>
+      {kind === "phone" ? (
+        <>
+          <rect x="-6" y="-9" width="12" height="18" rx="2" fill="#2b2b2b" />
+          <rect x="-4.5" y="-7" width="9" height="12" rx="0.6" fill="#7ec8ff" />
+          <circle cx="0" cy="6.4" r="0.8" fill="#ddd" />
+        </>
+      ) : null}
+      {kind === "coins" ? (
+        <>
+          <ellipse cx="0" cy="4" rx="7" ry="3.2" fill="#e8a317" />
+          <ellipse cx="0" cy="1.2" rx="7" ry="3.2" fill="#f6d365" />
+          <ellipse cx="0" cy="-1.6" rx="7" ry="3.2" fill="#ffe08a" stroke="#c4840d" strokeWidth="0.6" />
+        </>
+      ) : null}
+      {kind === "trophy" ? (
+        <>
+          <path d="M-6 -6h12v4c0 3.4-2.6 6-6 6s-6-2.6-6-6z" fill="#f5c518" stroke="#a16207" strokeWidth="0.6" />
+          <path d="M-6 -5h-3.2c0 3 1.4 5 3.2 5.4M6 -5h3.2c0 3-1.4 5-3.2 5.4" stroke="#f5c518" strokeWidth="1.4" fill="none" />
+          <rect x="-1.2" y="4" width="2.4" height="3" fill="#d4a017" />
+          <rect x="-3.4" y="6.6" width="6.8" height="1.8" rx="0.4" fill="#e8b923" />
+        </>
+      ) : null}
+      {kind === "bag" ? (
+        <>
+          <path d="M-6 2c0-5 2.4-8 6-8s6 3 6 8v6c0 1.4-1 2.4-2.4 2.4h-7.2C-5 10.4-6 9.4-6 8z" fill="#c45c08" />
+          <path d="M-3.2 -4c0-2.4 1.4-4 3.2-4s3.2 1.6 3.2 4" stroke="#f6d365" strokeWidth="1.3" fill="none" />
+          <circle cx="0" cy="2" r="1.5" fill="#ffe08a" />
+        </>
+      ) : null}
+    </g>
   );
 }
-
-type SpinWheelDiscProps = {
-  segments: SpinWheelSegment[];
-  rotation: number;
-  locale: Locale;
-  spinning: boolean;
-  skipAnimation: boolean;
-};
 
 export function computeSpinRotation(
   segmentIndex: number,
@@ -75,138 +87,111 @@ export function computeSpinRotation(
   return currentRotation + extraSpins * 360 + delta;
 }
 
+type SpinWheelDiscProps = {
+  segments: SpinWheelSegment[];
+  rotation: number;
+  spinning: boolean;
+  canSpin: boolean;
+  goLabel: string;
+  onSpin: () => void;
+};
+
 export default function SpinWheelDisc({
   segments,
   rotation,
-  locale,
   spinning,
-  skipAnimation,
+  canSpin,
+  goLabel,
+  onSpin,
 }: SpinWheelDiscProps) {
   const count = segments.length || 10;
   const segmentAngle = 360 / count;
-  const labelFontSize = count > 12 ? 10 : count > 10 ? 11 : 13;
 
   const wedges = useMemo(() => {
     return segments.map((seg, i) => {
       const start = i * segmentAngle;
       const end = (i + 1) * segmentAngle;
       const mid = start + segmentAngle / 2;
-      const labelPos = polarToCartesian(CX, CY, LABEL_RADIUS, mid);
+      const iconPos = polar(CX, CY, 108, mid);
+      const labelPos = polar(CX, CY, 78, mid);
       return {
         ...seg,
         path: describeArc(CX, CY, RIM, start, end),
-        color: SEGMENT_COLORS[i % SEGMENT_COLORS.length],
+        iconPos,
         labelPos,
         mid,
-        label: `৳${formatSpinAmount(seg.amount, locale)}`,
+        icon: ICONS[i % ICONS.length],
+        label: `৳${seg.amount}`,
+        fill: i % 2 === 0 ? "#fffdf8" : "#fff4dc",
       };
     });
-  }, [segments, segmentAngle, locale]);
+  }, [segments, segmentAngle]);
 
-  const transitionStyle =
-    spinning && !skipAnimation
-      ? "transform 4.8s cubic-bezier(0.15, 0.85, 0.2, 1)"
-      : "transform 0.15s ease-out";
+  const bulbs = useMemo(() => {
+    return Array.from({ length: BULB_COUNT }, (_, i) => {
+      const angle = (360 / BULB_COUNT) * i;
+      const pos = polar(50, 50, 46.2, angle);
+      return { i, left: `${pos.x}%`, top: `${pos.y}%`, dim: i % 2 === 1 };
+    });
+  }, []);
+
+  const transition =
+    spinning ? "transform 4.8s cubic-bezier(0.15, 0.85, 0.2, 1)" : "transform 0.15s ease-out";
 
   return (
-    <div className="relative mx-auto w-full max-w-[min(100%,340px)]">
-      {/* Pointer */}
-      <div className="pointer-events-none absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1">
-        <svg width="36" height="44" viewBox="0 0 36 44" aria-hidden>
-          <defs>
-            <linearGradient id="spin-pointer-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#ffe566" />
-              <stop offset="50%" stopColor="#f7c948" />
-              <stop offset="100%" stopColor="#c9a020" />
-            </linearGradient>
-            <filter id="spin-pointer-glow">
-              <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#f7c948" floodOpacity="0.6" />
-            </filter>
-          </defs>
-          <path
-            d="M18 4 L32 38 Q18 32 4 38 Z"
-            fill="url(#spin-pointer-grad)"
-            stroke="#fff8d0"
-            strokeWidth="1.2"
-            filter="url(#spin-pointer-glow)"
+    <div className="spin-prize">
+      <div className="spin-prize-fire" aria-hidden />
+      <div className="spin-prize-frame">
+        {bulbs.map((bulb) => (
+          <span
+            key={bulb.i}
+            className={`spin-prize-bulb ${bulb.dim ? "is-dim" : "is-bright"}`}
+            style={{ left: bulb.left, top: bulb.top, animationDelay: `${bulb.i * 0.08}s` }}
           />
-        </svg>
-      </div>
-
-      {/* Outer glow ring */}
-      <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(34,197,94,0.35)_0%,transparent_70%)] blur-md" />
-
-      <div
-        className="relative mx-auto aspect-square w-full"
-        style={{ maxWidth: SIZE }}
-      >
-        {/* Golden rim (static) */}
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background:
-              "conic-gradient(from 0deg, #f7d060, #fff3b0, #d4a820, #f7d060, #fff8c8, #c9a020, #f7d060)",
-            padding: "6px",
-            boxShadow:
-              "0 0 24px rgba(247,201,72,0.45), inset 0 0 12px rgba(255,255,255,0.25)",
-          }}
-        >
+        ))}
+        <div className="spin-prize-well">
           <div
-            className="h-full w-full rounded-full"
-            style={{
-              background: "#0d3d28",
-              boxShadow: "inset 0 0 20px rgba(0,0,0,0.5)",
-            }}
-          />
-        </div>
-
-        {/* Rotating wheel */}
-        <div
-          className="absolute inset-[8px] will-change-transform"
-          style={{
-            transform: `rotate(${rotation}deg)`,
-            transition: transitionStyle,
-          }}
-        >
-          <svg
-            viewBox={`0 0 ${SIZE} ${SIZE}`}
-            className="h-full w-full drop-shadow-[0_4px_20px_rgba(0,0,0,0.45)]"
-            aria-hidden
+            className="spin-prize-rotor"
+            style={{ transform: `rotate(${rotation}deg)`, transition }}
           >
-            <defs>
-              <radialGradient id="hub-grad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#2d6b4a" />
-                <stop offset="100%" stopColor="#0f2d1e" />
-              </radialGradient>
-            </defs>
-
-            {wedges.map((w) => (
-              <g key={w.index}>
-                <path d={w.path} fill={w.color} stroke="#0a1f14" strokeWidth="1.2" />
-                <text
-                  x={w.labelPos.x}
-                  y={w.labelPos.y}
-                  fill="#fff8e0"
-                  fontSize={labelFontSize}
-                  fontWeight="800"
-                  fontFamily="system-ui, -apple-system, sans-serif"
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  transform={`rotate(${w.mid}, ${w.labelPos.x}, ${w.labelPos.y})`}
-                  stroke="#0a1f14"
-                  strokeWidth="0.6"
-                  paintOrder="stroke fill"
-                >
-                  {w.label}
-                </text>
-              </g>
-            ))}
-
-            <circle cx={CX} cy={CY} r={42} fill="url(#hub-grad)" stroke="#f7c948" strokeWidth="3" />
-            <circle cx={CX} cy={CY} r={36} fill="#143d2a" stroke="#2d8f5c" strokeWidth="1.5" />
-            <BjHubLogo />
-          </svg>
+            <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="h-full w-full" aria-hidden>
+              {wedges.map((wedge) => (
+                <g key={wedge.index}>
+                  <path d={wedge.path} fill={wedge.fill} stroke="#f0c56a" strokeWidth="1.2" />
+                  <PrizeGlyph
+                    kind={wedge.icon}
+                    x={wedge.iconPos.x}
+                    y={wedge.iconPos.y}
+                    angle={wedge.mid}
+                  />
+                  <text
+                    x={wedge.labelPos.x}
+                    y={wedge.labelPos.y}
+                    fill="#7c2d12"
+                    fontSize="13"
+                    fontWeight="800"
+                    fontFamily="system-ui, sans-serif"
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    transform={`rotate(${wedge.mid} ${wedge.labelPos.x} ${wedge.labelPos.y})`}
+                  >
+                    {wedge.label}
+                  </text>
+                </g>
+              ))}
+            </svg>
+          </div>
         </div>
+        <div className="spin-prize-pointer" aria-hidden />
+        <button
+          type="button"
+          className="spin-prize-go"
+          onClick={onSpin}
+          disabled={!canSpin || spinning}
+          aria-label={goLabel}
+        >
+          {goLabel}
+        </button>
       </div>
     </div>
   );

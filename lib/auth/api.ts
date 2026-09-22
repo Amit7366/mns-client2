@@ -163,6 +163,15 @@ export function formatWalletBalance(value: number | string | undefined | null): 
   return Math.max(0, num).toFixed(2);
 }
 
+/** Paint credited balance into the navbar immediately, then callers can re-fetch Mongo. */
+export function applySessionBalance(currentBalance: number | string | undefined | null): void {
+  const session = readAuthSession();
+  if (!session) return;
+  const formatted = formatWalletBalance(currentBalance);
+  if (!formatted) return;
+  saveAuthSession({ ...session, balance: formatted });
+}
+
 /** Authoritative balance from UserBalance collection (by member id). */
 export async function refreshWalletBalance(): Promise<string | undefined> {
   const meta = await fetchWalletMeta();
@@ -191,7 +200,8 @@ export async function fetchWalletMeta(): Promise<WalletMeta | undefined> {
   );
 
   if (formatted !== undefined) {
-    saveAuthSession({ ...current, balance: formatted });
+    const latest = readAuthSessionForRequest() ?? current;
+    saveAuthSession({ ...latest, balance: formatted });
     return {
       balance: formatted,
       walletRevision: body.data.walletRevision,

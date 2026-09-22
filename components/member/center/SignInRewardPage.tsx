@@ -6,6 +6,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { useLocale } from "@/components/LocaleProvider";
 import { useToast } from "@/components/ToastProvider";
 import { getSignInRewardMessages } from "@/lib/i18n/sign-in-reward-messages";
+import { applySessionBalance } from "@/lib/auth/api";
 import { formatDisplayBalance } from "@/lib/format-balance";
 import { memberRewardCenterHref } from "@/lib/member-routes";
 import {
@@ -262,6 +263,7 @@ export default function SignInRewardPage() {
     setClaiming(true);
     try {
       const result = await claimSignInReward();
+      applySessionBalance(result.balance);
       showToast(`${s.claimSuccess} (+৳${formatBonusAmount(result.bonusAmount, locale)})`, {
         variant: "success",
       });

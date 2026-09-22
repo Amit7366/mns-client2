@@ -4,6 +4,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
+import { applySessionBalance } from "@/lib/auth/api";
 import { useLocale } from "@/components/LocaleProvider";
 import {
   MEMBER_PAGE_BG,
@@ -79,7 +80,8 @@ function DepositReturnContent() {
   useEffect(() => {
     if (!order || order.status !== "success" || synced.current) return;
     synced.current = true;
-    syncSessionBalance();
+    applySessionBalance(order.currentBalance);
+    syncSessionBalance(order.currentBalance);
     void refreshBalance();
   }, [order, refreshBalance]);
 

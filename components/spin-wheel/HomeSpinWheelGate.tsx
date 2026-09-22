@@ -7,14 +7,29 @@ import { fetchSpinStatus, type SpinStatus } from "@/lib/spin-api";
 import { OPEN_SPIN_WHEEL_EVENT } from "@/lib/spin-wheel-events";
 import SpinWheelModal from "./SpinWheelModal";
 
-const DISMISS_KEY_PREFIX = "bkbaji.spin.dismissed.";
-
-function todayKey(): string {
-  return new Date().toISOString().slice(0, 10);
-}
+const WINDOW_MS = 24 * 60 * 60 * 1000;
+const NEXT_SHOW_KEY = "bkbaji.spin.nextShowAt";
 
 function isHomePath(pathname: string): boolean {
   return /^\/(bn|en|hi)\/?$/.test(pathname);
+}
+
+function readNextShowAt(): number {
+  try {
+    return Number(localStorage.getItem(NEXT_SHOW_KEY) || 0);
+  } catch {
+    return 0;
+  }
+}
+
+function scheduleNextShow(): number {
+  const next = Date.now() + WINDOW_MS;
+  try {
+    localStorage.setItem(NEXT_SHOW_KEY, String(next));
+  } catch {
+    // Ignore storage errors
+  }
+  return next;
 }
 
 export default function HomeSpinWheelGate() {
@@ -22,21 +37,20 @@ export default function HomeSpinWheelGate() {
   const { isAuthenticated, authReady } = useAuth();
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<SpinStatus | null>(null);
+  const [resumeAt, setResumeAt] = useState<number | null>(null);
   const checkedRef = useRef(false);
 
   const checkAndShow = useCallback(async () => {
     if (!isHomePath(pathname) || !isAuthenticated) return;
-
-    const dismissKey = `${DISMISS_KEY_PREFIX}${todayKey()}`;
-    if (sessionStorage.getItem(dismissKey) === "1") return;
+    if (readNextShowAt() > Date.now()) return;
 
     try {
       const data = await fetchSpinStatus();
-      if (!data.canSpin) return;
       setStatus(data);
+      setResumeAt(scheduleNextShow());
       setOpen(true);
     } catch {
-      // Silent — don't block home page
+      // Silent — don't block the home page
     }
   }, [pathname, isAuthenticated]);
 
@@ -45,7 +59,10 @@ export default function HomeSpinWheelGate() {
     if (checkedRef.current) return;
 
     checkedRef.current = true;
-    void checkAndShow();
+    const timer = window.setTimeout(() => {
+      void checkAndShow();
+    }, 500);
+    return () => window.clearTimeout(timer);
   }, [authReady, pathname, isAuthenticated, checkAndShow]);
 
   useEffect(() => {
@@ -58,6 +75,8 @@ export default function HomeSpinWheelGate() {
   useEffect(() => {
     const onOpen = () => {
       if (!isAuthenticated) return;
+      const scheduled = readNextShowAt();
+      setResumeAt(scheduled > Date.now() ? scheduled : Date.now() + WINDOW_MS);
       void (async () => {
         try {
           const data = await fetchSpinStatus();
@@ -73,12 +92,17 @@ export default function HomeSpinWheelGate() {
   }, [isAuthenticated]);
 
   const handleClose = useCallback(() => {
-    const dismissKey = `${DISMISS_KEY_PREFIX}${todayKey()}`;
-    sessionStorage.setItem(dismissKey, "1");
     setOpen(false);
   }, []);
 
   if (!open) return null;
 
-  return <SpinWheelModal open={open} onClose={handleClose} initialStatus={status} />;
+  return (
+    <SpinWheelModal
+      open={open}
+      onClose={handleClose}
+      initialStatus={status}
+      resumeAt={resumeAt}
+    />
+  );
 }

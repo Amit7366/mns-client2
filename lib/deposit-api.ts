@@ -168,6 +168,7 @@ export type WinyPayOrder = {
   bonusAmount?: number;
   paymentMethod?: string;
   transactionType?: "deposit" | "withdraw";
+  currentBalance?: number;
 };
 
 export async function fetchWinyPayOrder(orderId: string): Promise<WinyPayOrder> {

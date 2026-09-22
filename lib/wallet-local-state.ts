@@ -86,7 +86,11 @@ export async function initWalletFromDb(memberId: string): Promise<number> {
   clearLocalWallet(normalized);
 
   const dbBalanceStr = await refreshWalletBalance();
-  const balance = Number.parseFloat(dbBalanceStr ?? "0");
+  if (dbBalanceStr == null) {
+    const fallback = Number.parseFloat(readAuthSession()?.balance ?? "0");
+    return Number.isFinite(fallback) ? fallback : 0;
+  }
+  const balance = Number.parseFloat(dbBalanceStr);
   const safeBalance = Number.isFinite(balance) ? balance : 0;
 
   const state: LocalWalletState = {
@@ -109,7 +113,11 @@ export async function reanchorWalletFromDb(memberId: string): Promise<number> {
   const existing = readLocalWallet(normalized);
 
   const dbBalanceStr = await refreshWalletBalance();
-  const balance = Number.parseFloat(dbBalanceStr ?? "0");
+  if (dbBalanceStr == null) {
+    const fallback = existing?.balance ?? Number.parseFloat(readAuthSession()?.balance ?? "0");
+    return Number.isFinite(fallback) ? fallback : 0;
+  }
+  const balance = Number.parseFloat(dbBalanceStr);
   const safeBalance = Number.isFinite(balance) ? balance : 0;
 
   const state: LocalWalletState = {
