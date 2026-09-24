@@ -646,7 +646,7 @@
   padding: 0.15rem 0 0;
 }
 
-.golden-egg-slot.is-active:not(:disabled) {
+.golden-egg-slot:not(:disabled) {
   cursor: pointer;
 }
 
@@ -703,7 +703,8 @@
 }
 
 .golden-egg-shake {
-  animation: golden-egg-shake 1.05s ease-in-out infinite;
+  transform-origin: 50% 84%;
+  animation: golden-egg-shake 0.16s ease-in-out infinite;
 }
 
 .golden-egg-slot.is-hitting .golden-egg-body {
@@ -794,13 +795,10 @@
 @keyframes golden-egg-shake {
   0%,
   100% {
-    transform: translateX(0);
+    transform: rotate(-9deg);
   }
-  25% {
-    transform: translateX(-6px);
-  }
-  75% {
-    transform: translateX(6px);
+  50% {
+    transform: rotate(9deg);
   }
 }
 

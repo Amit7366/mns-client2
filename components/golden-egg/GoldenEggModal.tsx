@@ -45,14 +45,15 @@ function splitCountdown(ms: number): { h: string; m: string; s: string } {
   return { h: pad2(h), m: pad2(m), s: pad2(s) };
 }
 
-function pickActiveEggs(): Set<number> {
-  const count = Math.random() < 0.55 ? 1 : 2;
-  const pool = Array.from({ length: EGG_COUNT }, (_, i) => i);
-  for (let i = pool.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  return new Set(pool.slice(0, count));
+function pickNextEgg(current: number | null): number {
+  let next = Math.floor(Math.random() * EGG_COUNT);
+  if (current === null) return next;
+  while (next === current) next = Math.floor(Math.random() * EGG_COUNT);
+  return next;
+}
+
+function activeHoldMs(): number {
+  return 1000 + Math.floor(Math.random() * 1001);
 }
 
 function CrownHorns() {
@@ -112,6 +113,7 @@ function EggCrackMark() {
 type EggSlotProps = {
   index: number;
   active: boolean;
+  canSmash: boolean;
   hitting: boolean;
   cracked: boolean;
   amount: number | null;
@@ -124,6 +126,7 @@ type EggSlotProps = {
 function EggSlot({
   index,
   active,
+  canSmash,
   hitting,
   cracked,
   amount,
@@ -132,7 +135,7 @@ function EggSlot({
   locale,
   onSmash,
 }: EggSlotProps) {
-  const clickable = active && !hitting && !cracked && !locked && amount === null;
+  const clickable = canSmash && !hitting && !cracked && !locked && amount === null;
   const revealed = amount !== null;
 
   return (
@@ -191,7 +194,6 @@ export default function GoldenEggModal({ open, onClose, initialStatus }: GoldenE
   const [amounts, setAmounts] = useState<(number | null)[]>(() => Array(EGG_COUNT).fill(null));
   const [countdownMs, setCountdownMs] = useState(0);
   const [winBurst, setWinBurst] = useState<number | null>(null);
-  const activeRef = useRef<Set<number>>(new Set());
   const [activeEggs, setActiveEggs] = useState<Set<number>>(() => new Set());
   const busyRef = useRef(false);
 
@@ -201,9 +203,6 @@ export default function GoldenEggModal({ open, onClose, initialStatus }: GoldenE
       const data = await fetchGoldenEggStatus();
       setStatus(data);
       if (data.canClaim) {
-        const next = pickActiveEggs();
-        activeRef.current = next;
-        setActiveEggs(next);
         setPhase("idle");
         setCountdownMs(DISPLAY_WINDOW_MS);
         setAmounts(Array(EGG_COUNT).fill(null));
@@ -211,7 +210,6 @@ export default function GoldenEggModal({ open, onClose, initialStatus }: GoldenE
         setCrackedIndex(null);
         setWinBurst(null);
       } else {
-        activeRef.current = new Set();
         setActiveEggs(new Set());
         setPhase("locked");
         setCountdownMs(data.remainingMs);
@@ -249,6 +247,21 @@ export default function GoldenEggModal({ open, onClose, initialStatus }: GoldenE
   }, [open]);
 
   useEffect(() => {
+    if (!open || loading || phase !== "idle") {
+      setActiveEggs(new Set());
+      return undefined;
+    }
+    let timer = 0;
+    const hop = (current: number | null) => {
+      const next = pickNextEgg(current);
+      setActiveEggs(new Set([next]));
+      timer = window.setTimeout(() => hop(next), activeHoldMs());
+    };
+    hop(null);
+    return () => window.clearTimeout(timer);
+  }, [open, loading, phase]);
+
+  useEffect(() => {
     if (winBurst === null) return undefined;
     const id = window.setTimeout(() => setWinBurst(null), 2200);
     return () => window.clearTimeout(id);
@@ -258,7 +271,7 @@ export default function GoldenEggModal({ open, onClose, initialStatus }: GoldenE
 
   const smash = useCallback(
     async (index: number) => {
-      if (busyRef.current || phase !== "idle" || !activeRef.current.has(index)) return;
+      if (busyRef.current || phase !== "idle") return;
       busyRef.current = true;
       setPhase("hitting");
       setHitIndex(index);
@@ -409,6 +422,7 @@ export default function GoldenEggModal({ open, onClose, initialStatus }: GoldenE
                       key={eggIndex}
                       index={eggIndex}
                       active={activeEggs.has(eggIndex)}
+                      canSmash={phase === "idle"}
                       hitting={hitIndex === eggIndex}
                       cracked={crackedIndex === eggIndex}
                       amount={amounts[eggIndex]}
