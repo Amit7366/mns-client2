@@ -17,7 +17,7 @@ export const HOME_ANNOUNCEMENT_TABS: HomeAnnouncementTab[] = [
   {
     id: "delayBonus",
     images: [
-      "https://images.39393929.com/mcs-images/announcement/cv666bdtf6/1787225497084_1742054089768_Delayed_Deposit_Withdrawal_Bonus.png",
+      "https://res.cloudinary.com/dtmkefol8/image/upload/v1790413928/home-image-1_wxvwjr.png",
     ],
     go: "deposit",
   },
@@ -40,28 +40,28 @@ export const HOME_ANNOUNCEMENT_TABS: HomeAnnouncementTab[] = [
   {
     id: "loginBonus",
     images: [
-      "https://images.39393929.com/mcs-images/announcement/cv666bdtf6/1742053580481_Red%20Envelope.png",
+      "https://res.cloudinary.com/dtmkefol8/image/upload/v1790413928/home-image-2_cqmvbo.png",
     ],
     go: "reward",
   },
   {
     id: "notice",
     images: [
-      "https://images.39393929.com/mcs-images/announcement/cv666bdtf6/1753526535398_cv66_com_web.png",
+      "https://res.cloudinary.com/dtmkefol8/image/upload/v1790413928/home-image-3_yrd5oz.png",
     ],
     go: "close",
   },
   {
     id: "referral",
     images: [
-      "https://images.39393929.com/mcs-images/announcement/cv666bdtf6/1742048484790_Refer%20a%20friend.png",
+      "https://res.cloudinary.com/dtmkefol8/image/upload/v1790413927/home-image-4_q1yeeh.png",
     ],
     go: "referral",
   },
   {
     id: "slotLoss",
     images: [
-      "https://images.39393929.com/mcs-images/announcement/cv666bdtf6/1745943139067_8888_11zon_11zon.png",
+      "https://res.cloudinary.com/dtmkefol8/image/upload/v1790413928/home-image-5_zrqwxh.png",
     ],
     go: "slot",
   },
