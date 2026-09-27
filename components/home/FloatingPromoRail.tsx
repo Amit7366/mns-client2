@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { useLocale } from "@/components/LocaleProvider";
 import { getFloatingPromoMessages } from "@/lib/i18n/floating-promo-messages";
-import { memberBonusRewardHref, memberRewardCenterHref } from "@/lib/member-routes";
+import { memberRewardCenterHref } from "@/lib/member-routes";
 import { openGoldenEgg } from "@/lib/golden-egg-events";
+import { openRedEnvelope } from "@/lib/red-envelope-events";
 import { openSpinWheel } from "@/lib/spin-wheel-events";
 import { openAuthModal } from "@/lib/auth-modal-events";
 
@@ -105,7 +106,7 @@ export default function FloatingPromoRail() {
   }
 
   function handleItem(go: (typeof PROMO_ITEMS)[number]["go"]) {
-    if (go === "spin" || go === "egg") {
+    if (go === "spin" || go === "egg" || go === "bonus") {
       if (!isAuthenticated) {
         openAuthModal("login");
         return;
@@ -114,14 +115,14 @@ export default function FloatingPromoRail() {
         openGoldenEgg();
         return;
       }
+      if (go === "bonus") {
+        openRedEnvelope();
+        return;
+      }
       openSpinWheel();
       return;
     }
-    if (go === "reward") {
-      goMember(memberRewardCenterHref(locale));
-      return;
-    }
-    goMember(memberBonusRewardHref(locale));
+    goMember(memberRewardCenterHref(locale));
   }
 
   if (!ready) return null;

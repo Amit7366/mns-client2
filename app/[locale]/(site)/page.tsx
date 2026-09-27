@@ -5,6 +5,7 @@ import FloatingPromoRail from "@/components/home/FloatingPromoRail";
 import HeroSlider from "@/components/HeroSlider";
 import HomePromoGate from "@/components/home-promo/HomePromoGate";
 import HomeGoldenEggGate from "@/components/golden-egg/HomeGoldenEggGate";
+import HomeRedEnvelopeGate from "@/components/red-envelope/HomeRedEnvelopeGate";
 import HomeSpinWheelGate from "@/components/spin-wheel/HomeSpinWheelGate";
 import HomeCategoryIconBar from "@/components/home/HomeCategoryIconBar";
 import HomeGameSection from "@/components/home/HomeGameSection";
@@ -95,6 +96,7 @@ export default async function Home({ params }: PageProps) {
       <HomePromoGate />
       <HomeSpinWheelGate />
       <HomeGoldenEggGate />
+      <HomeRedEnvelopeGate />
       <AnnouncementBar />
       <HeroSlider />
       <HomeCategoryIconBar />
