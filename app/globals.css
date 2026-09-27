@@ -19,6 +19,10 @@
   --text-muted: #9bb5ad;
   --danger: #e85d4a;
   --focus-ring: rgba(0, 229, 255, 0.45);
+  --font-geist-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-geist-mono: "Geist Mono", ui-monospace, monospace;
+  --font-bengali: "Noto Sans Bengali", sans-serif;
+  --font-hindi: "Noto Sans Devanagari", sans-serif;
 }
 
 @layer base {

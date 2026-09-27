@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Noto_Sans_Bengali, Noto_Sans_Devanagari } from "next/font/google";
 import { headers } from "next/headers";
 import { isValidLocale, type Locale } from "@/lib/locale";
 import DisablePinchZoom from "@/components/DisablePinchZoom";
@@ -7,27 +6,8 @@ import { localeFontClass } from "@/lib/locale-font";
 import { defaultSiteMetadata } from "@/lib/seo/default-metadata";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const notoSansBengali = Noto_Sans_Bengali({
-  variable: "--font-bengali",
-  subsets: ["bengali"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const notoSansDevanagari = Noto_Sans_Devanagari({
-  variable: "--font-hindi",
-  subsets: ["devanagari"],
-  weight: ["400", "500", "600", "700"],
-});
+const FONT_STYLESHEET =
+  "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap";
 
 export const metadata: Metadata = defaultSiteMetadata;
 
@@ -56,11 +36,12 @@ export default async function RootLayout({
     localeHeader && isValidLocale(localeHeader) ? localeHeader : "bn";
 
   return (
-    <html
-      lang={locale}
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${notoSansBengali.variable} ${notoSansDevanagari.variable} h-full antialiased`}
-    >
+    <html lang={locale} suppressHydrationWarning className="h-full antialiased">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="stylesheet" href={FONT_STYLESHEET} />
+      </head>
       <body
         suppressHydrationWarning
         className={`flex h-dvh flex-col overflow-hidden bg-[var(--bg)] ${localeFontClass(locale)}`}
