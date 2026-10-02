@@ -1,3 +1,5 @@
+name: bb666-client
+
 services:
   app:
     build:
@@ -7,7 +9,8 @@ services:
         NEXT_PUBLIC_SOCKET_URL: https://api.bkb444.site
         NEXT_PUBLIC_SITE_URL: https://bb666.site
     ports:
-      - "3020:3000" # VPS host 3020 (3000 is used by another service)
+      # Unique localhost port — must not overlap 3044 (bkb444 client) or 5044 (bkb444 api)
+      - "127.0.0.1:3066:3000"
     environment:
       NODE_ENV: production
       API_URL: https://api.bkb444.site
@@ -18,22 +21,3 @@ services:
       NEXT_PUBLIC_SITE_URL: https://bb666.site
       NEXT_PUBLIC_SOCKET_URL: https://api.bkb444.site
     restart: unless-stopped
-
-  dev:
-    image: node:22-alpine
-    working_dir: /app
-    command: sh -c "npm ci && npm run dev"
-    ports:
-      - "3002:3000"
-    environment:
-      NODE_ENV: development
-      WATCHPACK_POLLING: "true"
-      NEXT_PUBLIC_SOCKET_URL: http://localhost:8000
-    volumes:
-      - .:/app
-      - node_modules:/app/node_modules
-    profiles:
-      - dev
-
-volumes:
-  node_modules:

@@ -14,8 +14,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # NEXT_PUBLIC_* must be present at `next build` (baked into client JS)
-ARG NEXT_PUBLIC_SOCKET_URL=https://bkbajiapi.xyz
-ARG NEXT_PUBLIC_SITE_URL=https://bkbaji.com
+ARG NEXT_PUBLIC_SOCKET_URL=https://api.bkb444.site
+ARG NEXT_PUBLIC_SITE_URL=https://bb666.site
 ENV NEXT_PUBLIC_SOCKET_URL=$NEXT_PUBLIC_SOCKET_URL
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 ENV NEXT_TELEMETRY_DISABLED=1
