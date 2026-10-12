@@ -107,6 +107,7 @@ export default async function Home({ params }: PageProps) {
         ribbon="hot"
         limit={10}
       />
+      {/* here is the jackpot banner section */}
       <JackpotBanner
         games={
           categoryResults.find((section) => section.kind === "slot")?.games ??
