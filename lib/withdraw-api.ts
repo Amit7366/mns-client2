@@ -11,6 +11,17 @@ export type ManualWithdrawRecord = {
   walletNumber?: string;
 };
 
+export type WinyPayWithdrawResult = {
+  orderId: string;
+  transaction: ManualWithdrawRecord;
+};
+
+export function isWinyPayWithdrawMethod(
+  method: WithdrawPaymentMethod,
+): method is "bkash" | "nagad" {
+  return method === "bkash" || method === "nagad";
+}
+
 /** Map saved wallet name (bKash, NAGAD, …) → API paymentMethod enum. */
 export function mapWalletNameToPaymentMethod(name: string): WithdrawPaymentMethod {
   const n = name.trim().toLowerCase();
@@ -44,5 +55,28 @@ export async function createManualWithdraw(input: {
   return authFetchData<ManualWithdrawRecord>("/transaction/withdraw/manual", {
     method: "POST",
     body: JSON.stringify(payload),
+  });
+}
+
+/** POST /transaction/withdraw/winypay — send bKash/Nagad payout immediately. */
+export async function createWinyPayWithdraw(input: {
+  amount: number;
+  paymentMethod: "bkash" | "nagad";
+  walletNumber: string;
+  accountHolderName?: string;
+}): Promise<WinyPayWithdrawResult> {
+  const session = readAuthSession();
+  if (!session?.objectId || !session.memberId) {
+    throw new Error("Please log in to continue");
+  }
+
+  return authFetchData<WinyPayWithdrawResult>("/transaction/withdraw/winypay", {
+    method: "POST",
+    body: JSON.stringify({
+      amount: input.amount,
+      paymentMethod: input.paymentMethod,
+      walletNumber: input.walletNumber.trim(),
+      accountHolderName: input.accountHolderName?.trim() || session.userName || "Member",
+    }),
   });
 }

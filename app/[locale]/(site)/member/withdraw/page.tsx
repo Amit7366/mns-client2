@@ -14,7 +14,8 @@ import {
 } from "@/components/member/shared/member-ui";
 import { memberSectionHref } from "@/lib/member-routes";
 import {
-  createManualWithdraw,
+  createWinyPayWithdraw,
+  isWinyPayWithdrawMethod,
   mapWalletNameToPaymentMethod,
 } from "@/lib/withdraw-api";
 import { canWithdraw } from "@/lib/account-status";
@@ -71,7 +72,12 @@ export default function WithdrawPage() {
   const validAmount =
     !Number.isNaN(amountNum) && amountNum >= minWithdraw && amountNum <= balanceNum;
   const selectedWallet = wallets.find((w) => w._id === selectedWalletId) ?? null;
-  const canSubmit = withdrawAllowed && validAmount && selectedWallet != null && !submitting;
+  const selectedMethod = selectedWallet
+    ? mapWalletNameToPaymentMethod(selectedWallet.walletName)
+    : null;
+  const rocketSelected = selectedMethod === "rocket";
+  const canSubmit =
+    withdrawAllowed && validAmount && selectedWallet != null && !submitting && !rocketSelected;
 
   const addWalletHref = memberSectionHref(locale, "add-wallet");
 
@@ -101,13 +107,21 @@ export default function WithdrawPage() {
   }, []);
 
   const handleSubmit = async () => {
-    if (!canSubmit || !selectedWallet) return;
+    if (!canSubmit || !selectedWallet || !selectedMethod) return;
+    if (!isWinyPayWithdrawMethod(selectedMethod)) {
+      setError(
+        isBn
+          ? "Rocket উইথড্র এখন উপলব্ধ নয়। bKash বা Nagad ব্যবহার করুন।"
+          : "Rocket withdrawal is not available. Use bKash or Nagad.",
+      );
+      return;
+    }
     setSubmitting(true);
     setError(null);
     try {
-      await createManualWithdraw({
+      await createWinyPayWithdraw({
         amount: amountNum,
-        paymentMethod: mapWalletNameToPaymentMethod(selectedWallet.walletName),
+        paymentMethod: selectedMethod,
         walletNumber: selectedWallet.walletNumber,
         accountHolderName: selectedWallet.accountHolderName,
       });
@@ -134,8 +148,8 @@ export default function WithdrawPage() {
           </p>
           <p className="mb-6 text-[14px] text-[#9ca3af]">
             {isBn
-              ? "আপনার উইথড্রয়াল প্রসেসিংয়ে আছে। নিশ্চিত হলে টাকা আপনার ওয়ালেটে পাঠানো হবে।"
-              : "Your withdrawal is being processed. Funds will be sent to your wallet when confirmed."}
+              ? "উইথড্রয়াল WinyPay-এ পাঠানো হয়েছে। নিশ্চিত হলে টাকা আপনার ওয়ালেটে যাবে।"
+              : "Withdrawal sent to WinyPay. Funds will reach your wallet when confirmed."}
           </p>
           <div className="flex flex-col gap-2">
             <Link href={memberSectionHref(locale, "transaction-records")} className={memberBtnPrimary}>
@@ -243,6 +257,13 @@ export default function WithdrawPage() {
               ))}
             </div>
           )}
+          {rocketSelected ? (
+            <p className="mt-2 text-[12px] text-[#f87171]">
+              {isBn
+                ? "Rocket উইথড্র এখন উপলব্ধ নয়। bKash বা Nagad ব্যবহার করুন।"
+                : "Rocket withdrawal is not available. Use bKash or Nagad."}
+            </p>
+          ) : null}
         </div>
 
         <div>
@@ -298,8 +319,8 @@ export default function WithdrawPage() {
 
         <p className="text-center text-[12px] leading-5 text-[#6b7280]">
           {isBn
-            ? "উইথড্রয়াল জমার পর প্রসেস হয়ে আপনার নির্বাচিত ওয়ালেটে পাঠানো হবে।"
-            : "After you submit, the withdrawal is processed and sent to your selected wallet."}
+            ? "সাবমিট করলে উইথড্রয়াল সরাসরি WinyPay-এ যাবে এবং নিশ্চিত হলে আপনার ওয়ালেটে পৌঁছাবে।"
+            : "After you submit, WinyPay processes the payout to your selected wallet."}
         </p>
       </section>
     </div>
