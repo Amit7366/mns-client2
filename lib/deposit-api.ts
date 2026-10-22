@@ -154,9 +154,10 @@ export async function createWinyPayDeposit(input: {
   promoCode?: string;
   locale?: string;
 }): Promise<WinyPayDepositResult> {
+  const siteOrigin = typeof window !== "undefined" ? window.location.origin : undefined;
   return authFetchData<WinyPayDepositResult>("/transaction/deposit/winypay", {
     method: "POST",
-    body: JSON.stringify(input),
+    body: JSON.stringify({ ...input, siteOrigin }),
   });
 }
 

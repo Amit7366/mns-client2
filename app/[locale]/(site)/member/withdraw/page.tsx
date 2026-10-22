@@ -1,13 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { useLocale } from "@/components/LocaleProvider";
 import {
   MEMBER_PAGE_BG,
-  memberBtnPrimary,
   memberContainerNarrow,
   memberPagePaddingNarrow,
   MemberPageHeader,
@@ -49,7 +46,6 @@ function walletBadge(walletName: string): string {
 export default function WithdrawPage() {
   const { preferences } = useLocale();
   const { session, refreshBalance } = useAuth();
-  const router = useRouter();
   const locale = preferences.locale;
   const isBn = locale === "bn";
 
@@ -59,7 +55,6 @@ export default function WithdrawPage() {
   const [amount, setAmount] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
 
   const balanceNum = Math.max(0, Number.parseFloat(session?.balance ?? "0") || 0);
   const amountNum = Number.parseFloat(amount || "0");
@@ -125,48 +120,13 @@ export default function WithdrawPage() {
         walletNumber: selectedWallet.walletNumber,
         accountHolderName: selectedWallet.accountHolderName,
       });
-      setSuccess(true);
       await refreshBalance();
+      window.location.replace(`${window.location.origin}/${locale}`);
     } catch (e) {
       setError(e instanceof Error ? e.message : isBn ? "উইথড্রয়াল ব্যর্থ" : "Withdrawal failed");
-    } finally {
       setSubmitting(false);
     }
   };
-
-  if (success) {
-    return (
-      <div className={MEMBER_PAGE_BG}>
-        <MemberPageHeader
-          title={isBn ? "উইথড্রয়াল" : "Withdraw"}
-          backHref={`/${locale}/member/deposit`}
-          backLabel={isBn ? "ডিপোজিট" : "Deposit"}
-        />
-        <div className={`${memberContainerNarrow} ${memberPagePaddingNarrow} text-center`}>
-          <p className="mb-2 text-[17px] font-semibold text-[#4ade80]">
-            {isBn ? "অনুরোধ জমা হয়েছে" : "Request submitted"}
-          </p>
-          <p className="mb-6 text-[14px] text-[#9ca3af]">
-            {isBn
-              ? "উইথড্রয়াল WinyPay-এ পাঠানো হয়েছে। নিশ্চিত হলে টাকা আপনার ওয়ালেটে যাবে।"
-              : "Withdrawal sent to WinyPay. Funds will reach your wallet when confirmed."}
-          </p>
-          <div className="flex flex-col gap-2">
-            <Link href={memberSectionHref(locale, "transaction-records")} className={memberBtnPrimary}>
-              {isBn ? "ট্রানজেকশন রেকর্ডস" : "Transaction records"}
-            </Link>
-            <button
-              type="button"
-              className="focus-ring min-h-11 rounded-md border border-[#555] py-3 text-[14px] font-medium text-white hover:bg-white/5"
-              onClick={() => router.push(`/${locale}`)}
-            >
-              {isBn ? "হোম" : "Home"}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={MEMBER_PAGE_BG}>
@@ -319,8 +279,8 @@ export default function WithdrawPage() {
 
         <p className="text-center text-[12px] leading-5 text-[#6b7280]">
           {isBn
-            ? "সাবমিট করলে উইথড্রয়াল সরাসরি WinyPay-এ যাবে এবং নিশ্চিত হলে আপনার ওয়ালেটে পৌঁছাবে।"
-            : "After you submit, WinyPay processes the payout to your selected wallet."}
+            ? "সফল হলে উইথড্রয়াল অনুমোদিত হবে এবং ব্যালেন্স কমবে। ব্যর্থ হলে অনুরোধ পেন্ডিং থাকবে এবং ব্যালেন্স অপরিবর্তিত থাকবে।"
+            : "A successful payout is approved and your balance is reduced. If it fails, the withdrawal stays pending and your balance stays the same."}
         </p>
       </section>
     </div>
