@@ -28,6 +28,15 @@ export type Messages = {
   chatTyping: string;
   chatPlaceholder: string;
   chatSend: string;
+  chatPopupGreeting: string;
+  chatPopupHint: string;
+  chatPopupSecure: string;
+  chatPopupDirect: string;
+  chatPopupBack: string;
+  chatPopupOnline: string;
+  chatPopupExpand: string;
+  chatPopupMinimize: string;
+  chatPopupClose: string;
   promoSponsor: string;
   currencyLanguage: string;
   promotions: string;
@@ -146,6 +155,15 @@ const en: Messages = {
   chatTyping: "Agent is typing…",
   chatPlaceholder: "Type your message…",
   chatSend: "Send",
+  chatPopupGreeting: "How can we help you?",
+  chatPopupHint: "Choose an issue below or start a direct conversation with our support team.",
+  chatPopupSecure: "Your conversation is secure and private",
+  chatPopupDirect: "Direct Chat with Agent",
+  chatPopupBack: "Back",
+  chatPopupOnline: "Support team online",
+  chatPopupExpand: "Open full chat",
+  chatPopupMinimize: "Minimize",
+  chatPopupClose: "Close",
   promoSponsor: "NEW PRINCIPAL SPONSOR OF MI EMIRATES IN ILT20",
   currencyLanguage: "Currency and Language",
   promotions: "Promotions",
@@ -501,6 +519,15 @@ const bn: Messages = {
   chatTyping: "এজেন্ট টাইপ করছেন…",
   chatPlaceholder: "আপনার বার্তা লিখুন…",
   chatSend: "পাঠান",
+  chatPopupGreeting: "আমরা কীভাবে সাহায্য করতে পারি?",
+  chatPopupHint: "নিচ থেকে একটি বিষয় বেছে নিন অথবা আমাদের সাপোর্ট টিমের সাথে সরাসরি কথা বলুন।",
+  chatPopupSecure: "আপনার কথোপকথন নিরাপদ ও গোপনীয়",
+  chatPopupDirect: "এজেন্টের সাথে সরাসরি চ্যাট",
+  chatPopupBack: "পেছনে",
+  chatPopupOnline: "সাপোর্ট টিম অনলাইনে",
+  chatPopupExpand: "পূর্ণ চ্যাট খুলুন",
+  chatPopupMinimize: "ছোট করুন",
+  chatPopupClose: "বন্ধ করুন",
   promoSponsor: "ILT20-তে MI EMIRATES-এর নতুন প্রধান স্পন্সর",
   currencyLanguage: "মুদ্রা ও ভাষা",
   promotions: "প্রমোশন",
@@ -856,6 +883,15 @@ const hi: Messages = {
   chatTyping: "एजेंट टाइप कर रहा है…",
   chatPlaceholder: "अपना संदेश लिखें…",
   chatSend: "भेजें",
+  chatPopupGreeting: "हम आपकी कैसे मदद कर सकते हैं?",
+  chatPopupHint: "नीचे से एक समस्या चुनें या हमारी सपोर्ट टीम से सीधे बात करें।",
+  chatPopupSecure: "आपकी बातचीत सुरक्षित और निजी है",
+  chatPopupDirect: "एजेंट से सीधी चैट",
+  chatPopupBack: "वापस",
+  chatPopupOnline: "सपोर्ट टीम ऑनलाइन",
+  chatPopupExpand: "पूरी चैट खोलें",
+  chatPopupMinimize: "छोटा करें",
+  chatPopupClose: "बंद करें",
   promoSponsor: "ILT20 में MI EMIRATES का नया प्रमुख प्रायोजक",
   currencyLanguage: "मुद्रा और भाषा",
   promotions: "प्रमोशन",

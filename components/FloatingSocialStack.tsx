@@ -1,11 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/components/AuthProvider";
+import { useState } from "react";
+import LiveChatPopup from "@/components/live-chat/LiveChatPopup";
 import { useLocale } from "@/components/LocaleProvider";
-import { memberLiveChatHref } from "@/lib/member-routes";
-import { openAuthModal } from "@/lib/auth-modal-events";
 
 const FLOAT_SOCIAL_ITEMS = [
   { id: "facebook", href: "https://facebook.com", color: "#1877f2", label: "Facebook" },
@@ -36,24 +34,14 @@ function SocialGlyph({ id }: { id: string }) {
 }
 
 export default function FloatingSocialStack() {
-  const router = useRouter();
-  const { isAuthenticated } = useAuth();
-  const { t, preferences } = useLocale();
+  const { t } = useLocale();
   const label = t.sub.liveChat;
-
-  function goLiveChat() {
-    const href = memberLiveChatHref(preferences.locale);
-    if (!isAuthenticated) {
-      openAuthModal("login", href);
-      return;
-    }
-    router.push(href);
-  }
+  const [chatOpen, setChatOpen] = useState(false);
 
   const floatItems = FLOAT_SOCIAL_ITEMS;
 
   return (
-    <div className="fixed right-1.5 z-30 flex flex-col items-center gap-2 bottom-[calc(4.35rem+env(safe-area-inset-bottom))] lg:right-8 lg:bottom-8">
+    <div className={`fixed right-1.5 flex flex-col items-center gap-2 bottom-[calc(4.35rem+env(safe-area-inset-bottom))] lg:right-8 lg:bottom-8 ${chatOpen ? "z-[80]" : "z-30"}`}>
       {floatItems.map((item) => (
         <a
           key={item.id}
@@ -69,7 +57,8 @@ export default function FloatingSocialStack() {
       ))}
       <button
         type="button"
-        onClick={goLiveChat}
+        onClick={() => setChatOpen((open) => !open)}
+        aria-expanded={chatOpen}
         aria-label={label}
         className="flex flex-col items-center gap-0.5 transition-transform hover:scale-105 active:scale-95"
       >
@@ -87,6 +76,7 @@ export default function FloatingSocialStack() {
           {label}
         </span>
       </button>
+      {chatOpen ? <LiveChatPopup onClose={() => setChatOpen(false)} /> : null}
     </div>
   );
 }
