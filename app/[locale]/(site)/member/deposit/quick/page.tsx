@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLocale } from "@/components/LocaleProvider";
@@ -18,14 +19,15 @@ import DepositPromotionPicker, {
   DEFAULT_PROMO_CODE,
 } from "@/components/member/deposit/DepositPromotionPicker";
 import { getMinimumDepositAmount, hasSelectedPromotion, fetchDepositPromotions } from "@/lib/deposit-promotions";
+import { memberCenterHref } from "@/lib/member-routes";
 import {
   formatNormalBonusHint,
   type DepositBonusPreview,
 } from "@/lib/normal-deposit-bonus";
 
-const WINYPAY_METHODS: { id: DepositPaymentMethod; labelEn: string; labelBn: string; badge: string }[] = [
-  { id: "bkash", labelEn: "bKash", labelBn: "বিকাশ", badge: "✈" },
-  { id: "nagad", labelEn: "Nagad", labelBn: "নগদ", badge: "🎯" },
+const WINYPAY_METHODS: { id: DepositPaymentMethod; labelEn: string; labelBn: string; icon: string }[] = [
+  { id: "bkash", labelEn: "bKash", labelBn: "বিকাশ", icon: "/icons/bkash_logo.png" },
+  { id: "nagad", labelEn: "Nagad", labelBn: "নগদ", icon: "/icons/nagad_logo.png" },
 ];
 
 function InfoIcon() {
@@ -181,8 +183,8 @@ export default function QuickDepositPage() {
     <div className={MEMBER_PAGE_BG}>
       <MemberPageHeader
         title={isBn ? "Quick deposit" : "Quick deposit"}
-        backHref={`/${locale}/member/deposit`}
-        backLabel={isBn ? "ডিপোজিট" : "Deposit"}
+        backHref={memberCenterHref(locale)}
+        backLabel={isBn ? "সদস্য" : "Member"}
       />
 
       <section className={`${memberContainerNarrow} ${memberPagePaddingNarrow} space-y-4`}>
@@ -200,14 +202,21 @@ export default function QuickDepositPage() {
                 key={m.id}
                 type="button"
                 onClick={() => setSelectedMethod(m.id)}
-                className={`focus-ring rounded-sm border px-2 py-2 text-center transition-colors ${
+                className={`focus-ring rounded-sm border px-2 py-2.5 text-center transition-colors ${
                   selectedMethod === m.id
                     ? "border-[#23c97f] bg-[#1f2428]"
                     : "border-[#2d2d2d] bg-[#1f2326] hover:border-[#3b3b3b]"
                 }`}
               >
-                <span className="mx-auto mb-1 inline-flex h-7 min-w-7 items-center justify-center rounded bg-[#2b2f33] px-1.5 text-[10px] font-bold text-white">
-                  {m.badge}
+                <span className="mx-auto mb-1.5 flex h-14 w-full items-center justify-center overflow-hidden rounded bg-white p-1">
+                  <Image
+                    src={m.icon}
+                    alt=""
+                    width={m.id === "bkash" ? 1923 : 1300}
+                    height={m.id === "bkash" ? 1228 : 700}
+                    className="h-full w-full object-contain"
+                    style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                  />
                 </span>
                 <p className="truncate text-[12px] font-medium text-white">{isBn ? m.labelBn : m.labelEn}</p>
               </button>
@@ -226,8 +235,10 @@ export default function QuickDepositPage() {
                 : "Available balance ৳ 100.00-৳ 30,000.00"}
           </p>
           <div
-            className={`flex min-h-[58px] items-center rounded-sm border bg-[#1f2326] px-3 transition-colors ${
-              amountFocused ? "border-[#23c97f]" : "border-[#2d2d2d]"
+            className={`flex min-h-[64px] items-center rounded-md border-2 bg-[#14181b] px-3 transition-shadow ${
+              amountFocused
+                ? "border-[#23c97f] shadow-[0_0_0_4px_rgba(35,201,127,0.35)]"
+                : "border-[#23c97f] shadow-[0_0_0_3px_rgba(35,201,127,0.16)]"
             }`}
           >
             <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#1a6d52] text-[12px] font-bold text-[#7ee7bf]">
@@ -243,7 +254,8 @@ export default function QuickDepositPage() {
               placeholder="0"
               min={100}
               max={30000}
-              className="ml-auto w-28 bg-transparent text-right text-[40px] leading-none text-white outline-none placeholder:text-[#8b8b8b]"
+              aria-label={isBn ? "ডিপোজিটের পরিমাণ" : "Deposit amount"}
+              className="ml-3 min-w-0 flex-1 rounded-md border border-[#23c97f]/70 bg-[#0d1210] px-3 py-1 text-right text-[36px] leading-none text-white outline-none placeholder:text-[#8b8b8b] focus:border-[#23c97f]"
             />
           </div>
           {amountTooLowForPromo ? (

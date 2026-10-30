@@ -18,7 +18,7 @@ export function memberSectionHref(locale: string, section: MemberSection): strin
 }
 
 export function memberDepositHref(locale: string): string {
-  return `/${locale}/member/deposit`;
+  return `/${locale}/member/deposit/quick`;
 }
 
 export function memberWithdrawHref(locale: string): string {
