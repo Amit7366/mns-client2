@@ -1,5 +1,5 @@
 export const REFERRAL_BANNER_IMAGE =
-  "https://i.ibb.co.com/xrSP5vL/referral-program.png";
+  "https://i.ibb.co.com/zW0SzYLX/image.png";
 
 export type ReferralRewardLevel = {
   id: string;
