@@ -34,6 +34,10 @@ export function proxy(request: NextRequest) {
     return response;
   }
 
+  if (pathname === "/download" || pathname.startsWith("/download/")) {
+    return NextResponse.next();
+  }
+
   const localeSegment = pathname.split("/")[1];
   if (localeSegment && !isValidLocale(localeSegment)) {
     const response = NextResponse.redirect(new URL(`/${DEFAULT_PREFERENCES.locale}`, request.url));

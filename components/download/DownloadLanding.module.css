@@ -1,0 +1,48 @@
+.page {
+  font-family: Prompt, "Noto Sans Bengali", sans-serif;
+}
+
+.install {
+  position: relative;
+  overflow: hidden;
+}
+
+.install::before {
+  content: "";
+  position: absolute;
+  top: -180px;
+  left: 0;
+  z-index: 1;
+  width: 30px;
+  height: 100%;
+  background: #fff;
+  animation: download-shine 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes download-shine {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(45deg);
+  }
+  80% {
+    opacity: 0.5;
+    transform: scale(0) rotate(45deg);
+  }
+  81% {
+    opacity: 1;
+    transform: scale(4) rotate(45deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(50) rotate(45deg);
+  }
+}
+
+.shots {
+  scrollbar-width: none;
+}
+
+.shots::-webkit-scrollbar {
+  display: none;
+}
