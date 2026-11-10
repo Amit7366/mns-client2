@@ -20,6 +20,10 @@ export function usePwaInstall() {
   const [isStandalone, setIsStandalone] = useState(true);
 
   useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      void navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+
     setIsStandalone(isStandaloneMode());
     if (isStandaloneMode()) return;
 

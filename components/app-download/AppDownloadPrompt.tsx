@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { useLocale } from "@/components/LocaleProvider";
 import { usePwaInstall } from "@/lib/use-pwa-install";
-import { BKBAJI_ANDROID_APP_PATH, SITE_ICONS } from "@/lib/seo/site-config";
+import { SITE_ICONS } from "@/lib/seo/site-config";
 import { getAppDownloadBarMessages } from "@/lib/i18n/app-download-bar-messages";
 
 type AppDownloadPromptProps = {
@@ -23,23 +24,36 @@ function Star() {
   );
 }
 
+function isIosBrowser(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+
 export default function AppDownloadPrompt({ onClose }: AppDownloadPromptProps) {
   const { preferences } = useLocale();
   const { canInstall, install } = usePwaInstall();
   const m = getAppDownloadBarMessages(preferences.locale);
+  const [helpOpen, setHelpOpen] = useState(false);
 
   async function handleDownload() {
-    if (canInstall) {
-      const accepted = await install();
-      if (accepted) {
-        onClose();
-        return;
-      }
+    if (!canInstall) {
+      setHelpOpen(true);
+      return;
     }
-    window.location.href = BKBAJI_ANDROID_APP_PATH;
+    const accepted = await install();
+    if (accepted) onClose();
+  }
+
+  async function handleInstallFromHelp() {
+    const accepted = await install();
+    if (accepted) {
+      setHelpOpen(false);
+      onClose();
+    }
   }
 
   return (
+    <>
     <div
       role="banner"
       aria-label={m.headline}
@@ -100,5 +114,43 @@ export default function AppDownloadPrompt({ onClose }: AppDownloadPromptProps) {
         </button>
       </div>
     </div>
+    {helpOpen ? (
+      <div
+        className="fixed inset-0 z-[80] flex items-end justify-center bg-black/50 px-4 pb-6 sm:items-center"
+        role="presentation"
+        onClick={() => setHelpOpen(false)}
+      >
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={m.installTitle}
+          className="w-full max-w-sm rounded-2xl bg-white px-5 py-5 text-center shadow-xl"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <p className="text-[17px] font-bold text-[#1a1a1a]">{m.installTitle}</p>
+          {canInstall ? (
+            <button
+              type="button"
+              onClick={() => void handleInstallFromHelp()}
+              className="mt-4 inline-flex h-11 items-center justify-center rounded-full bg-[#01875f] px-8 text-[15px] font-semibold text-white"
+            >
+              {m.installNow}
+            </button>
+          ) : (
+            <p className="mt-3 text-[14px] leading-6 text-[#3c4043]">
+              {isIosBrowser() ? m.iosHint : m.browserHint}
+            </p>
+          )}
+          <button
+            type="button"
+            onClick={() => setHelpOpen(false)}
+            className="mt-4 text-[13px] font-semibold text-[#5f6368]"
+          >
+            {m.close}
+          </button>
+        </div>
+      </div>
+    ) : null}
+    </>
   );
 }
